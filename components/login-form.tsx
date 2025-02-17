@@ -30,12 +30,16 @@ function SubmitButton() {
   );
 }
 
-export function LoginForm({className, ...props}: React.ComponentProps<"div">) {
+interface LoginFormProps {
+  redirectTo?: string;
+}
+
+export function LoginForm({redirectTo}: LoginFormProps) {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn("flex flex-col gap-6")}>
       <Card className="overflow-hidden">
         <CardContent className="grid p-0 md:grid-cols-2">
           <form
@@ -52,7 +56,7 @@ export function LoginForm({className, ...props}: React.ComponentProps<"div">) {
                   description: "Успешно се најавивте на вашата сметка",
                 });
                 router.refresh();
-                router.push("/");
+                router.push(redirectTo || "/");
               }
             }}
             className="p-6 md:p-8">

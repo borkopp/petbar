@@ -39,7 +39,12 @@ export async function Navbar() {
             </Link>
 
             {user ? (
-              <LogoutButton />
+              <>
+                <LogoutButton />
+                <Link href="/create-listing" className="text-gray-600 hover:text-primary text-md font-semibold">
+                  <Button className="text-base font-semibold">Објави оглас</Button>
+                </Link>
+              </>
             ) : (
               <>
                 <Link href="/login" className="text-gray-600 hover:text-primary text-md font-semibold">
@@ -47,7 +52,7 @@ export async function Navbar() {
                     Најави се
                   </Button>
                 </Link>
-                <Link href="/signup" className="text-gray-600 hover:text-primary text-md font-semibold">
+                <Link href="/login?redirect=/create-listing" className="text-gray-600 hover:text-primary text-md font-semibold">
                   <Button className="text-base font-semibold">Објави оглас</Button>
                 </Link>
               </>
