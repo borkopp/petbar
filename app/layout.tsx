@@ -2,6 +2,7 @@ import type {Metadata} from "next";
 import {Rubik} from "next/font/google";
 import {Fredoka} from "next/font/google";
 import "./globals.css";
+import {Navbar} from "@/components/navbar";
 
 const rubik = Rubik({
   subsets: ["latin", "cyrillic"],
@@ -25,7 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${rubik.variable} ${fredoka.variable} font-rubik antialiased`}>{children}</body>
+      <body className={`${rubik.variable} ${fredoka.variable} font-rubik antialiased`}>
+        <Navbar />
+        {children}
+      </body>
     </html>
   );
 }
