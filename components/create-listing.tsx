@@ -79,6 +79,32 @@ export default function CreateListing({user}: CreateListingProps) {
     },
   });
 
+  const handleNext = () => {
+    const currentStepFields = {
+      1: ["title", "category", "listingType", "price", "location"],
+      2: ["breed", "gender", "age", "weight", "color", "hasPedigree", "isVaccinated"],
+      3: ["description"],
+    }[step] as Array<keyof FormValues>;
+
+    const isStepValid = currentStepFields.every((field) => {
+      const fieldState = form.getFieldState(field);
+      return !fieldState.invalid;
+    });
+
+    if (isStepValid) {
+      setStep(step + 1);
+    } else {
+      // Trigger validation for the current step's fields
+      currentStepFields.forEach((field) => {
+        form.trigger(field);
+      });
+    }
+  };
+
+  const handleBack = () => {
+    setStep(step - 1);
+  };
+
   const onSubmit = async (values: FormValues) => {
     try {
       setIsSubmitting(true);
@@ -171,7 +197,7 @@ export default function CreateListing({user}: CreateListingProps) {
 
       <div className="rounded-lg border p-6 shadow-lg">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form className="space-y-8">
             {step === 1 && (
               <div className="space-y-4">
                 <h2 className="text-xl font-semibold">Основни Информации</h2>
@@ -242,7 +268,7 @@ export default function CreateListing({user}: CreateListingProps) {
                     <FormItem>
                       <FormLabel>Цена (МКД)</FormLabel>
                       <FormControl>
-                        <Input type="number" placeholder="0" {...field} />
+                        <Input type="number" placeholder="0" {...field} value={field.value || ""} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -331,7 +357,7 @@ export default function CreateListing({user}: CreateListingProps) {
                       <FormItem>
                         <FormLabel>Возраст (месеци)</FormLabel>
                         <FormControl>
-                          <Input type="number" {...field} />
+                          <Input type="number" {...field} value={field.value || ""} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -345,7 +371,7 @@ export default function CreateListing({user}: CreateListingProps) {
                       <FormItem>
                         <FormLabel>Тежина (кг)</FormLabel>
                         <FormControl>
-                          <Input type="number" {...field} />
+                          <Input type="number" {...field} value={field.value || ""} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -360,7 +386,7 @@ export default function CreateListing({user}: CreateListingProps) {
                     <FormItem>
                       <FormLabel>Боја</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input {...field} value={field.value || ""} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -537,16 +563,16 @@ export default function CreateListing({user}: CreateListingProps) {
             )}
 
             <div className="flex justify-between pt-4">
-              <Button type="button" variant="outline" onClick={() => setStep(step - 1)} disabled={step === 1}>
+              <Button type="button" variant="outline" onClick={handleBack} disabled={step === 1}>
                 Назад
               </Button>
 
               {step < 4 ? (
-                <Button type="button" onClick={() => setStep(step + 1)}>
+                <Button type="button" onClick={handleNext}>
                   Следно
                 </Button>
               ) : (
-                <Button type="submit" disabled={isSubmitting}>
+                <Button type="button" disabled={isSubmitting} onClick={form.handleSubmit(onSubmit)}>
                   {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Објави Оглас
                 </Button>

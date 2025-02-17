@@ -28,7 +28,7 @@ export async function Navbar() {
           {/* Navigation Links */}
           <div className="flex items-center space-x-4">
             <Link
-              href="/marketplace"
+              href="/listings"
               className="relative hover:text-primary text-md font-semibold transition-colors duration-200 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full">
               Пазар
             </Link>

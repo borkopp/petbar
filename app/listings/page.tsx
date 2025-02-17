@@ -1,0 +1,144 @@
+import {createServerComponentClient} from "@supabase/auth-helpers-nextjs";
+import {cookies} from "next/headers";
+
+import ListingsFilters from "@/components/listings/filters";
+import ListingCard from "@/components/listings/listing-card";
+
+interface SearchParams {
+  type?: string;
+  category?: string;
+  price?: string;
+  age?: string;
+  gender?: string;
+  location?: string;
+  pedigree?: string;
+  vaccinated?: string;
+}
+
+export default async function ListingsPage({searchParams}: {searchParams: SearchParams}) {
+  const supabase = createServerComponentClient({cookies});
+
+  // Build the query
+  let query = supabase
+    .from("pet_listings")
+    .select(
+      `
+      *,
+      pet_images (
+        url
+      )
+    `
+    )
+    .order("created_at", {ascending: false});
+
+  // Apply filters
+  if (searchParams.type) {
+    query = query.eq("listing_type", searchParams.type);
+  }
+
+  if (searchParams.category) {
+    query = query.eq("category", searchParams.category);
+  }
+
+  if (searchParams.price) {
+    const [min, max] = searchParams.price.split("-").map(Number);
+    query = query.gte("price", min).lte("price", max);
+  }
+
+  if (searchParams.age) {
+    const [min, max] = searchParams.age.split("-").map(Number);
+    query = query.gte("age", min).lte("age", max);
+  }
+
+  if (searchParams.gender) {
+    query = query.eq("gender", searchParams.gender);
+  }
+
+  if (searchParams.location) {
+    query = query.eq("location", searchParams.location);
+  }
+
+  if (searchParams.pedigree === "true") {
+    query = query.eq("pedigree", true);
+  }
+
+  if (searchParams.vaccinated === "true") {
+    query = query.eq("vaccination_status", true);
+  }
+
+  const {data: listings} = await query;
+
+  // Get user's bookmarks
+  const {
+    data: {user},
+  } = await supabase.auth.getUser();
+  const {data: bookmarks} = user ? await supabase.from("bookmarks").select("listing_id").eq("user_id", user.id) : {data: []};
+
+  const bookmarkedListings = new Set(bookmarks?.map((b) => b.listing_id));
+
+  return (
+    <div className="container mx-auto py-10">
+      <div className="flex flex-col gap-8 md:flex-row">
+        {/* Filters Sidebar */}
+        <div className="w-full md:w-64 md:flex-none">
+          <div className="sticky top-20">
+            <ListingsFilters />
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 space-y-8">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold">Огласи за Миленици</h1>
+            <p className="text-sm text-muted-foreground">
+              {listings?.length} {listings?.length === 1 ? "оглас" : "огласи"}
+            </p>
+          </div>
+
+          {listings?.length === 0 ? (
+            <div className="flex h-[450px] items-center justify-center rounded-lg border border-dashed">
+              <div className="mx-auto max-w-[420px] text-center">
+                <h3 className="mt-4 text-lg font-semibold">Нема пронајдено огласи</h3>
+                <p className="mt-2 text-sm text-muted-foreground">Променете ги филтрите за да видите повеќе огласи.</p>
+              </div>
+            </div>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {listings?.map((listing) => (
+                <ListingCard
+                  key={listing.id}
+                  id={listing.id}
+                  title={listing.title}
+                  price={listing.price}
+                  location={listing.location}
+                  category={listing.category}
+                  listingType={listing.listing_type}
+                  images={listing.pet_images}
+                  createdAt={listing.created_at}
+                  isBookmarked={bookmarkedListings.has(listing.id)}
+                  onBookmark={
+                    user
+                      ? async () => {
+                          if (bookmarkedListings.has(listing.id)) {
+                            await supabase.from("bookmarks").delete().match({
+                              user_id: user.id,
+                              listing_id: listing.id,
+                            });
+                          } else {
+                            await supabase.from("bookmarks").insert({
+                              user_id: user.id,
+                              listing_id: listing.id,
+                            });
+                          }
+                        }
+                      : undefined
+                  }
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
