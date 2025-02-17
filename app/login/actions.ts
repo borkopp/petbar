@@ -2,26 +2,27 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { revalidatePath } from 'next/cache'
 
 type State = {
   error: string | null;
 }
 
-export async function login(_prevState: State, formData: FormData): Promise<State> {
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
-  
+export async function login(prevState: State, formData: FormData): Promise<State> {
   const supabase = await createClient()
 
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  })
+  const data = {
+    email: formData.get('email') as string,
+    password: formData.get('password') as string,
+  }
+
+  const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
     return { error: error.message }
   }
 
+  revalidatePath('/')
   redirect('/')
 }
 

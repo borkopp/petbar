@@ -11,6 +11,7 @@ import {useFormStatus} from "react-dom";
 import {useState} from "react";
 import {toast} from "sonner";
 import Link from "next/link";
+import {useRouter} from "next/navigation";
 
 type State = {
   error: string | null;
@@ -31,6 +32,7 @@ function SubmitButton() {
 
 export function LoginForm({className, ...props}: React.ComponentProps<"div">) {
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -42,7 +44,15 @@ export function LoginForm({className, ...props}: React.ComponentProps<"div">) {
               const result = await login(initialState, formData);
               if (result?.error) {
                 setError(result.error);
-                toast.error(result.error);
+                toast.error("Грешка при најавување", {
+                  description: result.error,
+                });
+              } else {
+                toast.success("Добредојдовте назад!", {
+                  description: "Успешно се најавивте на вашата сметка",
+                });
+                router.refresh();
+                router.push("/");
               }
             }}
             className="p-6 md:p-8">
@@ -77,7 +87,9 @@ export function LoginForm({className, ...props}: React.ComponentProps<"div">) {
                   onClick={async () => {
                     const result = await signInWithApple();
                     if (result?.error) {
-                      toast.error(result.error);
+                      toast.error("Грешка при најавување со Apple", {
+                        description: result.error,
+                      });
                     }
                   }}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -95,7 +107,9 @@ export function LoginForm({className, ...props}: React.ComponentProps<"div">) {
                   onClick={async () => {
                     const result = await signInWithGoogle();
                     if (result?.error) {
-                      toast.error(result.error);
+                      toast.error("Грешка при најавување со Google", {
+                        description: result.error,
+                      });
                     }
                   }}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

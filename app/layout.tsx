@@ -3,6 +3,8 @@ import {Rubik} from "next/font/google";
 import {Fredoka} from "next/font/google";
 import "./globals.css";
 import {Navbar} from "@/components/navbar";
+import {Toaster} from "sonner";
+import {cn} from "@/lib/utils";
 
 const rubik = Rubik({
   subsets: ["latin", "cyrillic"],
@@ -26,9 +28,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${rubik.variable} ${fredoka.variable} font-rubik antialiased`}>
+      <body className={cn("min-h-screen bg-background font-sans antialiased", rubik.variable, fredoka.variable)}>
         <Navbar />
         {children}
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   );

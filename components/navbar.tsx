@@ -1,7 +1,20 @@
 import Link from "next/link";
 import {Button} from "@/components/ui/button";
 import Image from "next/image";
-export function Navbar() {
+import {createClient} from "@/lib/supabase/server";
+import {LogoutButton} from "@/components/logout-button";
+
+async function getUser() {
+  const supabase = await createClient();
+  const {
+    data: {user},
+  } = await supabase.auth.getUser();
+  return user;
+}
+
+export async function Navbar() {
+  const user = await getUser();
+
   return (
     <nav className="border-b bg-white fixed top-0 z-50 w-full">
       <div className="container mx-auto px-4">
@@ -21,18 +34,24 @@ export function Navbar() {
             </Link>
             <Link
               href="/marketplace"
-              className="relative  hover:text-primary text-md font-semibold transition-colors duration-200 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full">
+              className="relative hover:text-primary text-md font-semibold transition-colors duration-200 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full">
               Пронајди партнер
             </Link>
-            {/* Login and Ad Post */}
-            <Link href="/login" className="text-gray-600 hover:text-primary text-md font-semibold">
-              <Button variant={"outline"} className="text-base font-semibold">
-                Најави се
-              </Button>
-            </Link>
-            <Link href="/signup" className="text-gray-600 hover:text-primary text-md font-semibold">
-              <Button className="text-base font-semibold">Објави оглас</Button>
-            </Link>
+
+            {user ? (
+              <LogoutButton />
+            ) : (
+              <>
+                <Link href="/login" className="text-gray-600 hover:text-primary text-md font-semibold">
+                  <Button variant="outline" className="text-base font-semibold">
+                    Најави се
+                  </Button>
+                </Link>
+                <Link href="/signup" className="text-gray-600 hover:text-primary text-md font-semibold">
+                  <Button className="text-base font-semibold">Објави оглас</Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

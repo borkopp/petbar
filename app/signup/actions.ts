@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { revalidatePath } from 'next/cache'
 
 type State = {
   error: string | null;
@@ -30,7 +31,8 @@ export async function signup(prevState: State, formData: FormData): Promise<Stat
     return { error: error.message }
   }
 
-  redirect('/verify-email')
+  revalidatePath('/')
+  redirect('/')
 }
 
 export async function signUpWithGoogle() {
