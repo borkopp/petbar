@@ -1,5 +1,4 @@
 import {notFound} from "next/navigation";
-
 import {createClient} from "@/lib/supabase/server";
 import ListingGallery from "@/components/listings/listing-gallery";
 import ListingInfo from "@/components/listings/listing-info";
@@ -8,12 +7,13 @@ import ContactInfo from "@/components/listings/contact-info";
 import PetDetails from "@/components/listings/pet-details";
 
 interface PageProps {
-  params: {
-    id: string;
-  };
+  params: Promise<{id: string}>;
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  searchParams: Promise<{}>;
 }
 
-export default async function ListingPage({params}: PageProps) {
+export default async function ListingPage(props: PageProps) {
+  const params = await props.params;
   const supabase = await createClient();
 
   const {data: listing, error} = await supabase
