@@ -8,6 +8,7 @@ import {cn} from "@/lib/utils";
 import {Suspense} from "react";
 import {LoadingScreen} from "@/components/ui/loading-screen";
 import {InitialLoader} from "@/components/initial-loader";
+import {Analytics} from "@vercel/analytics/react";
 
 const rubik = Rubik({
   subsets: ["latin", "cyrillic"],
@@ -36,8 +37,9 @@ export default function RootLayout({
         <Suspense fallback={<LoadingScreen />}>
           <Navbar />
           {children}
-          <Toaster richColors position="top-right" />
+          <Toaster richColors position="bottom-right" />
         </Suspense>
+        <Analytics />
       </body>
     </html>
   );
