@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
 import type {Metadata} from "next";
+import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
 import {createClient} from "@/lib/supabase/server";
 import ListingSuccess from "@/components/listing-success";
@@ -9,20 +9,19 @@ export const metadata: Metadata = {
   description: "Your listing has been successfully created",
 };
 
-type PageProps = {
-  params: {};
-  searchParams: {[key: string]: string | string[] | undefined};
-};
+export default async function SuccessPage() {
+  const cookieStore = await cookies();
+  const listingId = cookieStore.get("new_listing_id")?.value;
 
-export default async function SuccessPage(props: PageProps) {
-  const supabase = await createClient();
-  const id = props.searchParams.id;
+  // Clear the cookie after reading it
+  cookieStore.delete("new_listing_id");
 
-  if (!id || typeof id !== "string") {
+  if (!listingId) {
     redirect("/");
   }
 
-  const {data: listing} = await supabase.from("pet_listings").select("id").eq("id", id).single();
+  const supabase = await createClient();
+  const {data: listing} = await supabase.from("pet_listings").select("id").eq("id", listingId).single();
 
   if (!listing) {
     redirect("/");
