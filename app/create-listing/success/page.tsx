@@ -5,18 +5,32 @@ import ListingSuccess from "@/components/listing-success";
 
 export const metadata: Metadata = {
   title: "Success - Create Listing",
+  description: "Your listing has been successfully created",
 };
 
-export default async function SuccessPage({searchParams}: {searchParams: {[key: string]: string | string[] | undefined}}) {
+type PageProps = {
+  searchParams: {[key: string]: string | string[] | undefined};
+};
+
+async function getListingData(id: string) {
   const supabase = await createClient();
+  const {data, error} = await supabase.from("pet_listings").select("id").eq("id", id).single();
 
-  const id = searchParams.id as string | undefined;
+  if (error || !data) {
+    return null;
+  }
 
-  if (!id) {
+  return data;
+}
+
+export default async function SuccessPage({searchParams}: PageProps) {
+  const id = searchParams.id;
+
+  if (!id || typeof id !== "string") {
     redirect("/");
   }
 
-  const {data: listing} = await supabase.from("pet_listings").select("id").eq("id", id).single();
+  const listing = await getListingData(id);
 
   if (!listing) {
     redirect("/");
