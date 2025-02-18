@@ -8,7 +8,12 @@ export const metadata: Metadata = {
   description: "Најавете се на вашата сметка на dogbar.mk",
 };
 
-export default async function LoginPage({searchParams}: {searchParams: {redirect?: string}}) {
+export default async function LoginPage(props: {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  params: Promise<{}>;
+  searchParams: Promise<{redirect?: string}>;
+}) {
+  const searchParams = await props.searchParams;
   const supabase = await createClient();
   const {
     data: {user},

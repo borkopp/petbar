@@ -15,7 +15,14 @@ interface SearchParams {
   vaccinated?: string;
 }
 
-export default async function ListingsPage({searchParams}: {searchParams: SearchParams}) {
+interface PageProps {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  params: Promise<{}>;
+  searchParams: Promise<SearchParams>;
+}
+
+export default async function ListingsPage(props: PageProps) {
+  const searchParams = await props.searchParams;
   const supabase = createServerComponentClient({cookies});
 
   // Build the query
