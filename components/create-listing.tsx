@@ -4,7 +4,7 @@ import * as React from "react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {Loader2, Upload} from "lucide-react";
+import {ArrowLeft, CircleCheck, Loader2, Upload} from "lucide-react";
 import type {User} from "@supabase/supabase-js";
 import {createClient} from "@/lib/supabase/client";
 import {toast} from "sonner";
@@ -66,12 +66,12 @@ export default function CreateListing({user}: CreateListingProps) {
       title: "",
       category: "",
       listingType: "",
-      price: "",
+      price: 0,
       location: "",
       breed: "",
-      age: "",
+      age: 0,
       gender: "",
-      weight: "",
+      weight: 0,
       color: "",
       hasPedigree: false,
       isVaccinated: false,
@@ -191,7 +191,7 @@ export default function CreateListing({user}: CreateListingProps) {
   return (
     <div className="container mx-auto max-w-3xl py-10">
       <div className="mb-8 space-y-6">
-        <h1 className="text-center text-3xl font-bold">Креирај Нов Оглас за Миленик</h1>
+        <h1 className="text-center text-3xl font-bold">Креирај нов оглас</h1>
         <Progress value={step * 25} className="h-2" />
       </div>
 
@@ -403,7 +403,7 @@ export default function CreateListing({user}: CreateListingProps) {
                           <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                         </FormControl>
                         <div className="space-y-1 leading-none">
-                          <FormLabel>Има родовник</FormLabel>
+                          <FormLabel>Има педигре</FormLabel>
                         </div>
                       </FormItem>
                     )}
@@ -418,7 +418,7 @@ export default function CreateListing({user}: CreateListingProps) {
                           <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                         </FormControl>
                         <div className="space-y-1 leading-none">
-                          <FormLabel>Вакциниран</FormLabel>
+                          <FormLabel>Има вакцини</FormLabel>
                         </div>
                       </FormItem>
                     )}
@@ -564,6 +564,7 @@ export default function CreateListing({user}: CreateListingProps) {
 
             <div className="flex justify-between pt-4">
               <Button type="button" variant="outline" onClick={handleBack} disabled={step === 1}>
+                <ArrowLeft className="h-4 w-4" />
                 Назад
               </Button>
 
@@ -574,7 +575,8 @@ export default function CreateListing({user}: CreateListingProps) {
               ) : (
                 <Button type="button" disabled={isSubmitting} onClick={form.handleSubmit(onSubmit)}>
                   {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Објави Оглас
+                  <CircleCheck className=" h-4 w-4" />
+                  Објави оглас
                 </Button>
               )}
             </div>

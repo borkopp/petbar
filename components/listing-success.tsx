@@ -31,13 +31,13 @@ export default function ListingSuccess({listingId}: ListingSuccessProps) {
         </motion.div>
 
         <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} transition={{delay: 0.2}} className="space-y-4">
-          <h1 className="text-3xl font-bold">Успешно Креиран Оглас!</h1>
+          <h1 className="text-3xl font-bold">Успешно објавен оглас!</h1>
           <p className="text-muted-foreground">Вашиот оглас е успешно објавен и сега е достапен за сите корисници.</p>
         </motion.div>
 
         <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} transition={{delay: 0.3}} className="mt-8 space-x-4">
           <Button asChild>
-            <Link href={`/listings/${listingId}`}>Погледни Оглас</Link>
+            <Link href={`/listings/${listingId}`}>Погледни оглас</Link>
           </Button>
           <Button variant="outline" asChild>
             <Link href="/">Назад Дома</Link>
