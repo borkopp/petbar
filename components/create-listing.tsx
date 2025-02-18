@@ -42,8 +42,8 @@ const formSchema = z.object({
   }),
   weight: z.string().transform((val) => (val ? Number(val) : null)),
   color: z.string(),
-  hasPedigree: z.boolean(),
-  isVaccinated: z.boolean(),
+  pedigree: z.boolean(),
+  vaccine: z.boolean(),
   description: z.string(),
 });
 
@@ -73,8 +73,8 @@ export default function CreateListing({user}: CreateListingProps) {
       gender: "",
       weight: 0,
       color: "",
-      hasPedigree: false,
-      isVaccinated: false,
+      pedigree: false,
+      vaccine: false,
       description: "",
     },
   });
@@ -82,7 +82,7 @@ export default function CreateListing({user}: CreateListingProps) {
   const handleNext = () => {
     const currentStepFields = {
       1: ["title", "category", "listingType", "price", "location"],
-      2: ["breed", "gender", "age", "weight", "color", "hasPedigree", "isVaccinated"],
+      2: ["breed", "gender", "age", "weight", "color", "pedigree", "vaccine"],
       3: ["description"],
     }[step] as Array<keyof FormValues>;
 
@@ -123,8 +123,8 @@ export default function CreateListing({user}: CreateListingProps) {
           gender: values.gender,
           weight: values.weight ? Number(values.weight) : null,
           color: values.color || null,
-          pedigree: values.hasPedigree,
-          vaccination_status: values.isVaccinated,
+          pedigree: values.pedigree,
+          vaccine: values.vaccine,
           description: values.description || null,
           user_id: user.id,
         })
@@ -396,7 +396,7 @@ export default function CreateListing({user}: CreateListingProps) {
                 <div className="space-y-4">
                   <FormField
                     control={form.control}
-                    name="hasPedigree"
+                    name="pedigree"
                     render={({field}) => (
                       <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                         <FormControl>
@@ -411,7 +411,7 @@ export default function CreateListing({user}: CreateListingProps) {
 
                   <FormField
                     control={form.control}
-                    name="isVaccinated"
+                    name="vaccine"
                     render={({field}) => (
                       <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                         <FormControl>
@@ -531,11 +531,11 @@ export default function CreateListing({user}: CreateListingProps) {
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <dt className="font-medium">Родовник:</dt>
-                      <dd>{form.getValues("hasPedigree") ? "Да" : "Не"}</dd>
+                      <dd>{form.getValues("pedigree") ? "Да" : "Не"}</dd>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <dt className="font-medium">Вакциниран:</dt>
-                      <dd>{form.getValues("isVaccinated") ? "Да" : "Не"}</dd>
+                      <dd>{form.getValues("vaccine") ? "Да" : "Не"}</dd>
                     </div>
                   </div>
 

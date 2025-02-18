@@ -30,7 +30,7 @@ export function LogoutButton() {
   };
 
   return (
-    <Button variant="outline" className="text-base font-semibold gap-2" onClick={handleLogout} disabled={isLoggingOut}>
+    <Button variant="outline" className=" text-sm gap-2" onClick={handleLogout} disabled={isLoggingOut}>
       <LogOut className="h-4 w-4" />
       {isLoggingOut ? "Се одјавува..." : "Одјави се"}
     </Button>
