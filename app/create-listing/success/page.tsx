@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 import type {Metadata} from "next";
 import {redirect} from "next/navigation";
 import {createClient} from "@/lib/supabase/server";
@@ -8,26 +9,20 @@ export const metadata: Metadata = {
   description: "Your listing has been successfully created",
 };
 
-async function getListingData(id: string) {
-  "use server";
+type PageProps = {
+  params: {};
+  searchParams: {[key: string]: string | string[] | undefined};
+};
+
+export default async function SuccessPage(props: PageProps) {
   const supabase = await createClient();
-  const {data, error} = await supabase.from("pet_listings").select("id").eq("id", id).single();
-
-  if (error || !data) {
-    return null;
-  }
-
-  return data;
-}
-
-export default async function SuccessPage({searchParams}: {searchParams: {[key: string]: string | string[] | undefined}}) {
-  const id = searchParams.id;
+  const id = props.searchParams.id;
 
   if (!id || typeof id !== "string") {
     redirect("/");
   }
 
-  const listing = await getListingData(id);
+  const {data: listing} = await supabase.from("pet_listings").select("id").eq("id", id).single();
 
   if (!listing) {
     redirect("/");
