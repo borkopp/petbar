@@ -2,14 +2,13 @@ import {redirect} from "next/navigation";
 import {createClient} from "@/lib/supabase/server";
 import ListingSuccess from "@/components/listing-success";
 
-interface PageProps {
-  params: Record<string, never>;
+type Props = {
   searchParams: {
     id?: string;
   };
-}
+};
 
-export default async function SuccessPage({searchParams}: PageProps) {
+export default async function SuccessPage({searchParams}: Props) {
   const supabase = await createClient();
 
   if (!searchParams.id) {
