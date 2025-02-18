@@ -12,6 +12,7 @@ import {useState} from "react";
 import {toast} from "sonner";
 import Link from "next/link";
 import {useRouter} from "next/navigation";
+import {Loader2} from "lucide-react";
 
 type State = {
   error: string | null;
@@ -25,7 +26,7 @@ function SubmitButton() {
   const {pending} = useFormStatus();
   return (
     <Button type="submit" className="w-full" disabled={pending}>
-      {pending ? "Се најавува..." : "Најава"}
+      {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Најава"}
     </Button>
   );
 }

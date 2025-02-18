@@ -3,7 +3,7 @@ import {Button} from "@/components/ui/button";
 import Image from "next/image";
 import {createClient} from "@/lib/supabase/server";
 import {LogoutButton} from "@/components/logout-button";
-import {User2} from "lucide-react";
+import {List, User2} from "lucide-react";
 import {Plus} from "lucide-react";
 
 async function getUser() {
@@ -18,7 +18,7 @@ export async function Navbar() {
   const user = await getUser();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
       <div className="px-8 md:px-12 lg:px-16">
         <nav className="flex h-16 items-center justify-between font-rubik">
           <Link href="/" className="flex items-center space-x-3">
@@ -27,6 +27,12 @@ export async function Navbar() {
           </Link>
 
           <div className="flex items-center gap-2">
+            <Button asChild variant="ghost" className="flex items-center gap-2">
+              <Link href="/listings">
+                <List className="h-4 w-4" />
+                Огласи
+              </Link>
+            </Button>
             {user ? (
               <>
                 <Button asChild variant="ghost" className="flex items-center gap-2">
