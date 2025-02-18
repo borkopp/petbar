@@ -5,6 +5,9 @@ import "./globals.css";
 import {Navbar} from "@/components/navbar";
 import {Toaster} from "sonner";
 import {cn} from "@/lib/utils";
+import {Suspense} from "react";
+import {LoadingScreen} from "@/components/ui/loading-screen";
+import {InitialLoader} from "@/components/initial-loader";
 
 const rubik = Rubik({
   subsets: ["latin", "cyrillic"],
@@ -29,9 +32,12 @@ export default function RootLayout({
   return (
     <html lang="mk">
       <body className={cn("min-h-screen bg-background font-sans antialiased", rubik.variable, fredoka.variable)}>
-        <Navbar />
-        {children}
-        <Toaster richColors position="top-right" />
+        <InitialLoader />
+        <Suspense fallback={<LoadingScreen />}>
+          <Navbar />
+          {children}
+          <Toaster richColors position="top-right" />
+        </Suspense>
       </body>
     </html>
   );
