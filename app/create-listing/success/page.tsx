@@ -1,17 +1,18 @@
 import {redirect} from "next/navigation";
-import {createServerComponentClient} from "@supabase/auth-helpers-nextjs";
-import {cookies} from "next/headers";
+import {createClient} from "@/lib/supabase/server";
 import ListingSuccess from "@/components/listing-success";
 
-type SearchParams = {id?: string};
+type SearchParams = {
+  id?: string;
+};
 
 interface Props {
-  params: Record<string, never>;
+  params: {id: string};
   searchParams: SearchParams;
 }
 
 export default async function SuccessPage({searchParams}: Props) {
-  const supabase = createServerComponentClient({cookies});
+  const supabase = await createClient();
 
   if (!searchParams.id) {
     redirect("/");
