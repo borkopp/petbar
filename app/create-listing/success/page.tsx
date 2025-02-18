@@ -2,17 +2,14 @@ import {redirect} from "next/navigation";
 import {createClient} from "@/lib/supabase/server";
 import ListingSuccess from "@/components/listing-success";
 
-type SearchParams = {
-  id?: string;
-};
-
-interface Props {
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  params: {};
-  searchParams: SearchParams;
+interface PageProps {
+  params: Record<string, never>;
+  searchParams: {
+    id?: string;
+  };
 }
 
-export default async function SuccessPage({searchParams}: Props) {
+export default async function SuccessPage({searchParams}: PageProps) {
   const supabase = await createClient();
 
   if (!searchParams.id) {
