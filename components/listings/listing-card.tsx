@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-import {Heart} from "lucide-react";
+import {Heart, Verified, Shield, Award} from "lucide-react";
 import {formatDistanceToNow} from "date-fns";
 import {mk} from "date-fns/locale";
+import Image from "next/image";
+import Link from "next/link";
 
-import {Card, CardContent, CardFooter} from "@/components/ui/card";
+import {Card} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import {Badge} from "@/components/ui/badge";
 import {cn} from "@/lib/utils";
@@ -16,12 +16,14 @@ interface ListingCardProps {
   title: string;
   price: number | null;
   location: string;
-  category: string;
-  listingType: string;
   images: {url: string}[];
   createdAt: string;
   isBookmarked?: boolean;
   onBookmark?: () => void;
+  hasIdentityVerified?: boolean;
+  vaccine?: boolean;
+  pedigree?: boolean;
+  description?: string;
 }
 
 export default function ListingCard({
@@ -29,53 +31,86 @@ export default function ListingCard({
   title,
   price,
   location,
-  category,
-  listingType,
   images,
   createdAt,
   isBookmarked,
   onBookmark,
+  hasIdentityVerified,
+  vaccine,
+  pedigree,
+  description,
 }: ListingCardProps) {
   return (
-    <Card className="group overflow-hidden">
-      <Link href={`/listings/${id}`} className="relative block aspect-square">
-        <Image
-          src={images[0]?.url || "/placeholder.png"}
-          alt={title}
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
-        />
-        {onBookmark && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="absolute right-2 top-2 z-10"
-            onClick={(e) => {
-              e.preventDefault();
-              onBookmark();
-            }}>
-            <Heart className={cn("h-5 w-5", isBookmarked ? "fill-red-500 text-red-500" : "text-white")} />
-          </Button>
-        )}
-        <Badge variant="secondary" className="absolute left-2 top-2 capitalize">
-          {category}
-        </Badge>
+    <Card className="flex overflow-hidden border rounded-xl font-rubik">
+      {/* Left side - Image */}
+      <Link href={`/listings/${id}`} className="relative w-[400px] h-[300px]">
+        <Image src={images[0]?.url || "/placeholder.png"} alt={title} fill className="object-cover" />
       </Link>
-      <CardContent className="p-4">
-        <div className="space-y-1">
-          <h3 className="font-semibold line-clamp-1">{title}</h3>
-          <p className="text-sm text-muted-foreground capitalize">{location}</p>
+
+      {/* Right side - Content */}
+      <div className="flex-1 p-6">
+        {/* Top row - Location, Date, Bookmark */}
+        <div className="flex items-center justify-between mb-6">
+          <p className="text-sm text-muted-foreground">{location}</p>
+          <div className="flex items-center gap-2">
+            <p className="text-xs text-muted-foreground">
+              {formatDistanceToNow(new Date(createdAt), {
+                addSuffix: true,
+                locale: mk,
+              })}
+            </p>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-10 w-10 rounded-full hover:bg-gray-100"
+              onClick={(e) => {
+                e.preventDefault();
+                onBookmark?.();
+              }}>
+              <Heart className={cn("h-5 w-5", isBookmarked ? "fill-red-500 text-red-500" : "text-gray-400")} />
+            </Button>
+          </div>
         </div>
-      </CardContent>
-      <CardFooter className="grid grid-cols-2 gap-2 p-4 pt-0">
-        <div>{price ? <p className="font-semibold">{price.toLocaleString()} МКД</p> : <Badge variant="secondary">Вдомување</Badge>}</div>
-        <p className="text-right text-sm text-muted-foreground">
-          {formatDistanceToNow(new Date(createdAt), {
-            addSuffix: true,
-            locale: mk,
-          })}
-        </p>
-      </CardFooter>
+
+        {/* Title */}
+        <h3 className="text-xl font-semibold mb-3 line-clamp-2">{title}</h3>
+
+        {/* Description */}
+        {description && <p className="text-sm line-clamp-3 mb-4">{description}</p>}
+
+        {/* Price */}
+        <div className="mb-4">
+          {price ? (
+            <p className="text-xl text-muted-foreground font-semibold">{price.toLocaleString()} ден</p>
+          ) : (
+            <Badge variant="secondary" className="text-base px-3 py-1">
+              За присвојување
+            </Badge>
+          )}
+        </div>
+
+        {/* Badges */}
+        <div className="flex gap-2">
+          {hasIdentityVerified && (
+            <Badge variant="outline" className="flex items-center gap-1.5 px-3 py-1 rounded-full border-gray-300">
+              <Verified className="h-4 w-4 text-blue-500" />
+              <span className="text-gray-600">Идентифициран</span>
+            </Badge>
+          )}
+          {vaccine && (
+            <Badge variant="outline" className="flex items-center gap-1.5 px-3 py-1 rounded-full border-gray-300">
+              <Shield className="h-4 w-4 text-green-500" />
+              <span className="text-gray-600">Вакциниран</span>
+            </Badge>
+          )}
+          {pedigree && (
+            <Badge variant="outline" className="flex items-center gap-1.5 px-3 py-1 rounded-full border-gray-300">
+              <Award className="h-4 w-4 text-yellow-500" />
+              <span className="text-gray-600">Педигре</span>
+            </Badge>
+          )}
+        </div>
+      </div>
     </Card>
   );
 }

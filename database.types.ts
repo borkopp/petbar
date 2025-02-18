@@ -246,7 +246,7 @@ export type Database = {
           title: string
           updated_at: string | null
           user_id: string
-          vaccination_status: boolean | null
+          vaccine: boolean | null
           weight: number | null
         }
         Insert: {
@@ -265,7 +265,7 @@ export type Database = {
           title: string
           updated_at?: string | null
           user_id: string
-          vaccination_status?: boolean | null
+          vaccine?: boolean | null
           weight?: number | null
         }
         Update: {
@@ -284,7 +284,7 @@ export type Database = {
           title?: string
           updated_at?: string | null
           user_id?: string
-          vaccination_status?: boolean | null
+          vaccine?: boolean | null
           weight?: number | null
         }
         Relationships: [

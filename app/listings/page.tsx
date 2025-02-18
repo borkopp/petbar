@@ -63,7 +63,7 @@ export default async function ListingsPage({searchParams}: {searchParams: Search
   }
 
   if (searchParams.vaccinated === "true") {
-    query = query.eq("vaccination_status", true);
+    query = query.eq("vaccine", true);
   }
 
   const {data: listings} = await query;
@@ -89,7 +89,7 @@ export default async function ListingsPage({searchParams}: {searchParams: Search
         {/* Main Content */}
         <div className="flex-1 space-y-8">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold">Огласи за Миленици</h1>
+            <h1 className="text-2xl font-bold">Огласи за миленичина</h1>
             <p className="text-sm text-muted-foreground">
               {listings?.length} {listings?.length === 1 ? "оглас" : "огласи"}
             </p>
@@ -103,16 +103,17 @@ export default async function ListingsPage({searchParams}: {searchParams: Search
               </div>
             </div>
           ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="flex flex-col gap-6 max-w-4xl">
               {listings?.map((listing) => (
                 <ListingCard
                   key={listing.id}
                   id={listing.id}
                   title={listing.title}
                   price={listing.price}
+                  description={listing.description}
                   location={listing.location}
-                  category={listing.category}
-                  listingType={listing.listing_type}
+                  vaccine={listing.vaccine}
+                  pedigree={listing.pedigree}
                   images={listing.pet_images}
                   createdAt={listing.created_at}
                   isBookmarked={bookmarkedListings.has(listing.id)}
