@@ -7,7 +7,8 @@ type SearchParams = {
 };
 
 interface Props {
-  params: {id: string};
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  params: {};
   searchParams: SearchParams;
 }
 
