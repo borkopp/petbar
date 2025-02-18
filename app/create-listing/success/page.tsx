@@ -8,11 +8,8 @@ export const metadata: Metadata = {
   description: "Your listing has been successfully created",
 };
 
-type PageProps = {
-  searchParams: {[key: string]: string | string[] | undefined};
-};
-
 async function getListingData(id: string) {
+  "use server";
   const supabase = await createClient();
   const {data, error} = await supabase.from("pet_listings").select("id").eq("id", id).single();
 
@@ -23,7 +20,7 @@ async function getListingData(id: string) {
   return data;
 }
 
-export default async function SuccessPage({searchParams}: PageProps) {
+export default async function SuccessPage({searchParams}: {searchParams: {[key: string]: string | string[] | undefined}}) {
   const id = searchParams.id;
 
   if (!id || typeof id !== "string") {
