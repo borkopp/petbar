@@ -9,13 +9,21 @@ import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
 import {Slider} from "@/components/ui/slider";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
+import {Badge} from "@/components/ui/badge";
 import {X} from "lucide-react";
 
 export default function ListingsFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [priceRange, setPriceRange] = React.useState([0, 100000]);
+  const [priceRange, setPriceRange] = React.useState([0, 100000]); // 0-100,000 MKD
   const [ageRange, setAgeRange] = React.useState([0, 180]); // 0-15 years in months
+
+  // Count active filters
+  const activeFilters = ["type", "category", "price", "age", "gender", "location", "pedigree", "vaccinated"].filter((param) =>
+    searchParams.get(param)
+  );
+
+  const activeFilterCount = activeFilters.length;
 
   const createQueryString = (params: Record<string, string | null>) => {
     const current = new URLSearchParams(Array.from(searchParams.entries()));
@@ -44,11 +52,16 @@ export default function ListingsFilters() {
   return (
     <div className="w-full space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Филтри</h2>
-        <Button variant="ghost" size="sm" onClick={clearFilters}>
-          <X className="mr-2 h-4 w-4" />
-          Исчисти
-        </Button>
+        <div className="flex items-center gap-2">
+          <h2 className="text-lg font-semibold">Филтри</h2>
+          {activeFilterCount > 0 && <Badge variant="secondary">{activeFilterCount}</Badge>}
+        </div>
+        {activeFilterCount > 0 && (
+          <Button variant="ghost" size="sm" onClick={clearFilters}>
+            <X className="mr-2 h-4 w-4" />
+            Исчисти
+          </Button>
+        )}
       </div>
 
       <Accordion type="multiple" className="w-full">

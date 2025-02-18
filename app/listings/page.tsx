@@ -1,8 +1,11 @@
 import {createServerComponentClient} from "@supabase/auth-helpers-nextjs";
 import {cookies} from "next/headers";
+import Link from "next/link";
 
 import ListingsFilters from "@/components/listings/filters";
 import ListingCard from "@/components/listings/listing-card";
+import {Button} from "@/components/ui/button";
+import {Plus} from "lucide-react";
 
 interface SearchParams {
   type?: string;
@@ -90,6 +93,14 @@ export default async function ListingsPage(props: PageProps) {
         <div className="w-full md:w-64 md:flex-none">
           <div className="sticky top-20">
             <ListingsFilters />
+            <div className="mt-4 w-full">
+              <Button asChild className="w-full">
+                <Link href="/create-listing" className="flex items-center justify-center gap-2">
+                  <Plus className="h-4 w-4" />
+                  Нов оглас
+                </Link>
+              </Button>
+            </div>
           </div>
         </div>
 

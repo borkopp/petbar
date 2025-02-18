@@ -46,6 +46,9 @@ export function LoginForm({redirectTo}: LoginFormProps) {
           <form
             action={async (formData) => {
               setError(null);
+              if (redirectTo) {
+                formData.append("redirectTo", redirectTo);
+              }
               const result = await login(initialState, formData);
               if (result?.error) {
                 setError(result.error);

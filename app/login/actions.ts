@@ -6,6 +6,7 @@ import { revalidatePath } from 'next/cache'
 
 type State = {
   error: string | null;
+  redirectTo?: string;
 }
 
 export async function login(prevState: State, formData: FormData): Promise<State> {
@@ -16,6 +17,8 @@ export async function login(prevState: State, formData: FormData): Promise<State
     password: formData.get('password') as string,
   }
 
+  const redirectTo = formData.get('redirectTo') as string
+
   const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
@@ -23,7 +26,7 @@ export async function login(prevState: State, formData: FormData): Promise<State
   }
 
   revalidatePath('/')
-  redirect('/')
+  redirect(redirectTo || '/')
 }
 
 export async function signInWithGoogle() {
