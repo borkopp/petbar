@@ -3,6 +3,8 @@ import {Button} from "@/components/ui/button";
 import Image from "next/image";
 import {createClient} from "@/lib/supabase/server";
 import {LogoutButton} from "@/components/logout-button";
+import {User2} from "lucide-react";
+import {Plus} from "lucide-react";
 
 async function getUser() {
   const supabase = await createClient();
@@ -16,50 +18,42 @@ export async function Navbar() {
   const user = await getUser();
 
   return (
-    <nav className="border-b bg-white fixed top-0 z-50 w-full">
-      <div className="container mx-auto px-4">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <Link href="/" className="text-xl font-bold text-primary flex items-center gap-3">
-            <Image src="/dogbar-v2.png" alt="DogBar" width={75} height={75} />
-            <span className="text-4xl font-medium font-fredoka">dogbar.mk</span>
-          </Link>
+    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <nav className="container flex h-14 items-center">
+        <Link href="/" className="mr-6 flex items-center space-x-2">
+          <Image src="/dogbar-v2.png" alt="DogBar" width={75} height={75} />
+          <span className="text-4xl font-medium font-fredoka">dogbar.mk</span>
+        </Link>
 
-          {/* Navigation Links */}
-          <div className="flex items-center space-x-4">
-            <Link
-              href="/listings"
-              className="relative hover:text-primary text-md font-semibold transition-colors duration-200 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full">
-              Пазар
-            </Link>
-            <Link
-              href="/marketplace"
-              className="relative hover:text-primary text-md font-semibold transition-colors duration-200 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full">
-              Пронајди партнер
-            </Link>
-
-            {user ? (
-              <>
-                <LogoutButton />
-                <Link href="/create-listing" className="text-gray-600 hover:text-primary text-md font-semibold">
-                  <Button className="text-base font-semibold">Објави оглас</Button>
+        <div className="flex flex-1 items-center justify-end space-x-4">
+          {user ? (
+            <>
+              <Button asChild variant="ghost">
+                <Link href="/create-listing">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Креирај Оглас
                 </Link>
-              </>
-            ) : (
-              <>
-                <Link href="/login" className="text-gray-600 hover:text-primary text-md font-semibold">
-                  <Button variant="outline" className="text-base font-semibold">
-                    Најави се
-                  </Button>
+              </Button>
+              <Button asChild variant="ghost">
+                <Link href="/profile">
+                  <User2 className="mr-2 h-4 w-4" />
+                  Мој Профил
                 </Link>
-                <Link href="/login?redirect=/create-listing" className="text-gray-600 hover:text-primary text-md font-semibold">
-                  <Button className="text-base font-semibold">Објави оглас</Button>
-                </Link>
-              </>
-            )}
-          </div>
+              </Button>
+              <LogoutButton />
+            </>
+          ) : (
+            <>
+              <Button asChild variant="ghost">
+                <Link href="/login">Најави се</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/signup">Регистрирај се</Link>
+              </Button>
+            </>
+          )}
         </div>
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
 }
