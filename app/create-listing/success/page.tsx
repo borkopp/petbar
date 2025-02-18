@@ -3,10 +3,11 @@ import {createServerComponentClient} from "@supabase/auth-helpers-nextjs";
 import {cookies} from "next/headers";
 import ListingSuccess from "@/components/listing-success";
 
+type SearchParams = {id?: string};
+
 interface Props {
-  searchParams: {
-    id?: string;
-  };
+  params: Record<string, never>;
+  searchParams: SearchParams;
 }
 
 export default async function SuccessPage({searchParams}: Props) {
