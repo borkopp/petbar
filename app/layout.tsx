@@ -18,7 +18,7 @@ const fredoka = Fredoka({
 
 export const metadata: Metadata = {
   title: "dogbar.mk - Пазар за миленичина во Македонија",
-  description: "Пазар за миленичина во Македонија",
+  description: "Најдобриот пазар за миленичина во Македонија",
 };
 
 export default function RootLayout({
@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="mk">
       <body className={cn("min-h-screen bg-background font-sans antialiased", rubik.variable, fredoka.variable)}>
         <Navbar />
         {children}

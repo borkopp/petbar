@@ -13,6 +13,7 @@ import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useForm} from "react-hook-form";
 import * as z from "zod";
+import {Loader2} from "lucide-react";
 
 const signupSchema = z
   .object({
@@ -36,7 +37,7 @@ function SubmitButton() {
   const {pending} = useFormStatus();
   return (
     <Button type="submit" className="w-full" disabled={pending}>
-      {pending ? "Се регистрира..." : "Регистрација"}
+      {pending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Регистрација"}
     </Button>
   );
 }
@@ -73,8 +74,10 @@ export function SignupForm({className, ...props}: React.ComponentProps<"div">) {
           <div className="p-6 md:p-8">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold">Креирајте сметка 🐾</h1>
-                <p className="text-balance text-muted-foreground">Креирајте сметка за да ги користите сите функционалности</p>
+                <h1 className="text-2xl font-bold">Регистрација 🐾</h1>
+                <p className="text-balance mt-2 text-muted-foreground">
+                  Направете сметка за да ги користите сите функционалности на нашата платформа.
+                </p>
               </div>
               {error && <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">{error}</div>}
               <Form {...form}>

@@ -206,7 +206,7 @@ export default function ListingsFilters() {
                   checked={searchParams.get("pedigree") === "true"}
                   onCheckedChange={(checked) => handleFilterChange("pedigree", checked ? "true" : null)}
                 />
-                <Label htmlFor="pedigree">Со Родовник</Label>
+                <Label htmlFor="pedigree">Со педигре</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <Checkbox

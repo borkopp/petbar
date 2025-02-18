@@ -63,8 +63,8 @@ export function LoginForm({redirectTo}: LoginFormProps) {
             className="p-6 md:p-8">
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold">Добредојдовте 🐾</h1>
-                <p className="text-balance text-muted-foreground">Најавете се на вашата сметка</p>
+                <h1 className="text-2xl font-bold">Најава 🐾</h1>
+                <p className="text-balance mt-2 text-muted-foreground">Најавете се на вашата сметка</p>
               </div>
               {error && <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">{error}</div>}
               <div className="grid gap-2">

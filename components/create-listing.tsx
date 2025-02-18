@@ -530,7 +530,7 @@ export default function CreateListing({user}: CreateListingProps) {
                       <dd>{form.getValues("color") || "Не е наведено"}</dd>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
-                      <dt className="font-medium">Родовник:</dt>
+                      <dt className="font-medium">Педигре:</dt>
                       <dd>{form.getValues("pedigree") ? "Да" : "Не"}</dd>
                     </div>
                     <div className="grid grid-cols-2 gap-2">
