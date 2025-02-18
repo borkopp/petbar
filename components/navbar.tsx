@@ -22,9 +22,12 @@ export async function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm">
       <div className="px-8 md:px-12 lg:px-16">
         <nav className="flex h-16 items-center justify-between font-rubik">
-          <Link href="/" className="flex items-center space-x-3">
+          <Link href="/" className="flex items-center space-x-4">
             <Image src="/dogbar-transparent.png" alt="dogbar.mk" width={75} height={75} className="h-12 w-auto" />
-            <span className="text-3xl font-medium text-primary  font-fredoka">dogbar.mk</span>
+            <div className="flex flex-col">
+              <span className="text-3xl font-semibold text-primary  font-fredoka">dogbar.mk</span>
+              <span className="text-xs text-muted-foreground font-rubik">Вашиот бар за животни</span>
+            </div>
           </Link>
 
           <div className="flex items-center gap-2">

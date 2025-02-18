@@ -16,7 +16,7 @@ export function Hero() {
         <div className="max-w-4xl mx-auto text-center text-white space-y-8">
           {/* Main Title */}
           <h1 className="text-5xl font-bold mb-4">Пронајди го твоето милениче</h1>
-          {/* <p className="text-xl mb-8">Ние сме првиот пазар за миленици во Македонија со онлајн систем за идентификација.</p> */}
+          <p className="text-xl mb-8">во најголемиот и најдобриот бар за животни во Македонија!</p>
 
           {/* Search Form */}
           <div className="bg-white rounded-xl p-2 shadow-lg max-w-5xl mx-auto flex flex-col md:flex-row gap-2">
