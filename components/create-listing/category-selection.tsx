@@ -1,5 +1,6 @@
 import * as React from "react";
-import {Dog, Cat, House, Bird, Fish, Turtle, Rabbit, Egg, Check, ChevronsUpDown, Search} from "lucide-react";
+import {Check, ChevronsUpDown, Search} from "lucide-react";
+import Image from "next/image";
 import {cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import {breeds} from "@/lib/breeds";
@@ -8,7 +9,7 @@ import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {ScrollArea} from "@/components/ui/scroll-area";
 
 interface CategoryCardProps {
-  icon: React.ReactNode;
+  icon: string;
   label: string;
   onClick: () => void;
   isSelected: boolean;
@@ -22,7 +23,9 @@ const CategoryCard = ({icon, label, onClick, isSelected}: CategoryCardProps) => 
       isSelected && "border-2 border-primary bg-primary/5"
     )}
     onClick={onClick}>
-    <div className="text-3xl text-muted-foreground">{icon}</div>
+    <div className="relative h-16 w-16">
+      <Image src={`/icons/${icon}.svg`} alt={label} fill className="object-contain" />
+    </div>
     <span className="text-sm font-medium">{label}</span>
   </Button>
 );
@@ -38,14 +41,14 @@ export function CategorySelection({onComplete}: CategorySelectionProps) {
   const [search, setSearch] = React.useState("");
 
   const categories = [
-    {id: "dog", label: "Куче", icon: <Dog className="h-10 w-10" />},
-    {id: "cat", label: "Мачка", icon: <Cat className="h-10 w-10" />},
-    {id: "horse", label: "Коњ", icon: <House className="h-10 w-10" />},
-    {id: "bird", label: "Птица", icon: <Bird className="h-10 w-10" />},
-    {id: "fish", label: "Риба", icon: <Fish className="h-10 w-10" />},
-    {id: "reptile", label: "Влекач", icon: <Turtle className="h-10 w-10" />},
-    {id: "smallpet", label: "Мал Миленик", icon: <Rabbit className="h-10 w-10" />},
-    {id: "farm", label: "Фарма", icon: <Egg className="h-10 w-10" />},
+    {id: "dog", label: "Куче", icon: "dog"},
+    {id: "cat", label: "Мачка", icon: "cat"},
+    {id: "horse", label: "Коњ", icon: "horse"},
+    {id: "bird", label: "Птица", icon: "bird"},
+    {id: "fish", label: "Риба", icon: "fish"},
+    {id: "reptile", label: "Влекач", icon: "reptile"},
+    {id: "smallpet", label: "Мал Миленик", icon: "rabbit"},
+    {id: "farm", label: "Фарма", icon: "farm"},
   ];
 
   const filteredBreeds = React.useMemo(() => {

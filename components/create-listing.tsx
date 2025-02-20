@@ -15,11 +15,11 @@ import {Button} from "@/components/ui/button";
 import {Form} from "@/components/ui/form";
 import {FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Textarea} from "@/components/ui/textarea";
-import {Progress} from "@/components/ui/progress";
 import Image from "next/image";
 import {CategorySelection} from "@/components/create-listing/category-selection";
 import {PetDetails} from "@/components/create-listing/pet-details";
 import {BasicDetails} from "@/components/create-listing/basic-details";
+import {StepProgress} from "@/components/ui/step-progress";
 
 const formSchema = z
   .object({
@@ -189,12 +189,32 @@ export default function CreateListing({user}: CreateListingProps) {
     }
   };
 
+  const steps = [
+    {
+      label: "Категорија",
+      description: "Изберете тип на миленик",
+    },
+    {
+      label: "Детали",
+      description: "Основни информации",
+    },
+    {
+      label: "Карактеристики",
+      description: "За миленикот",
+    },
+    {
+      label: "Опис",
+      description: "Дополнителни информации",
+    },
+    {
+      label: "Слики",
+      description: "Додадете фотографии",
+    },
+  ];
+
   return (
-    <div className="container mx-auto max-w-3xl py-10">
-      <div className="mb-8 space-y-6">
-        <h1 className="text-center text-3xl font-bold">Креирај нов оглас</h1>
-        <Progress value={step * 20} className="h-2" />
-      </div>
+    <div className="mx-auto max-w-3xl space-y-8 p-4">
+      <StepProgress currentStep={step} steps={steps} />
 
       <Form {...form}>
         <AnimatePresence mode="wait">

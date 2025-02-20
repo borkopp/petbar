@@ -8,6 +8,13 @@ import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/compo
 
 export function BasicDetails() {
   const form = useFormContext();
+  const listingType = form.watch("listingType");
+
+  React.useEffect(() => {
+    if (listingType === "adoption") {
+      form.setValue("price", "0");
+    }
+  }, [listingType, form]);
 
   const containerVariants = {
     hidden: {opacity: 0},
@@ -96,9 +103,17 @@ export function BasicDetails() {
                 <FormItem>
                   <FormLabel>Цена (МКД)</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="Внесете цена" {...field} value={field.value || ""} />
+                    <Input
+                      type="number"
+                      placeholder="Внесете цена"
+                      {...field}
+                      value={listingType === "adoption" ? "0" : field.value || ""}
+                      disabled={listingType === "adoption"}
+                      className={listingType === "adoption" ? "bg-muted" : ""}
+                    />
                   </FormControl>
                   <FormMessage />
+                  {listingType === "adoption" && <p className="text-sm text-muted-foreground">Цената е автоматски поставена на 0 за вдомување</p>}
                 </FormItem>
               )}
             />
