@@ -38,14 +38,14 @@ export function LoadingScreen() {
             {/* Replace this with your actual logo */}
             <div className="absolute inset-2 rounded-full bg-primary/20 p-2">
               <div className="h-full w-full rounded-full bg-primary" />
-              <Image src="/dogbar-transparent.png" alt="Dogbar Logo" fill className="object-contain p-1" priority />
+              <Image src="/dogbar-transparent.png" alt="petbar Logo" fill className="object-contain p-1" priority />
             </div>
           </div>
         </motion.div>
 
         {/* Increased text sizes */}
         <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} transition={{delay: 0.3}} className="mt-6 text-center">
-          <h2 className="font-fredoka text-2xl font-semibold text-primary">dogbar.mk</h2>
+          <h2 className="font-fredoka text-2xl font-semibold text-primary">petbar.mk</h2>
           <p className="text-base text-muted-foreground flex items-center justify-center gap-0.5">
             Се вчитува
             <motion.span initial={{opacity: 0}} animate={{opacity: 1}} transition={{repeat: Infinity, duration: 0.5, delay: 0}}>

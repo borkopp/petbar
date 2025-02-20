@@ -4,8 +4,8 @@ import {createClient} from "@/lib/supabase/server";
 import {redirect} from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "Најава - dogbar.mk",
-  description: "Најавете се на вашата сметка на dogbar.mk",
+  title: "Најава - petbar.mk",
+  description: "Најавете се на вашата сметка на petbar.mk",
 };
 
 export default async function LoginPage(props: {

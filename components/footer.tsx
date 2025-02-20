@@ -10,9 +10,9 @@ export function Footer() {
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">
             <Link href="/" className="flex items-center space-x-2 mb-4">
-              <Image src="/dogbar-transparent.png" alt="dogbar.mk" width={75} height={75} className="h-12 w-auto" />
+              <Image src="/dogbar-transparent.png" alt="petbar.mk" width={75} height={75} className="h-12 w-auto" />
               <div className="flex flex-col">
-                <span className="text-xl font-semibold text-primary font-fredoka">dogbar.mk</span>
+                <span className="text-xl font-semibold text-primary font-fredoka">petbar.mk</span>
                 <span className="text-xs text-muted-foreground font-rubik">Вашиот бар за животни</span>
               </div>
             </Link>
@@ -81,7 +81,7 @@ export function Footer() {
           <span className="text-sm text-muted-foreground sm:text-center">
             © {currentYear}{" "}
             <Link href="/" className="hover:text-primary">
-              dogbar.mk
+              petbar.mk
             </Link>
             . Сите права се задржани.
           </span>
@@ -94,7 +94,7 @@ export function Footer() {
               <Instagram className="h-5 w-5" />
               <span className="sr-only">Instagram профил</span>
             </Link>
-            <Link href="mailto:contact@dogbar.mk" className="text-muted-foreground hover:text-primary">
+            <Link href="mailto:contact@petbar.mk" className="text-muted-foreground hover:text-primary">
               <Mail className="h-5 w-5" />
               <span className="sr-only">Контакт е-пошта</span>
             </Link>

@@ -22,7 +22,7 @@ const fredoka = Fredoka({
 });
 
 export const metadata: Metadata = {
-  title: "dogbar.mk - Пазар за миленичина во Македонија",
+  title: "petbar.mk - Пазар за миленичина во Македонија",
   description: "Најдобриот пазар за миленичина во Македонија",
 };
 

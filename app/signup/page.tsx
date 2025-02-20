@@ -2,8 +2,8 @@ import {SignupForm} from "@/components/signup-form";
 import {Metadata} from "next";
 
 export const metadata: Metadata = {
-  title: "Регистрација - dogbar.mk",
-  description: "Креирајте сметка на dogbar.mk",
+  title: "Регистрација - petbar.mk",
+  description: "Креирајте сметка на petbar.mk",
 };
 
 export default function SignupPage() {
