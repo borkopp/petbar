@@ -3,8 +3,9 @@ import {Button} from "@/components/ui/button";
 import Image from "next/image";
 import {createClient} from "@/lib/supabase/server";
 import {LogoutButton} from "@/components/logout-button";
-import {Heart, List, User2, Plus, Menu} from "lucide-react";
+import {Heart, List, User2, Plus, Menu, UserPlus, User} from "lucide-react";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
+import {Separator} from "@/components/ui/separator";
 
 async function getUser() {
   const supabase = await createClient();
@@ -60,9 +61,17 @@ export async function Navbar() {
                   <DropdownMenuContent align="end" className="w-40">
                     <DropdownMenuItem asChild>
                       <Link href="/profile" className="w-full cursor-pointer">
+                        <User2 className="h-4 w-4" />
                         Мој профил
                       </Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/profile?tab=listings" className="w-full cursor-pointer">
+                        <List className="h-4 w-4" />
+                        Мои огласи
+                      </Link>
+                    </DropdownMenuItem>
+                    <Separator className="my-2" />
                     <DropdownMenuItem asChild className="md:hidden">
                       <Link href="/listings" className="w-full cursor-pointer">
                         Огласи
@@ -95,11 +104,13 @@ export async function Navbar() {
                 <DropdownMenuContent align="end" className="w-40">
                   <DropdownMenuItem asChild>
                     <Link href="/login" className="w-full cursor-pointer">
+                      <User className="h-4 w-4" />
                       Најави се
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/signup" className="w-full cursor-pointer">
+                      <UserPlus className="h-4 w-4" />
                       Регистрирај се
                     </Link>
                   </DropdownMenuItem>

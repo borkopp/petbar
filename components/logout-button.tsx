@@ -1,7 +1,6 @@
 "use client";
 
-import {Button} from "@/components/ui/button";
-import {LogOut} from "lucide-react";
+import {Loader2, LogOut} from "lucide-react";
 import {toast} from "sonner";
 import {createClient} from "@/lib/supabase/client";
 import {useState} from "react";
@@ -30,9 +29,9 @@ export function LogoutButton() {
   };
 
   return (
-    <Button variant="outline" className=" text-sm gap-2" onClick={handleLogout} disabled={isLoggingOut}>
+    <button className="flex items-center gap-2 text-red-500" onClick={handleLogout} disabled={isLoggingOut}>
       <LogOut className="h-4 w-4" />
-      {isLoggingOut ? "Се одјавува..." : "Одјави се"}
-    </Button>
+      {isLoggingOut ? <Loader2 className="h-4 w-4 animate-spin" /> : "Одјави се"}
+    </button>
   );
 }

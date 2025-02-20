@@ -82,37 +82,37 @@ export default function MyListings({listings: initialListings}: MyListingsProps)
   }
 
   return (
-    <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {listings.map((listing) => (
         <Card key={listing.id} className="group overflow-hidden">
-          <Link href={`/listings/${listing.id}`} className="relative block aspect-square">
+          <Link href={`/listings/${listing.id}`} className="relative block aspect-[4/3]">
             <Image
               src={listing.pet_images[0]?.url || "/placeholder.png"}
               alt={listing.title}
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
-            <Badge variant="secondary" className="absolute left-2 top-2 capitalize">
+            <Badge variant="secondary" className="absolute left-2 top-2 capitalize text-xs">
               {listing.category}
             </Badge>
           </Link>
-          <CardContent className="p-4">
-            <div className="space-y-1">
-              <h3 className="font-semibold line-clamp-1">{listing.title}</h3>
-              <p className="text-sm text-muted-foreground capitalize">{listing.location}</p>
+          <CardContent className="p-2.5">
+            <div className="space-y-0.5">
+              <h3 className="font-medium line-clamp-1 text-sm">{listing.title}</h3>
+              <p className="text-xs text-muted-foreground capitalize">{listing.location}</p>
             </div>
           </CardContent>
-          <CardFooter className="grid grid-cols-2 gap-2 p-4 pt-0">
-            <Button variant="outline" size="sm" asChild>
+          <CardFooter className="grid grid-cols-2 gap-1.5 p-2.5 pt-0">
+            <Button variant="outline" size="sm" asChild className="h-8 text-xs">
               <Link href={`/listings/${listing.id}/edit`}>
-                <Pencil className="mr-2 h-4 w-4" />
+                <Pencil className="mr-1.5 h-3.5 w-3.5" />
                 Измени
               </Link>
             </Button>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="sm" disabled={isDeleting}>
-                  <Trash2 className="mr-2 h-4 w-4" />
+                <Button variant="destructive" size="sm" disabled={isDeleting} className="h-8 text-xs">
+                  <Trash2 className="mr-1.5 h-3.5 w-3.5" />
                   Избриши
                 </Button>
               </AlertDialogTrigger>

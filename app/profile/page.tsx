@@ -2,7 +2,13 @@ import {redirect} from "next/navigation";
 import {createClient} from "@/lib/supabase/server";
 import ProfileTabs from "@/components/profile/profile-tabs";
 
-export default async function ProfilePage() {
+interface ProfilePageProps {
+  searchParams: {
+    tab?: string;
+  };
+}
+
+export default async function ProfilePage({searchParams}: ProfilePageProps) {
   const supabase = await createClient();
 
   const {
@@ -33,7 +39,7 @@ export default async function ProfilePage() {
   return (
     <div className="container mx-auto py-10">
       <h1 className="mb-8 text-3xl font-bold">Мој Профил</h1>
-      <ProfileTabs profile={profile} listings={listings || []} />
+      <ProfileTabs profile={profile} listings={listings || []} defaultTab={searchParams.tab === "listings" ? "listings" : "profile"} />
     </div>
   );
 }
