@@ -4,7 +4,7 @@ import * as React from "react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {ArrowLeft, CircleCheck, Loader2, Upload} from "lucide-react";
+import {ArrowLeft, Loader2, Upload} from "lucide-react";
 import type {User} from "@supabase/supabase-js";
 import {createClient} from "@/lib/supabase/client";
 import {toast} from "sonner";
@@ -192,28 +192,23 @@ export default function CreateListing({user}: CreateListingProps) {
   const steps = [
     {
       label: "Категорија",
-      description: "Изберете тип на миленик",
     },
     {
       label: "Детали",
-      description: "Основни информации",
     },
     {
       label: "Карактеристики",
-      description: "За миленикот",
     },
     {
-      label: "Опис",
-      description: "Дополнителни информации",
+      label: "Опис и Слики",
     },
     {
-      label: "Слики",
-      description: "Додадете фотографии",
+      label: "Потврда",
     },
   ];
 
   return (
-    <div className="mx-auto max-w-3xl space-y-8 p-4">
+    <div className="mx-auto max-w-3xl space-y-16 p-4 pb-16 min-h-screen">
       <StepProgress currentStep={step} steps={steps} />
 
       <Form {...form}>
@@ -376,7 +371,6 @@ export default function CreateListing({user}: CreateListingProps) {
               ) : (
                 <Button type="button" disabled={isSubmitting} onClick={form.handleSubmit(onSubmit)}>
                   {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  <CircleCheck className=" h-4 w-4" />
                   Објави оглас
                 </Button>
               )}

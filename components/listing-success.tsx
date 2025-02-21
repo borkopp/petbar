@@ -37,10 +37,10 @@ export default function ListingSuccess({listingId}: ListingSuccessProps) {
 
         <motion.div initial={{opacity: 0, y: 10}} animate={{opacity: 1, y: 0}} transition={{delay: 0.3}} className="mt-8 space-x-4">
           <Button asChild>
-            <Link href={`/listings/${listingId}`}>Погледни оглас</Link>
+            <Link href={`/listings/${listingId}`}>Погледни го огласот</Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link href="/">Назад Дома</Link>
+            <Link href="/">Дома</Link>
           </Button>
         </motion.div>
       </motion.div>

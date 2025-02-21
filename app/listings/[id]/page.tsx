@@ -72,7 +72,7 @@ export default async function ListingPage(props: PageProps) {
 
           <SellerCard seller={listing.profiles} responseTime="1 час" responseRate={100} />
 
-          <ContactInfo location={listing.location} phone="0177/49..." website="Website anzeigen" />
+          <ContactInfo location={listing.location} phone={listing.phone || "Нема број"} />
         </div>
       </div>
     </div>

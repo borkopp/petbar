@@ -2,13 +2,11 @@ import {redirect} from "next/navigation";
 import {createClient} from "@/lib/supabase/server";
 import ProfileTabs from "@/components/profile/profile-tabs";
 
-interface ProfilePageProps {
-  searchParams: {
-    tab?: string;
-  };
+interface SearchParams {
+  tab?: string;
 }
 
-export default async function ProfilePage({searchParams}: ProfilePageProps) {
+export default async function ProfilePage({searchParams}: {searchParams: SearchParams}) {
   const supabase = await createClient();
 
   const {
