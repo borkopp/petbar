@@ -1,11 +1,12 @@
-import {createServerComponentClient} from "@supabase/auth-helpers-nextjs";
 import {cookies} from "next/headers";
 import Link from "next/link";
+import {createServerComponentClient} from "@supabase/auth-helpers-nextjs";
 
 import ListingsFilters from "@/components/listings/filters";
 import ListingCard from "@/components/listings/listing-card";
 import {Button} from "@/components/ui/button";
 import {Plus} from "lucide-react";
+import type {Database} from "@/database.types";
 
 interface SearchParams {
   type?: string;
@@ -19,14 +20,16 @@ interface SearchParams {
 }
 
 interface PageProps {
-  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-  params: Promise<{}>;
+  params: Promise<object>;
   searchParams: Promise<SearchParams>;
 }
 
 export default async function ListingsPage(props: PageProps) {
   const searchParams = await props.searchParams;
-  const supabase = createServerComponentClient({cookies});
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient<Database>({
+    cookies: () => cookieStore,
+  });
 
   // Build the query
   let query = supabase
@@ -76,15 +79,9 @@ export default async function ListingsPage(props: PageProps) {
     query = query.eq("vaccine", true);
   }
 
-  const {data: listings} = await query;
-
-  // Get user's bookmarks
-  const {
-    data: {user},
-  } = await supabase.auth.getUser();
-  const {data: bookmarks} = user ? await supabase.from("bookmarks").select("listing_id").eq("user_id", user.id) : {data: []};
-
-  const bookmarkedListings = new Set(bookmarks?.map((b) => b.listing_id));
+  // Get listings
+  const {data: rawListings} = await query;
+  const listings = rawListings ?? [];
 
   return (
     <div className="container mx-auto py-10">
@@ -109,11 +106,11 @@ export default async function ListingsPage(props: PageProps) {
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold">Огласи за миленичина</h1>
             <p className="text-sm text-muted-foreground">
-              {listings?.length} {listings?.length === 1 ? "оглас" : "огласи"}
+              {listings.length} {listings.length === 1 ? "оглас" : "огласи"}
             </p>
           </div>
 
-          {listings?.length === 0 ? (
+          {listings.length === 0 ? (
             <div className="flex h-[450px] items-center justify-center rounded-lg border border-dashed">
               <div className="mx-auto max-w-[420px] text-center">
                 <h3 className="mt-4 text-lg font-semibold">Нема пронајдено огласи</h3>
@@ -122,36 +119,18 @@ export default async function ListingsPage(props: PageProps) {
             </div>
           ) : (
             <div className="flex flex-col gap-6 max-w-4xl">
-              {listings?.map((listing) => (
+              {listings.map((listing) => (
                 <ListingCard
                   key={listing.id}
                   id={listing.id}
                   title={listing.title}
                   price={listing.price}
-                  description={listing.description}
+                  description={listing.description ?? undefined}
                   location={listing.location}
-                  vaccine={listing.vaccine}
-                  pedigree={listing.pedigree}
+                  vaccine={listing.vaccine ?? undefined}
+                  pedigree={listing.pedigree ?? undefined}
                   images={listing.pet_images}
-                  createdAt={listing.created_at}
-                  isBookmarked={bookmarkedListings.has(listing.id)}
-                  onBookmark={
-                    user
-                      ? async () => {
-                          if (bookmarkedListings.has(listing.id)) {
-                            await supabase.from("bookmarks").delete().match({
-                              user_id: user.id,
-                              listing_id: listing.id,
-                            });
-                          } else {
-                            await supabase.from("bookmarks").insert({
-                              user_id: user.id,
-                              listing_id: listing.id,
-                            });
-                          }
-                        }
-                      : undefined
-                  }
+                  createdAt={listing.created_at ?? new Date().toISOString()}
                 />
               ))}
             </div>

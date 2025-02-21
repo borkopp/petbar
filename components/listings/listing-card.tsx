@@ -1,15 +1,13 @@
 "use client";
 
-import {Heart, Verified, Shield, Award} from "lucide-react";
+import {Verified, Shield, Award} from "lucide-react";
 import {formatDistanceToNow} from "date-fns";
 import {mk} from "date-fns/locale";
 import Image from "next/image";
 import Link from "next/link";
 
 import {Card} from "@/components/ui/card";
-import {Button} from "@/components/ui/button";
 import {Badge} from "@/components/ui/badge";
-import {cn} from "@/lib/utils";
 
 interface ListingCardProps {
   id: string;
@@ -18,8 +16,6 @@ interface ListingCardProps {
   location: string;
   images: {url: string}[];
   createdAt: string;
-  isBookmarked?: boolean;
-  onBookmark?: () => void;
   hasIdentityVerified?: boolean;
   vaccine?: boolean;
   pedigree?: boolean;
@@ -33,8 +29,6 @@ export default function ListingCard({
   location,
   images,
   createdAt,
-  isBookmarked,
-  onBookmark,
   hasIdentityVerified,
   vaccine,
   pedigree,
@@ -49,27 +43,15 @@ export default function ListingCard({
 
       {/* Right side - Content */}
       <div className="flex-1 p-6">
-        {/* Top row - Location, Date, Bookmark */}
+        {/* Top row - Location and Date */}
         <div className="flex items-center justify-between mb-6">
           <p className="text-sm text-muted-foreground">{location}</p>
-          <div className="flex items-center gap-2">
-            <p className="text-xs text-muted-foreground">
-              {formatDistanceToNow(new Date(createdAt), {
-                addSuffix: true,
-                locale: mk,
-              })}
-            </p>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-10 w-10 rounded-full hover:bg-gray-100"
-              onClick={(e) => {
-                e.preventDefault();
-                onBookmark?.();
-              }}>
-              <Heart className={cn("h-5 w-5", isBookmarked ? "fill-red-500 text-red-500" : "text-gray-400")} />
-            </Button>
-          </div>
+          <p className="text-xs text-muted-foreground">
+            {formatDistanceToNow(new Date(createdAt), {
+              addSuffix: true,
+              locale: mk,
+            })}
+          </p>
         </div>
 
         {/* Title */}
