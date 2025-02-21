@@ -6,7 +6,12 @@ interface SearchParams {
   tab?: string;
 }
 
-export default async function ProfilePage({searchParams}: {searchParams: SearchParams}) {
+interface PageProps {
+  searchParams: Promise<SearchParams>;
+}
+
+export default async function ProfilePage({searchParams}: PageProps) {
+  const params = await searchParams;
   const supabase = await createClient();
 
   const {
@@ -37,7 +42,7 @@ export default async function ProfilePage({searchParams}: {searchParams: SearchP
   return (
     <div className="container mx-auto py-10">
       <h1 className="mb-8 text-3xl font-bold">Мој Профил</h1>
-      <ProfileTabs profile={profile} listings={listings || []} defaultTab={searchParams.tab === "listings" ? "listings" : "profile"} />
+      <ProfileTabs profile={profile} listings={listings || []} defaultTab={params.tab === "listings" ? "listings" : "profile"} />
     </div>
   );
 }
