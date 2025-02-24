@@ -47,16 +47,19 @@ export type Database = {
           category_id: number
           id: number
           name: string
+          type: string
         }
         Insert: {
           category_id: number
           id?: number
           name: string
+          type?: string
         }
         Update: {
           category_id?: number
           id?: number
           name?: string
+          type?: string
         }
         Relationships: [
           {
@@ -233,6 +236,7 @@ export type Database = {
         Row: {
           age: number | null
           breed: string | null
+          breed_id: number | null
           category: string
           color: string | null
           created_at: string | null
@@ -252,6 +256,7 @@ export type Database = {
         Insert: {
           age?: number | null
           breed?: string | null
+          breed_id?: number | null
           category: string
           color?: string | null
           created_at?: string | null
@@ -271,6 +276,7 @@ export type Database = {
         Update: {
           age?: number | null
           breed?: string | null
+          breed_id?: number | null
           category?: string
           color?: string | null
           created_at?: string | null
@@ -288,6 +294,13 @@ export type Database = {
           weight?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "pet_listings_breed_id_fkey"
+            columns: ["breed_id"]
+            isOneToOne: false
+            referencedRelation: "breeds"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "pet_listings_user_id_fkey"
             columns: ["user_id"]
