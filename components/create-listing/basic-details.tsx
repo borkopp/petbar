@@ -5,8 +5,13 @@ import {FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/compon
 import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
+import {Button} from "@/components/ui/button";
 
-export function BasicDetails() {
+interface BasicDetailsProps {
+  onNext: () => void;
+}
+
+export function BasicDetails({onNext}: BasicDetailsProps) {
   const form = useFormContext();
   const listingType = form.watch("listingType");
 
@@ -29,6 +34,13 @@ export function BasicDetails() {
   const itemVariants = {
     hidden: {y: 20, opacity: 0},
     visible: {y: 0, opacity: 1},
+  };
+
+  const handleNext = async () => {
+    const isValid = await form.trigger(["title", "listingType", "location"]);
+    if (isValid) {
+      onNext();
+    }
   };
 
   return (
@@ -79,6 +91,24 @@ export function BasicDetails() {
             />
           </motion.div>
 
+          {listingType === "sale" && (
+            <motion.div variants={itemVariants}>
+              <FormField
+                control={form.control}
+                name="price"
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel>Цена (МКД)</FormLabel>
+                    <FormControl>
+                      <Input type="number" placeholder="Внесете цена" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </motion.div>
+          )}
+
           <motion.div variants={itemVariants}>
             <FormField
               control={form.control}
@@ -94,32 +124,13 @@ export function BasicDetails() {
               )}
             />
           </motion.div>
-
-          <motion.div variants={itemVariants}>
-            <FormField
-              control={form.control}
-              name="price"
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>Цена (МКД)</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Внесете цена"
-                      {...field}
-                      value={listingType === "adoption" ? "0" : field.value || ""}
-                      disabled={listingType === "adoption"}
-                      className={listingType === "adoption" ? "bg-muted" : ""}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                  {listingType === "adoption" && <p className="text-sm text-muted-foreground">Цената е автоматски поставена на 0 за вдомување</p>}
-                </FormItem>
-              )}
-            />
-          </motion.div>
         </CardContent>
       </Card>
+      <div className="flex justify-end pt-6">
+        <Button type="button" onClick={handleNext}>
+          Следно
+        </Button>
+      </div>
     </motion.div>
   );
 }

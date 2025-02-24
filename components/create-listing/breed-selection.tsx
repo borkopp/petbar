@@ -12,7 +12,11 @@ import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {ScrollArea} from "@/components/ui/scroll-area";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 
-export function BreedSelection() {
+interface BreedSelectionProps {
+  onNext: () => void;
+}
+
+export function BreedSelection({onNext}: BreedSelectionProps) {
   const form = useFormContext();
   const [open, setOpen] = React.useState(false);
   const [search, setSearch] = React.useState("");
@@ -49,6 +53,13 @@ export function BreedSelection() {
   const itemVariants = {
     hidden: {y: 20, opacity: 0},
     visible: {y: 0, opacity: 1},
+  };
+
+  const handleNext = async () => {
+    const isValid = await form.trigger("breed");
+    if (isValid) {
+      onNext();
+    }
   };
 
   return (
@@ -120,6 +131,11 @@ export function BreedSelection() {
           </motion.div>
         </CardContent>
       </Card>
+      <div className="flex justify-end pt-6">
+        <Button type="button" onClick={handleNext}>
+          Следно
+        </Button>
+      </div>
     </motion.div>
   );
 }

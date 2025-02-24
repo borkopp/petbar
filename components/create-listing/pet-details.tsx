@@ -8,8 +8,13 @@ import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Checkbox} from "@/components/ui/checkbox";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
+import {Button} from "@/components/ui/button";
 
-export function PetDetails() {
+interface PetDetailsProps {
+  onNext: () => void;
+}
+
+export function PetDetails({onNext}: PetDetailsProps) {
   const form = useFormContext();
 
   const containerVariants = {
@@ -27,30 +32,21 @@ export function PetDetails() {
     visible: {y: 0, opacity: 1},
   };
 
+  const handleNext = async () => {
+    const isValid = await form.trigger("gender");
+    if (isValid) {
+      onNext();
+    }
+  };
+
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Основни информации</CardTitle>
-          <CardDescription>Внесете ги основните информации за вашето милениче</CardDescription>
+          <CardTitle>Карактеристики</CardTitle>
+          <CardDescription>Внесете ги карактеристиките на вашето милениче</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <motion.div variants={itemVariants}>
-            <FormField
-              control={form.control}
-              name="age"
-              render={({field}) => (
-                <FormItem>
-                  <FormLabel>Возраст (месеци)</FormLabel>
-                  <FormControl>
-                    <Input type="number" placeholder="Внесете возраст" {...field} value={field.value || ""} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </motion.div>
-
           <motion.div variants={itemVariants}>
             <FormField
               control={form.control}
@@ -78,12 +74,28 @@ export function PetDetails() {
           <motion.div variants={itemVariants}>
             <FormField
               control={form.control}
+              name="age"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel>Возраст (месеци)</FormLabel>
+                  <FormControl>
+                    <Input type="number" placeholder="Внесете возраст" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </motion.div>
+
+          <motion.div variants={itemVariants}>
+            <FormField
+              control={form.control}
               name="weight"
               render={({field}) => (
                 <FormItem>
                   <FormLabel>Тежина (кг)</FormLabel>
                   <FormControl>
-                    <Input type="number" placeholder="Внесете тежина" {...field} value={field.value || ""} />
+                    <Input type="number" placeholder="Внесете тежина" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -106,21 +118,13 @@ export function PetDetails() {
               )}
             />
           </motion.div>
-        </CardContent>
-      </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Дополнителни информации</CardTitle>
-          <CardDescription>Означете ги карактеристиките што важат</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
           <motion.div variants={itemVariants}>
             <FormField
               control={form.control}
               name="pedigree"
               render={({field}) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                   <FormControl>
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
@@ -137,12 +141,12 @@ export function PetDetails() {
               control={form.control}
               name="vaccine"
               render={({field}) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                   <FormControl>
                     <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
                   <div className="space-y-1 leading-none">
-                    <FormLabel>Вакциниран/а</FormLabel>
+                    <FormLabel>Вакциниран</FormLabel>
                   </div>
                 </FormItem>
               )}
@@ -150,6 +154,11 @@ export function PetDetails() {
           </motion.div>
         </CardContent>
       </Card>
+      <div className="flex justify-end pt-6">
+        <Button type="button" onClick={handleNext}>
+          Следно
+        </Button>
+      </div>
     </motion.div>
   );
 }

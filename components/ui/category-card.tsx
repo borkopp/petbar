@@ -5,13 +5,14 @@ import {Button} from "@/components/ui/button";
 interface CategoryCardProps {
   icon: string;
   label: string;
-  onClick: () => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   isSelected: boolean;
 }
 
 export function CategoryCard({icon, label, onClick, isSelected}: CategoryCardProps) {
   return (
     <Button
+      type="button"
       variant="outline"
       className={cn(
         "flex h-32 w-full flex-col items-center justify-center gap-2 p-6 transition-all hover:border-primary",

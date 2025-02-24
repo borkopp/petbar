@@ -1,6 +1,8 @@
 import * as React from "react";
 import {createClient} from "@/lib/supabase/client";
 import {CategoryCard} from "@/components/ui/category-card";
+import {Button} from "@/components/ui/button";
+import {toast} from "sonner";
 
 interface Category {
   id: number;
@@ -10,9 +12,10 @@ interface Category {
 
 interface CategorySelectionProps {
   onComplete: (data: {category: string}) => void;
+  onNext: () => void;
 }
 
-export function CategorySelection({onComplete}: CategorySelectionProps) {
+export function CategorySelection({onComplete, onNext}: CategorySelectionProps) {
   const [selectedCategory, setSelectedCategory] = React.useState<string>("");
   const [categories, setCategories] = React.useState<Category[]>([]);
   const [loadingCategories, setLoadingCategories] = React.useState(true);
@@ -45,6 +48,16 @@ export function CategorySelection({onComplete}: CategorySelectionProps) {
     return iconMap[slug] || slug;
   };
 
+  const handleNext = async () => {
+    if (!selectedCategory) {
+      toast.error("Изберете категорија", {
+        description: "Ве молиме изберете категорија за да продолжите.",
+      });
+      return;
+    }
+    onNext();
+  };
+
   if (loadingCategories) {
     return (
       <div className="flex h-[450px] items-center justify-center">
@@ -63,7 +76,9 @@ export function CategorySelection({onComplete}: CategorySelectionProps) {
               key={category.id}
               icon={getIconForSlug(category.slug)}
               label={category.name}
-              onClick={() => {
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                e.preventDefault();
+                e.stopPropagation();
                 setSelectedCategory(category.slug);
                 onComplete({
                   category: category.slug,
@@ -73,6 +88,11 @@ export function CategorySelection({onComplete}: CategorySelectionProps) {
             />
           ))}
         </div>
+      </div>
+      <div className="flex justify-end pt-6">
+        <Button type="button" onClick={handleNext}>
+          Следно
+        </Button>
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import * as React from "react";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import * as z from "zod";
-import {ArrowLeft, Loader2, Upload} from "lucide-react";
+import {ArrowLeft, Loader2} from "lucide-react";
 import type {User} from "@supabase/supabase-js";
 import {createClient} from "@/lib/supabase/client";
 import {toast} from "sonner";
@@ -13,15 +13,12 @@ import {AnimatePresence, motion} from "framer-motion";
 
 import {Button} from "@/components/ui/button";
 import {Form} from "@/components/ui/form";
-import {FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
-import {Textarea} from "@/components/ui/textarea";
-import {Label} from "@/components/ui/label";
-import Image from "next/image";
 import {CategorySelection} from "@/components/create-listing/category-selection";
 import {PetDetails} from "@/components/create-listing/pet-details";
 import {BasicDetails} from "@/components/create-listing/basic-details";
 import {BreedSelection} from "@/components/create-listing/breed-selection";
 import {StepProgress} from "@/components/ui/step-progress";
+import {DescriptionImages} from "@/components/create-listing/description-images";
 
 const formSchema = z
   .object({
@@ -86,39 +83,15 @@ export default function CreateListing({user}: CreateListingProps) {
       location: "",
     },
     mode: "onSubmit",
+    shouldUnregister: false,
   });
 
   const handleCategoryComplete = (data: {category: string}) => {
-    form.setValue("category", data.category, {shouldValidate: false});
-    setStep(2);
-  };
-
-  const handleNext = async () => {
-    let fieldsToValidate: Array<keyof z.infer<typeof formSchema>> = [];
-
-    switch (step) {
-      case 1:
-        fieldsToValidate = ["category"];
-        break;
-      case 2:
-        fieldsToValidate = ["breed"];
-        break;
-      case 3:
-        fieldsToValidate = ["title", "listingType", "location"];
-        break;
-      case 4:
-        fieldsToValidate = ["gender"];
-        break;
-      case 5:
-        fieldsToValidate = ["description"];
-        break;
-    }
-
-    const isValid = await form.trigger(fieldsToValidate);
-
-    if (isValid) {
-      setStep(step + 1);
-    }
+    form.setValue("category", data.category, {
+      shouldValidate: false,
+      shouldDirty: true,
+      shouldTouch: false,
+    });
   };
 
   const handleBack = () => {
@@ -306,10 +279,12 @@ export default function CreateListing({user}: CreateListingProps) {
               await onSubmit(data);
             },
             (errors) => {
-              console.error("Form validation errors:", errors);
-              toast.error("Проверете ги сите полиња", {
-                description: "Пополнете ги сите задолжителни полиња.",
-              });
+              if (Object.keys(errors).length > 0) {
+                console.error("Form validation errors:", errors);
+                toast.error("Проверете ги сите полиња", {
+                  description: "Пополнете ги сите задолжителни полиња.",
+                });
+              }
             }
           )}>
           <AnimatePresence mode="wait">
@@ -320,49 +295,18 @@ export default function CreateListing({user}: CreateListingProps) {
               exit={{opacity: 0, x: -20}}
               transition={{duration: 0.2}}
               className="rounded-lg border p-6 shadow-lg">
-              {step === 1 && <CategorySelection onComplete={handleCategoryComplete} />}
-              {step === 2 && <BreedSelection />}
-              {step === 3 && <BasicDetails />}
-              {step === 4 && <PetDetails />}
-              {step === 5 && (
-                <div className="space-y-6">
-                  <h2 className="text-xl font-semibold">Опис и Слики</h2>
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({field}) => (
-                      <FormItem>
-                        <FormLabel>Опис</FormLabel>
-                        <FormControl>
-                          <Textarea placeholder="Внесете опис" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <div className="space-y-4">
-                    <Label htmlFor="images">Слики</Label>
-                    <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-                      {images.map((image, index) => (
-                        <div key={index} className="relative aspect-square">
-                          <Image src={URL.createObjectURL(image)} alt={`Preview ${index + 1}`} fill className="rounded-lg object-cover" />
-                        </div>
-                      ))}
-                      <label
-                        htmlFor="images"
-                        className="relative flex aspect-square cursor-pointer items-center justify-center rounded-lg border-2 border-dashed">
-                        <div className="absolute inset-0 flex flex-col items-center justify-center space-y-2">
-                          <Upload className="h-8 w-8" />
-                          <span className="text-sm">Додади слики</span>
-                        </div>
-                        <input type="file" id="images" multiple accept="image/*" className="hidden" onChange={handleImageUpload} />
-                      </label>
-                    </div>
-                  </div>
-                </div>
+              {step === 1 && (
+                <CategorySelection
+                  onComplete={handleCategoryComplete}
+                  onNext={() => {
+                    setStep(2);
+                  }}
+                />
               )}
-
+              {step === 2 && <BreedSelection onNext={() => setStep(3)} />}
+              {step === 3 && <BasicDetails onNext={() => setStep(4)} />}
+              {step === 4 && <PetDetails onNext={() => setStep(5)} />}
+              {step === 5 && <DescriptionImages onNext={() => setStep(6)} images={images} onImagesChange={handleImageUpload} />}
               {step === 6 && (
                 <div className="space-y-6">
                   <h2 className="text-xl font-semibold">Преглед и Потврда</h2>
@@ -429,21 +373,19 @@ export default function CreateListing({user}: CreateListingProps) {
               )}
 
               <div className="flex justify-between pt-4">
-                <Button type="button" variant="outline" onClick={handleBack} disabled={step === 1}>
-                  <ArrowLeft className="h-4 w-4" />
-                  Назад
-                </Button>
-
-                {step < 6 ? (
-                  <Button type="button" onClick={handleNext}>
-                    Следно
+                {step > 1 && (
+                  <Button type="button" variant="outline" onClick={handleBack}>
+                    <ArrowLeft className="h-4 w-4" />
+                    Назад
                   </Button>
-                ) : (
+                )}
+
+                {step === 6 ? (
                   <Button type="submit" disabled={isSubmitting}>
                     {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Објави оглас
                   </Button>
-                )}
+                ) : null}
               </div>
             </motion.div>
           </AnimatePresence>
