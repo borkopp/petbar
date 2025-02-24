@@ -3,6 +3,7 @@ import {createClient} from "@/lib/supabase/server";
 
 import ListingsFilters from "@/components/listings/filters";
 import ListingCard from "@/components/listings/listing-card";
+import SortSelect from "@/components/listings/sort-select";
 import {Button} from "@/components/ui/button";
 import {Plus} from "lucide-react";
 import type {Database} from "@/database.types";
@@ -22,6 +23,7 @@ interface SearchParams {
   location?: string;
   pedigree?: string;
   vaccinated?: string;
+  sort?: string;
 }
 
 interface PageProps {
@@ -29,16 +31,42 @@ interface PageProps {
   searchParams: Promise<SearchParams>;
 }
 
+function getListingTitle(searchParams: SearchParams, categoryName?: string | null) {
+  const parts = [];
+
+  if (searchParams.category && categoryName) {
+    parts.push(categoryName);
+  }
+
+  if (searchParams.breed) {
+    parts.push(searchParams.breed);
+  }
+
+  if (searchParams.location) {
+    parts.push(`во ${searchParams.location}`);
+  }
+
+  if (parts.length > 0) {
+    return `Пребарување на ${parts.join(" ")}`;
+  }
+
+  return "Сите огласи";
+}
+
 export default async function ListingsPage(props: PageProps) {
   const searchParams = await props.searchParams;
-
   const supabase = await createClient();
 
+  // Fetch category name if category filter is applied
+  let categoryName = null;
+  if (searchParams.category) {
+    const {data: category} = await supabase.from("categories").select("name").eq("slug", searchParams.category).single();
+    categoryName = category?.name;
+  }
+
   // Build the query
-  let query = supabase
-    .from("pet_listings")
-    .select(
-      `
+  let query = supabase.from("pet_listings").select(
+    `
       *,
       pet_images (
         url
@@ -48,8 +76,7 @@ export default async function ListingsPage(props: PageProps) {
         name
       )
     `
-    )
-    .order("created_at", {ascending: false});
+  );
 
   // Apply filters
   if (searchParams.type) {
@@ -95,6 +122,24 @@ export default async function ListingsPage(props: PageProps) {
     query = query.eq("vaccine", true);
   }
 
+  // Apply sorting
+  switch (searchParams.sort) {
+    case "price-asc":
+      query = query.order("price", {ascending: true});
+      break;
+    case "price-desc":
+      query = query.order("price", {ascending: false});
+      break;
+    case "newest":
+      query = query.order("created_at", {ascending: false});
+      break;
+    case "oldest":
+      query = query.order("created_at", {ascending: true});
+      break;
+    default:
+      query = query.order("created_at", {ascending: false});
+  }
+
   // Get listings
   const {data: rawListings, error} = await query;
 
@@ -125,11 +170,15 @@ export default async function ListingsPage(props: PageProps) {
 
         {/* Main Content */}
         <div className="flex-1 space-y-8">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold">Огласи за миленичина</h1>
+          <div className="space-y-1">
+            <h1 className="text-2xl font-bold">{getListingTitle(searchParams, categoryName)}</h1>
             <p className="text-sm text-muted-foreground">
               {listings.length} {listings.length === 1 ? "оглас" : "огласи"}
             </p>
+          </div>
+
+          <div className="max-w-4xl justify-end flex">
+            <SortSelect />
           </div>
 
           {listings.length === 0 ? (
