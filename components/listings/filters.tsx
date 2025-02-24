@@ -98,22 +98,6 @@ export default function ListingsFilters() {
       </div>
 
       <Accordion type="multiple" className="w-full">
-        <AccordionItem value="type">
-          <AccordionTrigger>Тип на Оглас</AccordionTrigger>
-          <AccordionContent>
-            <RadioGroup defaultValue={searchParams.get("type") || ""} onValueChange={(value) => handleFilterChange("type", value)}>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="sale" id="sale" />
-                <Label htmlFor="sale">Продажба</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="adoption" id="adoption" />
-                <Label htmlFor="adoption">Вдомување</Label>
-              </div>
-            </RadioGroup>
-          </AccordionContent>
-        </AccordionItem>
-
         <AccordionItem value="category">
           <AccordionTrigger>Категорија</AccordionTrigger>
           <AccordionContent>
@@ -169,6 +153,22 @@ export default function ListingsFilters() {
             </AccordionContent>
           </AccordionItem>
         )}
+
+        <AccordionItem value="type">
+          <AccordionTrigger>Тип на Оглас</AccordionTrigger>
+          <AccordionContent>
+            <RadioGroup defaultValue={searchParams.get("type") || ""} onValueChange={(value) => handleFilterChange("type", value)}>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="sale" id="sale" />
+                <Label htmlFor="sale">Продажба</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="adoption" id="adoption" />
+                <Label htmlFor="adoption">Вдомување</Label>
+              </div>
+            </RadioGroup>
+          </AccordionContent>
+        </AccordionItem>
 
         <AccordionItem value="price">
           <AccordionTrigger>Цена (МКД)</AccordionTrigger>
