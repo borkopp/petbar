@@ -101,6 +101,27 @@ export function Footer() {
           </div>
         </div>
       </div>
+      <div className="relative w-full overflow-hidden">
+        <div className="waves h-48">
+          <svg className="waves-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none" shapeRendering="auto">
+            <defs>
+              <path id="wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+            </defs>
+            <g>
+              <use href="#wave" x="48" y="0" fill="hsl(32, 95%, 54%, 0.7)" />
+            </g>
+            <g>
+              <use href="#wave" x="48" y="3" fill="hsl(32, 95%, 54%, 0.5)" />
+            </g>
+            <g>
+              <use href="#wave" x="48" y="5" fill="hsl(32, 95%, 54%, 0.3)" />
+            </g>
+            <g>
+              <use href="#wave" x="48" y="7" fill="hsl(32, 95%, 54%, 0.2)" />
+            </g>
+          </svg>
+        </div>
+      </div>
     </footer>
   );
 }

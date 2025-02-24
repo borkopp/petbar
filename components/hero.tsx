@@ -7,9 +7,7 @@ export function Hero() {
   return (
     <div className="relative min-h-[80vh] flex items-center justify-center bg-muted">
       {/* Background Image with Overlay */}
-      {/* <div className="absolute inset-0 bg-[url('/bg-her.png')] bg-cover bg-center">
-        <div className="absolute inset-0 bg-black/30" />
-      </div> */}
+      <div className="absolute inset-0 bg-[url('/blob.svg')] bg-cover bg-center"></div>
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4">
@@ -64,7 +62,9 @@ export function Hero() {
 
 function CategoryLink({icon, label}: {icon: string; label: string}) {
   return (
-    <a href="#" className="flex items-center space-x-2 bg-white/90 hover:bg-white text-black px-6 py-3 rounded-full transition-colors">
+    <a
+      href="#"
+      className="flex items-center space-x-2 bg-white shadow-lg hover:shadow-xl hover:bg-white text-black px-6 py-3 rounded-full transition-colors">
       <span className="text-2xl">{icon}</span>
       <span className="font-medium">{label}</span>
     </a>
