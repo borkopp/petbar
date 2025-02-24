@@ -1,12 +1,15 @@
-import {cookies} from "next/headers";
 import Link from "next/link";
-import {createServerComponentClient} from "@supabase/auth-helpers-nextjs";
+import {createClient} from "@/lib/supabase/server";
 
 import ListingsFilters from "@/components/listings/filters";
 import ListingCard from "@/components/listings/listing-card";
 import {Button} from "@/components/ui/button";
 import {Plus} from "lucide-react";
 import type {Database} from "@/database.types";
+
+type PetListing = Database["public"]["Tables"]["pet_listings"]["Row"] & {
+  pet_images: {url: string}[];
+};
 
 interface SearchParams {
   type?: string;
@@ -26,10 +29,8 @@ interface PageProps {
 
 export default async function ListingsPage(props: PageProps) {
   const searchParams = await props.searchParams;
-  const cookieStore = cookies();
-  const supabase = createServerComponentClient<Database>({
-    cookies: () => cookieStore,
-  });
+
+  const supabase = await createClient();
 
   // Build the query
   let query = supabase
@@ -119,7 +120,7 @@ export default async function ListingsPage(props: PageProps) {
             </div>
           ) : (
             <div className="flex flex-col gap-6 max-w-4xl">
-              {listings.map((listing) => (
+              {listings.map((listing: PetListing) => (
                 <ListingCard
                   key={listing.id}
                   id={listing.id}
