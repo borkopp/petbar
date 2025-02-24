@@ -11,15 +11,37 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Badge} from "@/components/ui/badge";
 import {X} from "lucide-react";
+import {createClient} from "@/lib/supabase/client";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 
 export default function ListingsFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [priceRange, setPriceRange] = React.useState([0, 100000]); // 0-100,000 MKD
   const [ageRange, setAgeRange] = React.useState([0, 180]); // 0-15 years in months
+  const [breeds, setBreeds] = React.useState<{id: number; name: string}[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  // Fetch breeds when category is "dog"
+  React.useEffect(() => {
+    async function fetchBreeds() {
+      if (searchParams.get("category") === "dog") {
+        setLoading(true);
+        const supabase = createClient();
+        const {data} = await supabase.from("breeds").select("id, name").order("name");
+
+        setBreeds(data || []);
+        setLoading(false);
+      } else {
+        setBreeds([]);
+      }
+    }
+
+    fetchBreeds();
+  }, [searchParams.get("category")]);
 
   // Count active filters
-  const activeFilters = ["type", "category", "price", "age", "gender", "location", "pedigree", "vaccinated"].filter((param) =>
+  const activeFilters = ["type", "category", "breed", "price", "age", "gender", "location", "pedigree", "vaccinated"].filter((param) =>
     searchParams.get(param)
   );
 
@@ -40,9 +62,20 @@ export default function ListingsFilters() {
   };
 
   const handleFilterChange = (key: string, value: string | null) => {
-    router.push(`/listings?${createQueryString({[key]: value})}`, {
-      scroll: false,
-    });
+    // If changing category, reset breed
+    if (key === "category" && value !== "dog") {
+      router.push(
+        `/listings?${createQueryString({
+          [key]: value,
+          breed: null,
+        })}`,
+        {scroll: false}
+      );
+    } else {
+      router.push(`/listings?${createQueryString({[key]: value})}`, {
+        scroll: false,
+      });
+    }
   };
 
   const clearFilters = () => {
@@ -112,6 +145,30 @@ export default function ListingsFilters() {
             </div>
           </AccordionContent>
         </AccordionItem>
+
+        {searchParams.get("category") === "dog" && (
+          <AccordionItem value="breed">
+            <AccordionTrigger>Раса</AccordionTrigger>
+            <AccordionContent>
+              <Select value={searchParams.get("breed") || ""} onValueChange={(value) => handleFilterChange("breed", value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Изберете раса" />
+                </SelectTrigger>
+                <SelectContent>
+                  {loading ? (
+                    <SelectItem value="">Се вчитува...</SelectItem>
+                  ) : (
+                    breeds.map((breed) => (
+                      <SelectItem key={breed.id} value={breed.name}>
+                        {breed.name}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+            </AccordionContent>
+          </AccordionItem>
+        )}
 
         <AccordionItem value="price">
           <AccordionTrigger>Цена (МКД)</AccordionTrigger>

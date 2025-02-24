@@ -20,6 +20,7 @@ interface ListingCardProps {
   vaccine?: boolean;
   pedigree?: boolean;
   description?: string;
+  breed?: string;
 }
 
 export default function ListingCard({
@@ -33,6 +34,7 @@ export default function ListingCard({
   vaccine,
   pedigree,
   description,
+  breed,
 }: ListingCardProps) {
   return (
     <Card className="flex overflow-hidden border rounded-xl font-rubik">
@@ -56,6 +58,9 @@ export default function ListingCard({
 
         {/* Title */}
         <h3 className="text-xl font-semibold mb-3 line-clamp-2">{title}</h3>
+
+        {/* Breed */}
+        {breed && <p className="text-sm text-muted-foreground mb-2">{breed}</p>}
 
         {/* Description */}
         {description && <p className="text-sm line-clamp-3 mb-4">{description}</p>}

@@ -3,10 +3,10 @@ import {Check, ChevronsUpDown, Search} from "lucide-react";
 import Image from "next/image";
 import {cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
-import {breeds} from "@/lib/breeds";
 import {Input} from "@/components/ui/input";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {ScrollArea} from "@/components/ui/scroll-area";
+import {createClient} from "@/lib/supabase/client";
 
 interface CategoryCardProps {
   icon: string;
@@ -31,7 +31,7 @@ const CategoryCard = ({icon, label, onClick, isSelected}: CategoryCardProps) => 
 );
 
 interface CategorySelectionProps {
-  onComplete: (data: {category: string; subcategory: string; breed: string}) => void;
+  onComplete: (data: {category: string; breed: string}) => void;
 }
 
 export function CategorySelection({onComplete}: CategorySelectionProps) {
@@ -39,6 +39,26 @@ export function CategorySelection({onComplete}: CategorySelectionProps) {
   const [selectedBreed, setSelectedBreed] = React.useState<string>("");
   const [open, setOpen] = React.useState(false);
   const [search, setSearch] = React.useState("");
+  const [breeds, setBreeds] = React.useState<{id: number; name: string}[]>([]);
+  const [loading, setLoading] = React.useState(false);
+
+  // Fetch breeds when dog category is selected
+  React.useEffect(() => {
+    async function fetchBreeds() {
+      if (selectedCategory === "dog") {
+        setLoading(true);
+        const supabase = createClient();
+        const {data} = await supabase.from("breeds").select("id, name").order("name");
+
+        setBreeds(data || []);
+        setLoading(false);
+      } else {
+        setBreeds([]);
+      }
+    }
+
+    fetchBreeds();
+  }, [selectedCategory]);
 
   const categories = [
     {id: "dog", label: "Куче", icon: "dog"},
@@ -54,24 +74,16 @@ export function CategorySelection({onComplete}: CategorySelectionProps) {
   const filteredBreeds = React.useMemo(() => {
     if (!selectedCategory || selectedCategory !== "dog") return [];
 
-    return Object.entries(breeds).flatMap(([subcategory, breedList]) =>
-      breedList
-        .filter((breed) => breed.toLowerCase().includes(search.toLowerCase()))
-        .map((breed) => ({
-          subcategory,
-          breed,
-        }))
-    );
-  }, [selectedCategory, search]);
+    return breeds.filter((breed) => breed.name.toLowerCase().includes(search.toLowerCase()));
+  }, [selectedCategory, breeds, search]);
 
   const handleBreedSelect = React.useCallback(
-    (breed: string, subcategory: string) => {
-      setSelectedBreed(breed);
+    (breed: {id: number; name: string}) => {
+      setSelectedBreed(breed.name);
       setOpen(false);
       onComplete({
         category: selectedCategory,
-        subcategory: subcategory,
-        breed: breed,
+        breed: breed.name,
       });
     },
     [onComplete, selectedCategory]
@@ -87,7 +99,10 @@ export function CategorySelection({onComplete}: CategorySelectionProps) {
               key={category.id}
               icon={category.icon}
               label={category.label}
-              onClick={() => setSelectedCategory(category.id)}
+              onClick={() => {
+                setSelectedCategory(category.id);
+                setSelectedBreed("");
+              }}
               isSelected={selectedCategory === category.id}
             />
           ))}
@@ -115,20 +130,22 @@ export function CategorySelection({onComplete}: CategorySelectionProps) {
                 />
               </div>
               <ScrollArea className="h-[300px]">
-                {filteredBreeds.length === 0 ? (
+                {loading ? (
+                  <div className="py-6 text-center text-sm text-muted-foreground">Се вчитува...</div>
+                ) : filteredBreeds.length === 0 ? (
                   <div className="py-6 text-center text-sm text-muted-foreground">Не е пронајдена раса.</div>
                 ) : (
                   <div className="p-1">
-                    {filteredBreeds.map(({breed, subcategory}) => (
+                    {filteredBreeds.map((breed) => (
                       <div
-                        key={breed}
-                        onClick={() => handleBreedSelect(breed, subcategory)}
+                        key={breed.id}
+                        onClick={() => handleBreedSelect(breed)}
                         className={cn(
                           "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 hover:bg-accent hover:text-accent-foreground",
-                          selectedBreed === breed && "bg-accent text-accent-foreground"
+                          selectedBreed === breed.name && "bg-accent text-accent-foreground"
                         )}>
-                        <Check className={cn("mr-2 h-4 w-4", selectedBreed === breed ? "opacity-100" : "opacity-0")} />
-                        {breed}
+                        <Check className={cn("mr-2 h-4 w-4", selectedBreed === breed.name ? "opacity-100" : "opacity-0")} />
+                        {breed.name}
                       </div>
                     ))}
                   </div>

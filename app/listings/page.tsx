@@ -9,11 +9,13 @@ import type {Database} from "@/database.types";
 
 type PetListing = Database["public"]["Tables"]["pet_listings"]["Row"] & {
   pet_images: {url: string}[];
+  breed: Database["public"]["Tables"]["breeds"]["Row"] | null;
 };
 
 interface SearchParams {
   type?: string;
   category?: string;
+  breed?: string;
   price?: string;
   age?: string;
   gender?: string;
@@ -40,6 +42,10 @@ export default async function ListingsPage(props: PageProps) {
       *,
       pet_images (
         url
+      ),
+      breed:breed_id (
+        id,
+        name
       )
     `
     )
@@ -52,6 +58,15 @@ export default async function ListingsPage(props: PageProps) {
 
   if (searchParams.category) {
     query = query.eq("category", searchParams.category);
+  }
+
+  // Add breed filtering using the breed name
+  if (searchParams.breed) {
+    const {data: breedData} = await supabase.from("breeds").select("id").eq("name", searchParams.breed).single();
+
+    if (breedData) {
+      query = query.eq("breed_id", breedData.id);
+    }
   }
 
   if (searchParams.price) {
@@ -81,7 +96,13 @@ export default async function ListingsPage(props: PageProps) {
   }
 
   // Get listings
-  const {data: rawListings} = await query;
+  const {data: rawListings, error} = await query;
+
+  // Log error if any
+  if (error) {
+    console.error("Error fetching listings:", error);
+  }
+
   const listings = rawListings ?? [];
 
   return (
@@ -132,6 +153,7 @@ export default async function ListingsPage(props: PageProps) {
                   pedigree={listing.pedigree ?? undefined}
                   images={listing.pet_images}
                   createdAt={listing.created_at ?? new Date().toISOString()}
+                  breed={listing.breed?.name}
                 />
               ))}
             </div>
