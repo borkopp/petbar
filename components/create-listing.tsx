@@ -100,6 +100,15 @@ export default function CreateListing({user}: CreateListingProps) {
       console.log("Starting form submission...");
       console.log("Form values:", JSON.stringify(values, null, 2));
 
+      // Check for required images
+      if (images.length === 0) {
+        toast.error("Потребна е слика", {
+          description: "Ве молиме додадете барем една слика.",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
       // Transform numeric values
       const transformedValues = {
         ...values,

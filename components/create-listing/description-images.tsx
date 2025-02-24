@@ -7,6 +7,7 @@ import {Label} from "@/components/ui/label";
 import {Button} from "@/components/ui/button";
 import {Upload} from "lucide-react";
 import Image from "next/image";
+import {toast} from "sonner";
 
 interface DescriptionImagesProps {
   onNext: () => void;
@@ -28,6 +29,12 @@ export function DescriptionImages({onNext, images, onImagesChange}: DescriptionI
   };
 
   const handleNext = async () => {
+    if (images.length === 0) {
+      toast.error("Потребна е слика", {
+        description: "Ве молиме додадете барем една слика.",
+      });
+      return;
+    }
     onNext();
   };
 
@@ -49,7 +56,10 @@ export function DescriptionImages({onNext, images, onImagesChange}: DescriptionI
       />
 
       <div className="space-y-4">
-        <Label htmlFor="images">Слики</Label>
+        <div className="flex items-center justify-between">
+          <Label htmlFor="images">Слики</Label>
+          <span className="text-sm text-muted-foreground">Задолжително</span>
+        </div>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
           {images.map((image, index) => (
             <div key={index} className="relative aspect-square">
