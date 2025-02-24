@@ -4,6 +4,7 @@ import {CategoryCard} from "@/components/ui/category-card";
 import {Button} from "@/components/ui/button";
 import {toast} from "sonner";
 
+import {Skeleton} from "../ui/skeleton";
 interface Category {
   id: number;
   name: string;
@@ -60,8 +61,18 @@ export function CategorySelection({onComplete, onNext}: CategorySelectionProps) 
 
   if (loadingCategories) {
     return (
-      <div className="flex h-[450px] items-center justify-center">
-        <p className="text-muted-foreground">Се вчитува...</p>
+      <div className="space-y-8">
+        <div className="space-y-4">
+          <Skeleton className="h-8 w-48" />
+          <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+            {[...Array(8)].map((_, index) => (
+              <Skeleton key={index} className="aspect-square w-full rounded-lg" />
+            ))}
+          </div>
+        </div>
+        <div className="flex justify-end pt-6">
+          <Skeleton className="h-10 w-24" />
+        </div>
       </div>
     );
   }

@@ -20,7 +20,22 @@ export default function ListingsFilters() {
   const [priceRange, setPriceRange] = React.useState([0, 100000]); // 0-100,000 MKD
   const [ageRange, setAgeRange] = React.useState([0, 180]); // 0-15 years in months
   const [breeds, setBreeds] = React.useState<{id: number; name: string}[]>([]);
+  const [locations, setLocations] = React.useState<{id: number; name: string}[]>([]);
   const [loading, setLoading] = React.useState(true);
+  const [loadingLocations, setLoadingLocations] = React.useState(true);
+
+  // Fetch locations on mount
+  React.useEffect(() => {
+    async function fetchLocations() {
+      setLoadingLocations(true);
+      const supabase = createClient();
+      const {data} = await supabase.from("locations").select("id, name").order("name");
+      setLocations(data || []);
+      setLoadingLocations(false);
+    }
+
+    fetchLocations();
+  }, []);
 
   // Fetch breeds when category is "dog"
   React.useEffect(() => {
@@ -253,16 +268,22 @@ export default function ListingsFilters() {
         <AccordionItem value="location">
           <AccordionTrigger>Локација</AccordionTrigger>
           <AccordionContent>
-            <div className="space-y-2">
-              {["skopje", "bitola", "kumanovo", "tetovo", "ohrid"].map((city) => (
-                <div key={city} className="flex items-center space-x-2">
-                  <Checkbox id={city} checked={searchParams.get("location") === city} onCheckedChange={() => handleFilterChange("location", city)} />
-                  <Label htmlFor={city} className="capitalize">
-                    {city}
-                  </Label>
-                </div>
-              ))}
-            </div>
+            {loadingLocations ? (
+              <div className="py-2 text-sm text-muted-foreground">Се вчитува...</div>
+            ) : (
+              <Select value={searchParams.get("location") || ""} onValueChange={(value) => handleFilterChange("location", value)}>
+                <SelectTrigger className="focus:ring-0 focus:ring-offset-0 focus:ring-transparent focus:outline-none select-none">
+                  <SelectValue placeholder="Изберете локација" />
+                </SelectTrigger>
+                <SelectContent>
+                  {locations.map((location) => (
+                    <SelectItem key={location.id} value={location.name}>
+                      {location.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
           </AccordionContent>
         </AccordionItem>
 

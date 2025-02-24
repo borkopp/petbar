@@ -6,6 +6,7 @@ import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
+import {LocationCombobox} from "@/components/ui/location-combobox";
 
 interface BasicDetailsProps {
   onNext: () => void;
@@ -117,7 +118,7 @@ export function BasicDetails({onNext}: BasicDetailsProps) {
                 <FormItem>
                   <FormLabel>Локација</FormLabel>
                   <FormControl>
-                    <Input placeholder="Внесете локација" {...field} />
+                    <LocationCombobox value={field.value} onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

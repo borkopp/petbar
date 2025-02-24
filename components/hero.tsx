@@ -5,18 +5,18 @@ import {Search} from "lucide-react";
 
 export function Hero() {
   return (
-    <div className="relative min-h-[80vh] flex items-center justify-center">
+    <div className="relative min-h-[80vh] flex items-center justify-center bg-muted">
       {/* Background Image with Overlay */}
-      <div className="absolute inset-0 bg-[url('/bg-hero2.png')] bg-cover bg-center">
-        <div className="absolute inset-0 bg-black/35" />
-      </div>
+      {/* <div className="absolute inset-0 bg-[url('/bg-her.png')] bg-cover bg-center">
+        <div className="absolute inset-0 bg-black/30" />
+      </div> */}
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4">
-        <div className="max-w-4xl mx-auto text-center text-white space-y-8">
+        <div className="max-w-4xl mx-auto text-center text-black space-y-8">
           {/* Main Title */}
-          <h1 className="text-5xl font-bold mb-4">Пронајди го твоето милениче</h1>
-          <p className="text-xl mb-8">во најголемиот и најдобриот бар за животни во Македонија!</p>
+          <h1 className="text-5xl font-medium mb-4 font-rubik">Пронајди го твоето милениче</h1>
+          <p className="text-xl mb-8 font-rubik">во најголемиот и најдобриот бар за животни во Македонија!</p>
 
           {/* Search Form */}
           <div className="bg-white rounded-xl p-2 shadow-lg max-w-5xl mx-auto flex flex-col md:flex-row gap-2">
@@ -29,10 +29,10 @@ export function Hero() {
             <div className="flex-1 min-w-0">
               <Select>
                 <SelectTrigger className="w-full h-12 border-0 bg-gray-50 rounded-lg focus:ring-0 text-gray-900 placeholder:text-gray-500">
-                  <SelectValue placeholder="Пазар за миленици" />
+                  <SelectValue placeholder="Категорија" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Сите пазари</SelectItem>
+                  <SelectItem value="all">Сите категории</SelectItem>
                   <SelectItem value="dogs">Кучиња</SelectItem>
                   <SelectItem value="cats">Мачки</SelectItem>
                 </SelectContent>
