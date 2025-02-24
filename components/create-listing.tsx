@@ -20,38 +20,34 @@ import {BreedSelection} from "@/components/create-listing/breed-selection";
 import {StepProgress} from "@/components/ui/step-progress";
 import {DescriptionImages} from "@/components/create-listing/description-images";
 
-const formSchema = z
-  .object({
-    title: z.string().min(1, "Наслов е задолжително"),
-    category: z.string().min(1, "Категорија е задолжително"),
-    listingType: z.enum(["sale", "adoption"], {
-      required_error: "Тип на оглас е задолжително",
-    }),
-    breed_id: z
-      .number({
-        required_error: "Раса е задолжително",
-        invalid_type_error: "Раса е задолжително",
-      })
-      .nullable(),
-    breed: z.string().min(1, "Раса е задолжително"),
-    age: z.string().optional().nullable(),
-    gender: z.enum(["male", "female"], {
-      required_error: "Пол е задолжително",
-    }),
-    weight: z.string().optional().nullable(),
-    color: z.string().optional().default(""),
-    pedigree: z.boolean().default(false),
-    vaccine: z.boolean().default(false),
-    description: z.string().optional().default(""),
-    price: z.string().optional().nullable(),
-    location: z.string().min(1, "Локација е задолжително"),
-  })
-  .transform((data) => ({
-    ...data,
-    age: data.age ? parseInt(data.age, 10) : null,
-    weight: data.weight ? parseFloat(data.weight) : null,
-    price: data.price ? parseInt(data.price, 10) : null,
-  }));
+// Form input schema
+const formSchema = z.object({
+  title: z.string().min(1, "Наслов е задолжително"),
+  category: z.string().min(1, "Категорија е задолжително"),
+  listingType: z.enum(["sale", "adoption"], {
+    required_error: "Тип на оглас е задолжително",
+  }),
+  breed_id: z
+    .number({
+      required_error: "Раса е задолжително",
+      invalid_type_error: "Раса е задолжително",
+    })
+    .nullable(),
+  breed: z.string().min(1, "Раса е задолжително"),
+  age: z.string().optional(),
+  gender: z.enum(["male", "female"], {
+    required_error: "Пол е задолжително",
+  }),
+  weight: z.string().optional(),
+  color: z.string().optional().default(""),
+  pedigree: z.boolean().default(false),
+  vaccine: z.boolean().default(false),
+  description: z.string().optional().default(""),
+  price: z.string().optional(),
+  location: z.string().min(1, "Локација е задолжително"),
+});
+
+type FormInput = z.infer<typeof formSchema>;
 
 interface CreateListingProps {
   user: User;
@@ -64,7 +60,7 @@ export default function CreateListing({user}: CreateListingProps) {
   const router = useRouter();
   const supabase = createClient();
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormInput>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       title: "",
@@ -72,14 +68,14 @@ export default function CreateListing({user}: CreateListingProps) {
       listingType: undefined,
       breed: "",
       breed_id: null,
-      age: null,
+      age: "",
       gender: undefined,
-      weight: null,
+      weight: "",
       color: "",
       pedigree: false,
       vaccine: false,
       description: "",
-      price: null,
+      price: "",
       location: "",
     },
     mode: "onSubmit",
@@ -98,16 +94,24 @@ export default function CreateListing({user}: CreateListingProps) {
     setStep(step - 1);
   };
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: FormInput) => {
     try {
       setIsSubmitting(true);
       console.log("Starting form submission...");
       console.log("Form values:", JSON.stringify(values, null, 2));
 
+      // Transform numeric values
+      const transformedValues = {
+        ...values,
+        age: values.age && values.age !== "" ? parseInt(values.age, 10) : null,
+        weight: values.weight && values.weight !== "" ? parseFloat(values.weight) : null,
+        price: values.price && values.price !== "" ? parseInt(values.price, 10) : null,
+      };
+
       // Validate all required fields are present
       const requiredFields = ["title", "category", "listingType", "location", "breed_id", "breed", "gender"] as const;
       const missingFields = requiredFields.filter((field) => {
-        const value = values[field];
+        const value = transformedValues[field];
         console.log(`Checking field ${field}:`, value);
         return value === undefined || value === null || value === "";
       });
@@ -121,7 +125,7 @@ export default function CreateListing({user}: CreateListingProps) {
       }
 
       // Additional validation for breed_id
-      if (!values.breed_id) {
+      if (!transformedValues.breed_id) {
         console.error("breed_id is required");
         toast.error("Проверете ги сите полиња", {
           description: "Изберете раса",
@@ -131,19 +135,19 @@ export default function CreateListing({user}: CreateListingProps) {
 
       // Log the exact data being sent to Supabase
       const listingData = {
-        title: values.title,
-        category: values.category,
-        listing_type: values.listingType,
-        price: values.price,
-        location: values.location,
-        breed_id: values.breed_id,
-        age: values.age,
-        gender: values.gender,
-        weight: values.weight,
-        color: values.color || null,
-        pedigree: values.pedigree,
-        vaccine: values.vaccine,
-        description: values.description || null,
+        title: transformedValues.title,
+        category: transformedValues.category,
+        listing_type: transformedValues.listingType,
+        price: transformedValues.price,
+        location: transformedValues.location,
+        breed_id: transformedValues.breed_id,
+        age: transformedValues.age,
+        gender: transformedValues.gender,
+        weight: transformedValues.weight,
+        color: transformedValues.color || null,
+        pedigree: transformedValues.pedigree,
+        vaccine: transformedValues.vaccine,
+        description: transformedValues.description || null,
         user_id: user.id,
       };
 
