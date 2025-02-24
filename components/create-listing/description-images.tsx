@@ -27,11 +27,6 @@ export function DescriptionImages({onNext, images, onImagesChange}: DescriptionI
     },
   };
 
-  const itemVariants = {
-    hidden: {y: 20, opacity: 0},
-    visible: {y: 0, opacity: 1},
-  };
-
   const handleNext = async () => {
     onNext();
   };
