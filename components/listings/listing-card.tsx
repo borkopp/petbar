@@ -71,7 +71,7 @@ export default function ListingCard({
             <p className="text-xl text-muted-foreground font-semibold">{price.toLocaleString()} ден</p>
           ) : (
             <Badge variant="secondary" className="text-base px-3 py-1">
-              За присвојување
+              За вдомување
             </Badge>
           )}
         </div>
