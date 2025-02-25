@@ -150,7 +150,7 @@ export default function ListingsFilters() {
             <AccordionTrigger>Раса</AccordionTrigger>
             <AccordionContent>
               <Select value={searchParams.get("breed") || ""} onValueChange={(value) => handleFilterChange("breed", value)}>
-                <SelectTrigger>
+                <SelectTrigger className="focus:ring-0 focus:ring-offset-0 focus:ring-transparent focus:outline-none select-none">
                   <SelectValue placeholder="Изберете раса" />
                 </SelectTrigger>
                 <SelectContent>

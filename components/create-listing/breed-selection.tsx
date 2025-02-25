@@ -14,9 +14,10 @@ import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/compo
 
 interface BreedSelectionProps {
   onNext: () => void;
+  category: string;
 }
 
-export function BreedSelection({onNext}: BreedSelectionProps) {
+export function BreedSelection({onNext, category}: BreedSelectionProps) {
   const form = useFormContext();
   const [open, setOpen] = React.useState(false);
   const [search, setSearch] = React.useState("");
@@ -28,13 +29,38 @@ export function BreedSelection({onNext}: BreedSelectionProps) {
     async function fetchBreeds() {
       setLoading(true);
       const supabase = createClient();
-      const {data} = await supabase.from("breeds").select("id, name").order("name");
-      setBreeds(data || []);
+
+      // First get the category ID from the categories table
+      const {data: categoryData, error: categoryError} = await supabase.from("categories").select("id").eq("slug", category).single();
+
+      if (categoryError) {
+        setBreeds([]);
+        setLoading(false);
+        return;
+      }
+
+      if (categoryData) {
+        // Then fetch breeds for this category
+        const {data: breedsData, error: breedsError} = await supabase
+          .from("breeds")
+          .select("id, name")
+          .eq("category_id", categoryData.id)
+          .order("name");
+
+        if (breedsError) {
+          setBreeds([]);
+        } else {
+          setBreeds(breedsData || []);
+        }
+      } else {
+        setBreeds([]);
+      }
+
       setLoading(false);
     }
 
     fetchBreeds();
-  }, []);
+  }, [category]);
 
   const filteredBreeds = React.useMemo(() => {
     return breeds.filter((breed) => breed.name.toLowerCase().includes(search.toLowerCase()));

@@ -288,12 +288,10 @@ export default function CreateListing({user}: CreateListingProps) {
         <form
           onSubmit={form.handleSubmit(
             async (data) => {
-              console.log("Form submit triggered with data:", data);
               await onSubmit(data);
             },
             (errors) => {
               if (Object.keys(errors).length > 0) {
-                console.error("Form validation errors:", errors);
                 toast.error("Проверете ги сите полиња", {
                   description: "Пополнете ги сите задолжителни полиња.",
                 });
@@ -316,7 +314,7 @@ export default function CreateListing({user}: CreateListingProps) {
                   }}
                 />
               )}
-              {step === 2 && <BreedSelection onNext={() => setStep(3)} />}
+              {step === 2 && <BreedSelection onNext={() => setStep(3)} category={form.getValues().category} />}
               {step === 3 && <BasicDetails onNext={() => setStep(4)} />}
               {step === 4 && <PetDetails onNext={() => setStep(5)} />}
               {step === 5 && <DescriptionImages onNext={() => setStep(6)} images={images} onImagesChange={handleImageUpload} />}
