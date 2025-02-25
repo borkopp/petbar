@@ -21,8 +21,23 @@ export default function ListingsFilters() {
   const [ageRange, setAgeRange] = React.useState([0, 180]); // 0-15 years in months
   const [breeds, setBreeds] = React.useState<{id: number; name: string}[]>([]);
   const [locations, setLocations] = React.useState<{id: number; name: string}[]>([]);
+  const [categories, setCategories] = React.useState<{id: number; name: string; slug: string}[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [loadingLocations, setLoadingLocations] = React.useState(true);
+  const [loadingCategories, setLoadingCategories] = React.useState(true);
+
+  // Fetch categories on mount
+  React.useEffect(() => {
+    async function fetchCategories() {
+      setLoadingCategories(true);
+      const supabase = createClient();
+      const {data} = await supabase.from("categories").select("id, name, slug").order("id");
+      setCategories(data || []);
+      setLoadingCategories(false);
+    }
+
+    fetchCategories();
+  }, []);
 
   // Fetch locations on mount
   React.useEffect(() => {
@@ -37,15 +52,25 @@ export default function ListingsFilters() {
     fetchLocations();
   }, []);
 
-  // Fetch breeds when category is "dog"
+  // Fetch breeds when category changes
   React.useEffect(() => {
     async function fetchBreeds() {
-      if (searchParams.get("category") === "dog") {
+      const category = searchParams.get("category");
+      if (category) {
         setLoading(true);
         const supabase = createClient();
-        const {data} = await supabase.from("breeds").select("id, name").order("name");
 
-        setBreeds(data || []);
+        // First get the category ID
+        const {data: categoryData} = await supabase.from("categories").select("id").eq("slug", category).single();
+
+        if (categoryData) {
+          // Then fetch breeds for this category
+          const {data: breedsData} = await supabase.from("breeds").select("id, name").eq("category_id", categoryData.id).order("name");
+
+          setBreeds(breedsData || []);
+        } else {
+          setBreeds([]);
+        }
         setLoading(false);
       } else {
         setBreeds([]);
@@ -117,35 +142,25 @@ export default function ListingsFilters() {
           <AccordionTrigger>Категорија</AccordionTrigger>
           <AccordionContent>
             <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="dog" checked={searchParams.get("category") === "dog"} onCheckedChange={() => handleFilterChange("category", "dog")} />
-                <Label htmlFor="dog">Куче</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="cat" checked={searchParams.get("category") === "cat"} onCheckedChange={() => handleFilterChange("category", "cat")} />
-                <Label htmlFor="cat">Мачка</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="bird"
-                  checked={searchParams.get("category") === "bird"}
-                  onCheckedChange={() => handleFilterChange("category", "bird")}
-                />
-                <Label htmlFor="bird">Птица</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="other"
-                  checked={searchParams.get("category") === "other"}
-                  onCheckedChange={() => handleFilterChange("category", "other")}
-                />
-                <Label htmlFor="other">Друго</Label>
-              </div>
+              {loadingCategories ? (
+                <div className="text-sm text-muted-foreground">Се вчитува...</div>
+              ) : (
+                categories.map((category) => (
+                  <div key={category.id} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={category.slug}
+                      checked={searchParams.get("category") === category.slug}
+                      onCheckedChange={() => handleFilterChange("category", category.slug)}
+                    />
+                    <Label htmlFor={category.slug}>{category.name}</Label>
+                  </div>
+                ))
+              )}
             </div>
           </AccordionContent>
         </AccordionItem>
 
-        {searchParams.get("category") === "dog" && (
+        {searchParams.get("category") && breeds.length > 0 && (
           <AccordionItem value="breed">
             <AccordionTrigger>Раса</AccordionTrigger>
             <AccordionContent>

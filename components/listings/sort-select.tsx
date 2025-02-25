@@ -21,7 +21,7 @@ export default function SortSelect() {
 
   return (
     <Select defaultValue={searchParams.get("sort") || "newest"} onValueChange={handleValueChange}>
-      <SelectTrigger className="w-auto flex items-center gap-2">
+      <SelectTrigger className="w-auto flex items-center gap-2 focus:ring-0 focus:ring-offset-0">
         <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
         <SelectValue placeholder="Подреди по" />
       </SelectTrigger>

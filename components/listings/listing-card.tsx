@@ -37,67 +37,69 @@ export default function ListingCard({
   breed,
 }: ListingCardProps) {
   return (
-    <Card className="flex overflow-hidden border rounded-xl font-rubik">
-      {/* Left side - Image */}
-      <Link href={`/listings/${id}`} className="relative w-[400px] h-[300px]">
-        <Image src={images[0]?.url || "/placeholder.png"} alt={title} fill className="object-cover" />
-      </Link>
-
-      {/* Right side - Content */}
-      <div className="flex-1 p-6">
-        {/* Top row - Location and Date */}
-        <div className="flex items-center justify-between mb-6">
-          <p className="text-sm text-muted-foreground">{location}</p>
-          <p className="text-xs text-muted-foreground">
-            {formatDistanceToNow(new Date(createdAt), {
-              addSuffix: true,
-              locale: mk,
-            })}
-          </p>
+    <Link href={`/listings/${id}`} className="block">
+      <Card className="flex overflow-hidden border rounded-xl font-rubik hover:border-primary/50 transition-colors">
+        {/* Left side - Image */}
+        <div className="relative w-[400px] h-[300px]">
+          <Image src={images[0]?.url || "/placeholder.png"} alt={title} fill className="object-cover" />
         </div>
 
-        {/* Title */}
-        <h3 className="text-xl font-semibold mb-3 line-clamp-2">{title}</h3>
+        {/* Right side - Content */}
+        <div className="flex-1 p-6">
+          {/* Top row - Location and Date */}
+          <div className="flex items-center justify-between mb-6">
+            <p className="text-sm text-muted-foreground">{location}</p>
+            <p className="text-xs text-muted-foreground">
+              {formatDistanceToNow(new Date(createdAt), {
+                addSuffix: true,
+                locale: mk,
+              })}
+            </p>
+          </div>
 
-        {/* Breed */}
-        {breed && <p className="text-sm text-muted-foreground mb-2">{breed}</p>}
+          {/* Title */}
+          <h3 className="text-xl font-semibold mb-3 line-clamp-2">{title}</h3>
 
-        {/* Description */}
-        {description && <p className="text-sm line-clamp-3 mb-4">{description}</p>}
+          {/* Breed */}
+          {breed && <p className="text-sm text-muted-foreground mb-2">{breed}</p>}
 
-        {/* Price */}
-        <div className="mb-4">
-          {price ? (
-            <p className="text-xl text-muted-foreground font-semibold">{price.toLocaleString()} ден</p>
-          ) : (
-            <Badge variant="secondary" className="text-base px-3 py-1">
-              За вдомување
-            </Badge>
-          )}
+          {/* Description */}
+          {description && <p className="text-sm line-clamp-3 mb-4">{description}</p>}
+
+          {/* Price */}
+          <div className="mb-4">
+            {price ? (
+              <p className="text-xl text-muted-foreground font-semibold">{price.toLocaleString()} ден</p>
+            ) : (
+              <Badge variant="secondary" className="text-base px-3 py-1">
+                За вдомување
+              </Badge>
+            )}
+          </div>
+
+          {/* Badges */}
+          <div className="flex gap-2">
+            {hasIdentityVerified && (
+              <Badge variant="outline" className="flex items-center gap-1.5 px-3 py-1 rounded-full border-gray-300">
+                <Verified className="h-4 w-4 text-blue-500" />
+                <span className="text-gray-600">Идентифициран</span>
+              </Badge>
+            )}
+            {vaccine && (
+              <Badge variant="outline" className="flex items-center gap-1.5 px-3 py-1 rounded-full border-gray-300">
+                <Shield className="h-4 w-4 text-green-500" />
+                <span className="text-gray-600">Вакциниран</span>
+              </Badge>
+            )}
+            {pedigree && (
+              <Badge variant="outline" className="flex items-center gap-1.5 px-3 py-1 rounded-full border-gray-300">
+                <Award className="h-4 w-4 text-yellow-500" />
+                <span className="text-gray-600">Педигре</span>
+              </Badge>
+            )}
+          </div>
         </div>
-
-        {/* Badges */}
-        <div className="flex gap-2">
-          {hasIdentityVerified && (
-            <Badge variant="outline" className="flex items-center gap-1.5 px-3 py-1 rounded-full border-gray-300">
-              <Verified className="h-4 w-4 text-blue-500" />
-              <span className="text-gray-600">Идентифициран</span>
-            </Badge>
-          )}
-          {vaccine && (
-            <Badge variant="outline" className="flex items-center gap-1.5 px-3 py-1 rounded-full border-gray-300">
-              <Shield className="h-4 w-4 text-green-500" />
-              <span className="text-gray-600">Вакциниран</span>
-            </Badge>
-          )}
-          {pedigree && (
-            <Badge variant="outline" className="flex items-center gap-1.5 px-3 py-1 rounded-full border-gray-300">
-              <Award className="h-4 w-4 text-yellow-500" />
-              <span className="text-gray-600">Педигре</span>
-            </Badge>
-          )}
-        </div>
-      </div>
-    </Card>
+      </Card>
+    </Link>
   );
 }
