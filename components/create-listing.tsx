@@ -320,7 +320,7 @@ export default function CreateListing({user}: CreateListingProps) {
               {step === 5 && <DescriptionImages onNext={() => setStep(6)} images={images} onImagesChange={handleImageUpload} />}
               {step === 6 && (
                 <div className="space-y-6">
-                  <h2 className="text-xl font-semibold">Преглед и Потврда</h2>
+                  <h2 className="text-xl font-semibold">Преглед и потврда</h2>
                   <div className="rounded-lg bg-muted p-6 space-y-6">
                     <div className="grid gap-4">
                       <div className="grid grid-cols-2 gap-2">
