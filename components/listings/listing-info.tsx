@@ -11,13 +11,14 @@ interface ListingInfoProps {
   breed: string | null;
   price: number | null;
   location: string;
+  sellerId: string;
 }
 
-export default function ListingInfo({id, breed, price, location}: ListingInfoProps) {
+export default function ListingInfo({id, breed, price, location, sellerId}: ListingInfoProps) {
   const router = useRouter();
 
   const handleContact = () => {
-    router.push(`/messages/new?listing=${id}`);
+    router.push(`/chat/${sellerId}?listing=${id}`);
   };
 
   return (

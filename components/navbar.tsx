@@ -3,7 +3,7 @@ import {Button} from "@/components/ui/button";
 import Image from "next/image";
 import {createClient} from "@/lib/supabase/server";
 import {LogoutButton} from "@/components/logout-button";
-import {Heart, List, User2, Plus, Menu, UserPlus, User} from "lucide-react";
+import {Heart, List, User2, Plus, Menu, UserPlus, User, MessageSquare} from "lucide-react";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
 import {Separator} from "@/components/ui/separator";
 
@@ -43,12 +43,18 @@ export async function Navbar() {
                 Пронајди партнер
               </Link>
             </Button>
+
             {user ? (
               <>
                 <Button asChild variant="ghost" size="sm" className="hidden md:flex items-center gap-2">
                   <Link href="/create-listing">
                     <Plus className="h-4 w-4" />
                     Нов оглас
+                  </Link>
+                </Button>
+                <Button asChild variant="ghost" size="sm" className="hidden md:flex items-center gap-2">
+                  <Link href="/chat">
+                    <MessageSquare className="h-4 w-4" />
                   </Link>
                 </Button>
                 <DropdownMenu>

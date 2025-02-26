@@ -9,6 +9,7 @@ import ShareSection from "@/components/listings/share-section";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {Button} from "@/components/ui/button";
 import {Heart, MessageCircle} from "lucide-react";
+import Link from "next/link";
 
 interface PageProps {
   params: Promise<{id: string}>;
@@ -91,9 +92,11 @@ export default async function ListingPage(props: PageProps) {
           </TabsContent>
         </Tabs>
         <div className="flex flex-col gap-4">
-          <Button className="w-full">
-            <MessageCircle className="mr-2 h-5 w-5" />
-            Испрати порака
+          <Button asChild className="w-full">
+            <Link href={`/chat/${listing.profiles.id}?listing=${listing.id}`}>
+              <MessageCircle className="mr-2 h-5 w-5" />
+              Испрати порака
+            </Link>
           </Button>
           <Button variant="outline" className="w-full">
             <Heart className="mr-2 h-5 w-5" />
@@ -127,7 +130,7 @@ export default async function ListingPage(props: PageProps) {
 
         {/* Right section - Info */}
         <div className="lg:col-span-2 space-y-6">
-          <ListingInfo id={listing.id} breed={listing.breed} price={listing.price} location={listing.location} />
+          <ListingInfo id={listing.id} breed={listing.breed} price={listing.price} location={listing.location} sellerId={listing.profiles.id} />
           <SellerCard seller={listing.profiles} responseTime="1 час" responseRate={100} />
           <ContactInfo location={listing.location} phone={listing.phone || "Нема број"} />
           <ShareSection title={listing.title} />
