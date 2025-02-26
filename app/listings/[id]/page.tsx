@@ -32,7 +32,7 @@ export default async function ListingPage(props: PageProps) {
       ),
       profiles!pet_listings_user_id_fkey (
         id,
-        username,
+        full_name,
         avatar_url,
         created_at,
         rating

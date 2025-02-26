@@ -22,6 +22,32 @@ export function BasicDetails({onNext}: BasicDetailsProps) {
     }
   }, [listingType, form]);
 
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Remove any non-digit characters
+    let value = e.target.value.replace(/\D/g, "");
+
+    // Limit to 9 digits (excluding country code)
+    if (value.length > 9) {
+      value = value.slice(0, 9);
+    }
+
+    // Store the raw value in the form
+    form.setValue("phone", value);
+
+    // Format the display value
+    if (value.length >= 3) {
+      const displayValue = value.replace(/(\d{3})(\d{3})?(\d{3})?/, function (match, p1, p2, p3) {
+        let formatted = p1;
+        if (p2) formatted += " " + p2;
+        if (p3) formatted += " " + p3;
+        return formatted;
+      });
+      e.target.value = displayValue;
+    } else {
+      e.target.value = value;
+    }
+  };
+
   const containerVariants = {
     hidden: {opacity: 0},
     visible: {
@@ -119,6 +145,28 @@ export function BasicDetails({onNext}: BasicDetailsProps) {
                   <FormLabel>Локација</FormLabel>
                   <FormControl>
                     <LocationCombobox value={field.value} onChange={field.onChange} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </motion.div>
+
+          <motion.div variants={itemVariants}>
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({field}) => (
+                <FormItem>
+                  <FormLabel>Контакт телефон</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="tel"
+                      placeholder="07X XXX XXX"
+                      value={field.value || ""}
+                      onChange={handlePhoneChange}
+                      maxLength={11} // Account for spaces
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

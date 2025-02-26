@@ -246,6 +246,7 @@ export type Database = {
           listing_type: string
           location: string
           pedigree: boolean | null
+          phone: string | null
           price: number | null
           title: string
           updated_at: string | null
@@ -266,6 +267,7 @@ export type Database = {
           listing_type: string
           location: string
           pedigree?: boolean | null
+          phone?: string | null
           price?: number | null
           title: string
           updated_at?: string | null
@@ -286,6 +288,7 @@ export type Database = {
           listing_type?: string
           location?: string
           pedigree?: boolean | null
+          phone?: string | null
           price?: number | null
           title?: string
           updated_at?: string | null

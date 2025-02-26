@@ -27,27 +27,40 @@ const formSchema = z.object({
   listingType: z.enum(["sale", "adoption"], {
     required_error: "Тип на оглас е задолжително",
   }),
-  breed_id: z
-    .number({
-      required_error: "Раса е задолжително",
-      invalid_type_error: "Раса е задолжително",
+  breed_id: z.number().optional().nullable(),
+  breed: z.string().optional().nullable(),
+  age: z.string().optional().nullable(),
+  gender: z
+    .enum(["male", "female"], {
+      required_error: "Пол е задолжително",
     })
-    .nullable(),
-  breed: z.string().min(1, "Раса е задолжително"),
-  age: z.string().optional(),
-  gender: z.enum(["male", "female"], {
-    required_error: "Пол е задолжително",
-  }),
-  weight: z.string().optional(),
-  color: z.string().optional().default(""),
+    .optional(),
+  weight: z.string().optional().nullable(),
+  color: z.string().optional(),
   pedigree: z.boolean().default(false),
   vaccine: z.boolean().default(false),
-  description: z.string().optional().default(""),
-  price: z.string().optional(),
+  description: z.string().optional(),
+  price: z.string().optional().nullable(),
   location: z.string().min(1, "Локација е задолжително"),
+  phone: z
+    .string()
+    .min(9, "Телефонскиот број мора да има 9 цифри")
+    .max(11, "Телефонскиот број не може да има повеќе од 9 цифри")
+    .regex(/^07[0-9\s]{7,8}$/, "Телефонскиот број мора да започне со 07")
+    .optional()
+    .nullable(),
 });
 
+// This is the type we'll use for the form
 type FormInput = z.infer<typeof formSchema>;
+
+// This is the transformed schema that will be used for submission
+const transformedSchema = formSchema.transform((data) => ({
+  ...data,
+  age: data.age ? parseInt(data.age, 10) : null,
+  weight: data.weight ? parseFloat(data.weight) : null,
+  price: data.price ? parseInt(data.price, 10) : null,
+}));
 
 interface CreateListingProps {
   user: User;
@@ -77,6 +90,7 @@ export default function CreateListing({user}: CreateListingProps) {
       description: "",
       price: "",
       location: "",
+      phone: "",
     },
     mode: "onSubmit",
     shouldUnregister: false,
@@ -97,52 +111,21 @@ export default function CreateListing({user}: CreateListingProps) {
   const onSubmit = async (values: FormInput) => {
     try {
       setIsSubmitting(true);
-      console.log("Starting form submission...");
-      console.log("Form values:", JSON.stringify(values, null, 2));
+      console.log("Form values being submitted:", values);
 
       // Check for required images
       if (images.length === 0) {
-        toast.error("Потребна е слика", {
-          description: "Ве молиме додадете барем една слика.",
+        toast.error("Потребна е барем една слика", {
+          description: "Додадете слика за огласот",
         });
         setIsSubmitting(false);
         return;
       }
 
-      // Transform numeric values
-      const transformedValues = {
-        ...values,
-        age: values.age && values.age !== "" ? parseInt(values.age, 10) : null,
-        weight: values.weight && values.weight !== "" ? parseFloat(values.weight) : null,
-        price: values.price && values.price !== "" ? parseInt(values.price, 10) : null,
-      };
+      // Transform the values using our schema
+      const transformedValues = transformedSchema.parse(values);
 
-      // Validate all required fields are present
-      const requiredFields = ["title", "category", "listingType", "location", "breed_id", "breed", "gender"] as const;
-      const missingFields = requiredFields.filter((field) => {
-        const value = transformedValues[field];
-        console.log(`Checking field ${field}:`, value);
-        return value === undefined || value === null || value === "";
-      });
-
-      if (missingFields.length > 0) {
-        console.error("Missing required fields:", missingFields);
-        toast.error("Проверете ги сите полиња", {
-          description: `Следните полиња се задолжителни: ${missingFields.join(", ")}`,
-        });
-        return;
-      }
-
-      // Additional validation for breed_id
-      if (!transformedValues.breed_id) {
-        console.error("breed_id is required");
-        toast.error("Проверете ги сите полиња", {
-          description: "Изберете раса",
-        });
-        return;
-      }
-
-      // Log the exact data being sent to Supabase
+      // Insert the listing
       const listingData = {
         title: transformedValues.title,
         category: transformedValues.category,
@@ -157,12 +140,10 @@ export default function CreateListing({user}: CreateListingProps) {
         pedigree: transformedValues.pedigree,
         vaccine: transformedValues.vaccine,
         description: transformedValues.description || null,
+        phone: transformedValues.phone || null,
         user_id: user.id,
       };
 
-      console.log("Data being sent to Supabase:", JSON.stringify(listingData, null, 2));
-
-      // Insert the listing
       const {data: listing, error: listingError} = await supabase.from("pet_listings").insert(listingData).select().single();
 
       if (listingError) {
