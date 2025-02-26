@@ -19,9 +19,9 @@ export default async function ChatLayout({children}: {children: React.ReactNode}
 
   return (
     <ChatProvider>
-      <div className="flex h-[calc(100vh-4rem)] overflow-hidden">
-        {/* Left sidebar - Chat list */}
-        <div className="w-80 flex-shrink-0 border-r bg-muted/10">
+      <div className="flex h-[calc(100vh-4rem)]">
+        {/* Desktop: Left sidebar - Chat list */}
+        <div className="hidden md:block w-80 border-r">
           <div className="flex h-full flex-col">
             <div className="p-4 space-y-4">
               <div className="relative">
@@ -30,14 +30,14 @@ export default async function ChatLayout({children}: {children: React.ReactNode}
               </div>
               <Separator />
             </div>
-            <div className="flex-1 overflow-hidden">
+            <div className="flex-1">
               <ChatList userId={user.id} />
             </div>
           </div>
         </div>
 
         {/* Right side - Chat messages */}
-        <div className="flex-1 flex flex-col overflow-hidden">{children}</div>
+        <div className="flex-1">{children}</div>
       </div>
     </ChatProvider>
   );

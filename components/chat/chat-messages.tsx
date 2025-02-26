@@ -11,6 +11,7 @@ import {ScrollArea} from "@/components/ui/scroll-area";
 import {formatDistanceToNow} from "date-fns";
 import {Send, Info} from "lucide-react";
 import {cn} from "@/lib/utils";
+import {useUnreadMessages} from "@/lib/context/unread-messages-context";
 
 type Message = Database["public"]["Tables"]["messages"]["Row"];
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
@@ -28,6 +29,7 @@ export function ChatMessages({userId, otherUserId, listingId, otherUser}: ChatMe
   const [isLoading, setIsLoading] = React.useState(true);
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
   const {sendMessage, isLoading: isSending} = useChat();
+  const {updateUnreadCount} = useUnreadMessages();
   const supabase = React.useMemo(() => createClient(), []);
 
   const scrollToBottom = React.useCallback(() => {
@@ -115,13 +117,15 @@ export function ChatMessages({userId, otherUserId, listingId, otherUser}: ChatMe
     const markAsRead = async () => {
       try {
         await supabase.from("messages").update({read: true}).eq("sender_id", otherUserId).eq("receiver_id", userId).eq("read", false);
+        // Update unread count after marking messages as read
+        updateUnreadCount();
       } catch (error) {
         console.error("Error marking messages as read:", error);
       }
     };
 
     markAsRead();
-  }, [supabase, userId, otherUserId, messages]);
+  }, [supabase, userId, otherUserId, messages, updateUnreadCount]);
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -170,17 +174,17 @@ export function ChatMessages({userId, otherUserId, listingId, otherUser}: ChatMe
       {/* Chat header */}
       <div className="flex items-center justify-between border-b bg-white p-4">
         <div className="flex items-center gap-3">
-          <Avatar>
+          <Avatar className="h-8 w-8 md:h-10 md:w-10">
             <AvatarImage src={otherUser.avatar_url || undefined} alt={otherUser.username} />
             <AvatarFallback>{otherUser.username.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
           <div>
             <h2 className="font-semibold">{otherUser.full_name}</h2>
-            <p className="text-sm text-muted-foreground">{otherUser.username}</p>
+            <p className="text-xs md:text-sm text-muted-foreground">{otherUser.username}</p>
           </div>
         </div>
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" className="hidden md:inline-flex">
             <Info className="h-5 w-5" />
           </Button>
         </div>
@@ -193,14 +197,18 @@ export function ChatMessages({userId, otherUserId, listingId, otherUser}: ChatMe
             const isSender = message.sender_id === userId;
 
             return (
-              <div key={message.id} className={cn("flex items-start gap-3", isSender && "flex-row-reverse")}>
-                <Avatar className="h-8 w-8 mt-0.5">
+              <div key={message.id} className={cn("flex items-start gap-2 md:gap-3", isSender && "flex-row-reverse")}>
+                <Avatar className="h-6 w-6 md:h-8 md:w-8 mt-0.5">
                   <AvatarImage src={message.sender.avatar_url || undefined} alt={message.sender.username} />
                   <AvatarFallback>{message.sender.username.slice(0, 2).toUpperCase()}</AvatarFallback>
                 </Avatar>
                 <div className={cn("flex flex-col gap-1", isSender && "items-end")}>
-                  <div className={cn("rounded-2xl px-4 py-2 max-w-[85%]", isSender ? "bg-primary text-primary-foreground" : "bg-muted")}>
-                    <p className="text-sm">{message.content}</p>
+                  <div
+                    className={cn(
+                      "rounded-2xl px-3 py-2 md:px-4 md:py-2 max-w-[75%] md:max-w-[85%]",
+                      isSender ? "bg-primary text-primary-foreground" : "bg-muted"
+                    )}>
+                    <p className="text-sm break-words">{message.content}</p>
                   </div>
                   <span className="text-[10px] text-muted-foreground px-1">
                     {message.created_at && formatDistanceToNow(new Date(message.created_at), {addSuffix: true})}
@@ -214,7 +222,7 @@ export function ChatMessages({userId, otherUserId, listingId, otherUser}: ChatMe
       </ScrollArea>
 
       {/* Chat input */}
-      <div className="border-t bg-white p-4">
+      <div className="border-t bg-white p-2 md:p-4">
         <form onSubmit={handleSend} className="flex gap-2">
           <Input
             value={newMessage}

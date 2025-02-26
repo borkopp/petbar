@@ -90,7 +90,7 @@ export function ChatList({userId}: ChatListProps) {
   }
 
   return (
-    <ScrollArea className="h-full">
+    <ScrollArea className="h-[calc(100vh-10rem)]">
       <div className="space-y-1 p-2">
         {conversations.map(({message, profile}) => {
           const isActive = pathname === `/chat/${profile.id}`;
@@ -105,14 +105,14 @@ export function ChatList({userId}: ChatListProps) {
                 "relative"
               )}
               onClick={() => router.push(`/chat/${profile.id}`)}>
-              <Avatar className="h-10 w-10">
+              <Avatar className="h-10 w-10 flex-shrink-0">
                 <AvatarImage src={profile.avatar_url || undefined} alt={profile.full_name || ""} />
                 <AvatarFallback>{profile.full_name?.slice(0, 2).toUpperCase() || ""}</AvatarFallback>
               </Avatar>
-              <div className="flex-1 overflow-hidden">
-                <div className="flex items-center justify-between">
-                  <p className={cn("font-medium", isUnread && "font-semibold")}>{profile.full_name}</p>
-                  <span className="text-xs text-muted-foreground">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-2">
+                  <p className={cn("font-medium truncate", isUnread && "font-semibold")}>{profile.full_name}</p>
+                  <span className="text-xs text-muted-foreground flex-shrink-0">
                     {message.created_at && formatDistanceToNow(new Date(message.created_at), {addSuffix: true})}
                   </span>
                 </div>

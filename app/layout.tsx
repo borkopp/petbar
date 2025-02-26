@@ -10,6 +10,8 @@ import {LoadingScreen} from "@/components/ui/loading-screen";
 import {InitialLoader} from "@/components/initial-loader";
 import {Analytics} from "@vercel/analytics/react";
 import {FooterWrapper} from "@/components/footer-wrapper";
+import {createClient} from "@/lib/supabase/server";
+import {UnreadMessagesProvider} from "@/lib/context/unread-messages-context";
 
 const rubik = Rubik({
   subsets: ["latin", "cyrillic"],
@@ -26,20 +28,32 @@ export const metadata: Metadata = {
   description: "Најдобриот пазар за миленичина во Македонија",
 };
 
-export default function RootLayout({
+async function getUser() {
+  const supabase = await createClient();
+  const {
+    data: {user},
+  } = await supabase.auth.getUser();
+  return user;
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getUser();
+
   return (
     <html lang="mk">
       <body className={cn("min-h-screen bg-background font-sans antialiased", rubik.variable, fredoka.variable)}>
         <InitialLoader />
         <Suspense fallback={<LoadingScreen />}>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <FooterWrapper />
-          <Toaster richColors position="bottom-right" />
+          <UnreadMessagesProvider userId={user?.id}>
+            <Navbar user={user} />
+            <main className="flex-1">{children}</main>
+            <FooterWrapper />
+            <Toaster richColors position="bottom-right" />
+          </UnreadMessagesProvider>
         </Suspense>
         <Analytics />
       </body>
