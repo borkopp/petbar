@@ -59,6 +59,26 @@ export async function Navbar() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-40">
+                    <DropdownMenuItem asChild className="md:hidden">
+                      <Link href="/listings" className="w-full cursor-pointer">
+                        <List className="h-4 w-4" />
+                        Пазар
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild className="md:hidden">
+                      <Link href="/listings" className="w-full cursor-pointer">
+                        <Heart className="h-4 w-4" />
+                        Партнери
+                      </Link>
+                    </DropdownMenuItem>
+                    <Separator className="my-2 md:hidden" />
+                    <DropdownMenuItem asChild className="md:hidden">
+                      <Link href="/create-listing" className="w-full cursor-pointer">
+                        <Plus className="h-4 w-4" />
+                        Нов оглас
+                      </Link>
+                    </DropdownMenuItem>
+                    <Separator className="my-2 md:hidden" />
                     <DropdownMenuItem asChild>
                       <Link href="/profile" className="w-full cursor-pointer">
                         <User2 className="h-4 w-4" />
@@ -72,21 +92,6 @@ export async function Navbar() {
                       </Link>
                     </DropdownMenuItem>
                     <Separator className="my-2" />
-                    <DropdownMenuItem asChild className="md:hidden">
-                      <Link href="/listings" className="w-full cursor-pointer">
-                        Огласи
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="md:hidden">
-                      <Link href="/listings" className="w-full cursor-pointer">
-                        Пронајди партнер
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="md:hidden">
-                      <Link href="/create-listing" className="w-full cursor-pointer">
-                        Нов оглас
-                      </Link>
-                    </DropdownMenuItem>
                     <DropdownMenuItem>
                       <LogoutButton />
                     </DropdownMenuItem>

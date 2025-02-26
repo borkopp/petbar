@@ -40,8 +40,7 @@ export default async function ProfilePage({searchParams}: PageProps) {
     .order("created_at", {ascending: false});
 
   return (
-    <div className="container mx-auto py-10">
-      <h1 className="mb-8 text-3xl font-bold">Мој Профил</h1>
+    <div className="container mx-auto py-10 px-4 md:px-0">
       <ProfileTabs profile={profile} listings={listings || []} defaultTab={params.tab === "listings" ? "listings" : "profile"} />
     </div>
   );

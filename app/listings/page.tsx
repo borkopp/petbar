@@ -33,22 +33,19 @@ interface PageProps {
 }
 
 function getListingTitle(searchParams: SearchParams, categoryName?: string | null) {
-  const parts = [];
-
-  if (searchParams.category && categoryName) {
-    parts.push(categoryName);
-  }
-
+  // If breed is selected, show only breed
   if (searchParams.breed) {
-    parts.push(searchParams.breed);
+    return searchParams.breed;
   }
 
+  // If only category is selected, show category name
+  if (searchParams.category && categoryName) {
+    return categoryName;
+  }
+
+  // If only location is selected, show location
   if (searchParams.location) {
-    parts.push(`во ${searchParams.location}`);
-  }
-
-  if (parts.length > 0) {
-    return `Резултати за вашето пребарување`;
+    return `Огласи во ${searchParams.location}`;
   }
 
   return "Сите огласи";
@@ -152,7 +149,7 @@ export default async function ListingsPage(props: PageProps) {
   const listings = rawListings ?? [];
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="container mx-auto py-10 px-4 md:px-0">
       <div className="flex flex-col gap-8 md:flex-row">
         {/* Filters Sidebar */}
         <div className="w-full md:w-64 md:flex-none">

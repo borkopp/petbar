@@ -38,16 +38,16 @@ export default function ListingCard({
 }: ListingCardProps) {
   return (
     <Link href={`/listings/${id}`} className="block">
-      <Card className="flex overflow-hidden border rounded-xl font-rubik hover:border-primary/50 transition-colors">
-        {/* Left side - Image */}
-        <div className="relative w-[400px] h-[300px]">
+      <Card className="flex flex-col md:flex-row overflow-hidden border rounded-xl font-rubik hover:border-primary/50 transition-colors">
+        {/* Image */}
+        <div className="relative w-full md:w-[400px] aspect-video md:aspect-auto md:h-[300px]">
           <Image src={images[0]?.url || "/placeholder.png"} alt={title} fill className="object-cover" />
         </div>
 
-        {/* Right side - Content */}
-        <div className="flex-1 p-6">
+        {/* Content */}
+        <div className="flex-1 p-4 md:p-6 space-y-3 md:space-y-6">
           {/* Top row - Location and Date */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between">
             <p className="text-sm text-muted-foreground">{location}</p>
             <p className="text-xs text-muted-foreground">
               {formatDistanceToNow(new Date(createdAt), {
@@ -58,18 +58,22 @@ export default function ListingCard({
           </div>
 
           {/* Title */}
-          <h3 className="text-xl font-semibold mb-3 line-clamp-2">{title}</h3>
+          <h3 className="text-lg md:text-xl font-semibold line-clamp-2">{title}</h3>
 
           {/* Breed */}
-          {breed && <p className="text-sm text-muted-foreground mb-2">{breed}</p>}
+          {breed && <p className="text-sm text-muted-foreground">{breed}</p>}
 
-          {/* Description */}
-          {description && <p className="text-sm line-clamp-3 mb-4">{description}</p>}
+          {/* Description - Hide on mobile, truncate on desktop */}
+          {description && (
+            <div className="hidden md:block">
+              <p className="text-sm text-muted-foreground line-clamp-2">{description}</p>
+            </div>
+          )}
 
           {/* Price */}
-          <div className="mb-4">
+          <div>
             {price ? (
-              <p className="text-xl text-muted-foreground font-semibold">{price.toLocaleString()} ден</p>
+              <p className="text-lg md:text-xl text-muted-foreground font-semibold">{price.toLocaleString()} ден</p>
             ) : (
               <Badge variant="secondary" className="text-base px-3 py-1">
                 За вдомување
@@ -78,7 +82,7 @@ export default function ListingCard({
           </div>
 
           {/* Badges */}
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {hasIdentityVerified && (
               <Badge variant="outline" className="flex items-center gap-1.5 px-3 py-1 rounded-full border-gray-300">
                 <Verified className="h-4 w-4 text-blue-500" />

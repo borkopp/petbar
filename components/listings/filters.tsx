@@ -10,11 +10,12 @@ import {Slider} from "@/components/ui/slider";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {Badge} from "@/components/ui/badge";
-import {X} from "lucide-react";
+import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet";
+import {Filter, X} from "lucide-react";
 import {createClient} from "@/lib/supabase/client";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 
-export default function ListingsFilters() {
+function FiltersContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [priceRange, setPriceRange] = React.useState([0, 100000]); // 0-100,000 MKD
@@ -118,10 +119,6 @@ export default function ListingsFilters() {
     }
   };
 
-  const clearFilters = () => {
-    router.push("/listings");
-  };
-
   return (
     <div className="w-full space-y-4">
       <div className="flex items-center justify-between">
@@ -130,7 +127,7 @@ export default function ListingsFilters() {
           {activeFilterCount > 0 && <Badge variant="secondary">{activeFilterCount}</Badge>}
         </div>
         {activeFilterCount > 0 && (
-          <Button variant="ghost" size="sm" onClick={clearFilters}>
+          <Button variant="ghost" size="sm" onClick={() => router.push("/listings")}>
             <X className="mr-2 h-4 w-4" />
             Исчисти
           </Button>
@@ -327,5 +324,34 @@ export default function ListingsFilters() {
         </AccordionItem>
       </Accordion>
     </div>
+  );
+}
+
+export default function ListingsFilters() {
+  return (
+    <>
+      {/* Desktop Filters */}
+      <div className="hidden md:block">
+        <FiltersContent />
+      </div>
+
+      {/* Mobile Filters */}
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant="outline" size="sm" className="md:hidden w-full">
+            <Filter className="mr-2 h-4 w-4" />
+            Филтри
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="w-full sm:w-[340px] overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>Филтри</SheetTitle>
+          </SheetHeader>
+          <div className="mt-4">
+            <FiltersContent />
+          </div>
+        </SheetContent>
+      </Sheet>
+    </>
   );
 }
