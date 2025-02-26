@@ -7,7 +7,6 @@ import ContactInfo from "@/components/listings/contact-info";
 import PetDetails from "@/components/listings/pet-details";
 import ShareSection from "@/components/listings/share-section";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
-import {formatPrice} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import {Heart, MessageCircle} from "lucide-react";
 
@@ -59,7 +58,7 @@ export default async function ListingPage(props: PageProps) {
         <div className="space-y-5">
           <p className="text-sm text-muted-foreground mb-2">{listing.location}</p>
           <h1 className="text-2xl font-bold">{listing.title}</h1>
-          {listing.price && <p className="text-xl font-semibold text-muted-foreground">{formatPrice(listing.price)}</p>}
+          {listing.price && <p className="text-xl font-semibold text-muted-foreground">{listing.price.toLocaleString()} ден</p>}
         </div>
 
         {/* Tabs */}
@@ -101,7 +100,7 @@ export default async function ListingPage(props: PageProps) {
             Зачувај во омилени
           </Button>
         </div>
-        <ShareSection title={listing.title} id={listing.id} createdAt={listing.created_at || ""} />
+        <ShareSection title={listing.title} />
       </div>
 
       {/* Desktop Layout */}
@@ -131,7 +130,7 @@ export default async function ListingPage(props: PageProps) {
           <ListingInfo id={listing.id} breed={listing.breed} price={listing.price} location={listing.location} />
           <SellerCard seller={listing.profiles} responseTime="1 час" responseRate={100} />
           <ContactInfo location={listing.location} phone={listing.phone || "Нема број"} />
-          <ShareSection title={listing.title} id={listing.id} createdAt={listing.created_at || ""} />
+          <ShareSection title={listing.title} />
         </div>
       </div>
     </div>

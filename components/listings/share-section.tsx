@@ -8,12 +8,9 @@ import {useState} from "react";
 
 interface ShareSectionProps {
   title: string;
-  id: string;
-  createdAt: string;
-  views?: number;
 }
 
-export default function ShareSection({title, id, createdAt, views = 0}: ShareSectionProps) {
+export default function ShareSection({title}: ShareSectionProps) {
   const pathname = usePathname();
   const [copied, setCopied] = useState(false);
   const url = `https://petbar.mk${pathname}`;
@@ -64,9 +61,6 @@ export default function ShareSection({title, id, createdAt, views = 0}: ShareSec
               <Twitter className="h-5 w-5" />
             </a>
           </Button>
-        </div>
-        <div className="text-xs text-center text-muted-foreground">
-          ID: {id} | Објавено: {new Date(createdAt).toLocaleDateString("mk")} | Прегледи: {views}
         </div>
       </div>
     </div>

@@ -5,7 +5,6 @@ import {useRouter} from "next/navigation";
 import Link from "next/link";
 
 import {Button} from "@/components/ui/button";
-import {formatPrice} from "@/lib/utils";
 
 interface ListingInfoProps {
   id: string;
@@ -30,7 +29,7 @@ export default function ListingInfo({id, breed, price, location}: ListingInfoPro
             {breed}
           </Link>
         )}
-        {price && <p className="text-2xl font-semibold">{formatPrice(price)}</p>}
+        {price && <p className="text-2xl font-semibold">{price.toLocaleString()} ден</p>}
       </div>
 
       <div className="flex gap-4">

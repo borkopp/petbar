@@ -29,28 +29,6 @@ export default function ListingGallery({images}: ListingGalleryProps) {
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
-  // Handle keyboard navigation
-  React.useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isFullscreen) return;
-
-      switch (e.key) {
-        case "ArrowLeft":
-          showPrevious();
-          break;
-        case "ArrowRight":
-          showNext();
-          break;
-        case "Escape":
-          setIsFullscreen(false);
-          break;
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isFullscreen]);
-
   return (
     <>
       <div className="space-y-4">
