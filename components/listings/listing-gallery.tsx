@@ -78,11 +78,25 @@ export default function ListingGallery({images}: ListingGalleryProps) {
           <Button variant="ghost" size="icon" className="absolute top-2 right-2 bg-white/80 hover:bg-white" onClick={() => setIsFullscreen(true)}>
             <Expand className="h-5 w-5" />
           </Button>
+
+          {/* Mobile Dots Navigation */}
+          {images.length > 1 && (
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 md:hidden">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  className={cn("w-2 h-2 rounded-full transition-colors", currentIndex === index ? "bg-white" : "bg-white/50 hover:bg-white/75")}
+                  aria-label={`Go to image ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
         </Card>
 
-        {/* Thumbnails */}
+        {/* Desktop Thumbnails */}
         {images.length > 1 && (
-          <div className="flex gap-2 overflow-x-auto pb-2">
+          <div className="hidden md:flex gap-2 overflow-x-auto pb-2">
             {images.map((image, index) => (
               <button
                 key={image.id}

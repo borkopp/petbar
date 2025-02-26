@@ -5,6 +5,11 @@ import ListingInfo from "@/components/listings/listing-info";
 import SellerCard from "@/components/listings/seller-card";
 import ContactInfo from "@/components/listings/contact-info";
 import PetDetails from "@/components/listings/pet-details";
+import ShareSection from "@/components/listings/share-section";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import {formatPrice} from "@/lib/utils";
+import {Button} from "@/components/ui/button";
+import {Heart, MessageCircle} from "lucide-react";
 
 interface PageProps {
   params: Promise<{id: string}>;
@@ -45,7 +50,62 @@ export default async function ListingPage(props: PageProps) {
 
   return (
     <div className="container mx-auto py-8 px-4">
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+      {/* Mobile Layout */}
+      <div className="lg:hidden space-y-6">
+        {/* Gallery */}
+        <ListingGallery images={listing.pet_images} />
+
+        {/* Basic Info */}
+        <div className="space-y-5">
+          <p className="text-sm text-muted-foreground mb-2">{listing.location}</p>
+          <h1 className="text-2xl font-bold">{listing.title}</h1>
+          {listing.price && <p className="text-xl font-semibold text-muted-foreground">{formatPrice(listing.price)}</p>}
+        </div>
+
+        {/* Tabs */}
+        <Tabs defaultValue="details" className="w-full">
+          <TabsList className="w-full">
+            <TabsTrigger value="details" className="flex-1">
+              Детали
+            </TabsTrigger>
+            <TabsTrigger value="seller" className="flex-1">
+              Продавач
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="details" className="mt-4">
+            <PetDetails
+              age={listing.age}
+              gender={listing.gender}
+              breed={listing.breed}
+              color={listing.color}
+              weight={listing.weight}
+              pedigree={listing.pedigree}
+              vaccine={listing.vaccine}
+              description={listing.description}
+            />
+          </TabsContent>
+
+          <TabsContent value="seller" className="mt-4 space-y-6">
+            <SellerCard seller={listing.profiles} responseTime="1 час" responseRate={100} />
+            <ContactInfo location={listing.location} phone={listing.phone || "Нема број"} />
+          </TabsContent>
+        </Tabs>
+        <div className="flex flex-col gap-4">
+          <Button className="w-full">
+            <MessageCircle className="mr-2 h-5 w-5" />
+            Испрати порака
+          </Button>
+          <Button variant="outline" className="w-full">
+            <Heart className="mr-2 h-5 w-5" />
+            Зачувај во омилени
+          </Button>
+        </div>
+        <ShareSection title={listing.title} id={listing.id} createdAt={listing.created_at || ""} />
+      </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden lg:grid lg:grid-cols-5 gap-8">
         {/* Left section - Gallery and Details */}
         <div className="lg:col-span-3 space-y-6">
           <ListingGallery images={listing.pet_images} />
@@ -69,10 +129,9 @@ export default async function ListingPage(props: PageProps) {
         {/* Right section - Info */}
         <div className="lg:col-span-2 space-y-6">
           <ListingInfo id={listing.id} breed={listing.breed} price={listing.price} location={listing.location} />
-
           <SellerCard seller={listing.profiles} responseTime="1 час" responseRate={100} />
-
           <ContactInfo location={listing.location} phone={listing.phone || "Нема број"} />
+          <ShareSection title={listing.title} id={listing.id} createdAt={listing.created_at || ""} />
         </div>
       </div>
     </div>

@@ -47,7 +47,7 @@ export default function PetDetails({age, gender, breed, color, weight, pedigree,
             <div>
               <p className="text-sm text-muted-foreground">Возраст</p>
               <p className="font-medium">
-                {age} {age === 1 ? "година" : "години"}
+                {age} {age === 1 ? "месец" : "месеци"}
               </p>
             </div>
           </div>
