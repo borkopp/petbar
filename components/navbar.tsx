@@ -34,7 +34,7 @@ export async function Navbar() {
             <Button asChild variant="ghost" size="sm" className="hidden md:flex items-center gap-2">
               <Link href="/listings">
                 <List className="h-4 w-4" />
-                Огласи
+                Пазар
               </Link>
             </Button>
             <Button asChild variant="ghost" size="sm" className="hidden md:flex items-center gap-2">

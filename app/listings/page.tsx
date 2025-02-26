@@ -7,6 +7,7 @@ import SortSelect from "@/components/listings/sort-select";
 import {Button} from "@/components/ui/button";
 import {Plus} from "lucide-react";
 import type {Database} from "@/database.types";
+import {SearchBar} from "@/components/search-bar";
 
 type PetListing = Database["public"]["Tables"]["pet_listings"]["Row"] & {
   pet_images: {url: string}[];
@@ -47,7 +48,7 @@ function getListingTitle(searchParams: SearchParams, categoryName?: string | nul
   }
 
   if (parts.length > 0) {
-    return `Пребарување на ${parts.join(" ")}`;
+    return `Резултати за вашето пребарување`;
   }
 
   return "Сите огласи";
@@ -170,19 +171,20 @@ export default async function ListingsPage(props: PageProps) {
 
         {/* Main Content */}
         <div className="flex-1 space-y-8">
-          <div className="space-y-1">
-            <h1 className="text-2xl font-bold">{getListingTitle(searchParams, categoryName)}</h1>
-            <p className="text-sm text-muted-foreground">
-              {listings.length} {listings.length === 1 ? "оглас" : "огласи"}
-            </p>
-          </div>
-
-          <div className="max-w-4xl justify-end flex">
-            <SortSelect />
+          <div className="max-w-4xl space-y-6">
+            <SearchBar variant="listings" />
+            <div className="justify-between flex">
+              <div className="space-y-1">
+                <h1 className="text-xl font-medium">
+                  {getListingTitle(searchParams, categoryName)} ({listings.length})
+                </h1>
+              </div>
+              <SortSelect />
+            </div>
           </div>
 
           {listings.length === 0 ? (
-            <div className="flex h-[450px] items-center justify-center rounded-lg border border-dashed">
+            <div className="flex h-[450px] max-w-4xl items-center justify-center rounded-lg border border-dashed">
               <div className="mx-auto max-w-[420px] text-center">
                 <h3 className="mt-4 text-lg font-semibold">Нема пронајдено огласи</h3>
                 <p className="mt-2 text-sm text-muted-foreground">Променете ги филтрите за да видите повеќе огласи.</p>
