@@ -4,15 +4,18 @@ import {ChatMessages} from "@/components/chat/chat-messages";
 import {ChatProvider} from "@/lib/context/chat-context";
 
 interface ChatPageProps {
-  params: {
+  params: Promise<{
     userId: string;
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     listing?: string;
-  };
+  }>;
 }
 
 export default async function ChatPage({params, searchParams}: ChatPageProps) {
+  const {userId} = await params;
+  const {listing} = await searchParams;
+
   const supabase = await createClient();
 
   const {
@@ -24,7 +27,7 @@ export default async function ChatPage({params, searchParams}: ChatPageProps) {
   }
 
   // Get other user's profile
-  const {data: otherUser, error: otherUserError} = await supabase.from("profiles").select("*").eq("id", params.userId).single();
+  const {data: otherUser, error: otherUserError} = await supabase.from("profiles").select("*").eq("id", userId).single();
 
   if (otherUserError || !otherUser) {
     redirect("/chat");
@@ -33,7 +36,7 @@ export default async function ChatPage({params, searchParams}: ChatPageProps) {
   return (
     <ChatProvider>
       <div className="flex h-[calc(100vh-4rem)] flex-col">
-        <ChatMessages userId={user.id} otherUserId={params.userId} listingId={searchParams.listing} otherUser={otherUser} />
+        <ChatMessages userId={user.id} otherUserId={userId} listingId={listing} otherUser={otherUser} />
       </div>
     </ChatProvider>
   );
