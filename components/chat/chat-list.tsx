@@ -107,7 +107,7 @@ export function ChatList({userId}: ChatListProps) {
               onClick={() => router.push(`/chat/${profile.id}`)}>
               <Avatar className="h-10 w-10 flex-shrink-0">
                 <AvatarImage src={profile.avatar_url || undefined} alt={profile.full_name || ""} />
-                <AvatarFallback>{profile.full_name?.slice(0, 2).toUpperCase() || ""}</AvatarFallback>
+                <AvatarFallback>{profile.full_name?.slice(0, 1).toUpperCase() || ""}</AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2">

@@ -175,8 +175,8 @@ export function ChatMessages({userId, otherUserId, listingId, otherUser}: ChatMe
       <div className="flex items-center justify-between border-b bg-white p-4">
         <div className="flex items-center gap-3">
           <Avatar className="h-8 w-8 md:h-10 md:w-10">
-            <AvatarImage src={otherUser.avatar_url || undefined} alt={otherUser.username} />
-            <AvatarFallback>{otherUser.username.slice(0, 2).toUpperCase()}</AvatarFallback>
+            <AvatarImage src={otherUser.avatar_url || undefined} alt={otherUser.full_name || ""} />
+            <AvatarFallback>{otherUser.full_name?.slice(0, 1).toUpperCase() || ""}</AvatarFallback>
           </Avatar>
           <div>
             <h2 className="font-semibold">{otherUser.full_name}</h2>
@@ -199,8 +199,8 @@ export function ChatMessages({userId, otherUserId, listingId, otherUser}: ChatMe
             return (
               <div key={message.id} className={cn("flex items-start gap-2 md:gap-3", isSender && "flex-row-reverse")}>
                 <Avatar className="h-6 w-6 md:h-8 md:w-8 mt-0.5">
-                  <AvatarImage src={message.sender.avatar_url || undefined} alt={message.sender.username} />
-                  <AvatarFallback>{message.sender.username.slice(0, 2).toUpperCase()}</AvatarFallback>
+                  <AvatarImage src={message.sender.avatar_url || undefined} alt={message.sender.full_name || ""} />
+                  <AvatarFallback>{message.sender.full_name?.slice(0, 1).toUpperCase() || ""}</AvatarFallback>
                 </Avatar>
                 <div className={cn("flex flex-col gap-1", isSender && "items-end")}>
                   <div
