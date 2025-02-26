@@ -11,37 +11,47 @@ import ListingCard from "@/components/listings/listing-card";
 import {Separator} from "@/components/ui/separator";
 
 interface PageProps {
-  params: {
-    "user-id": string;
-  };
+  params: Promise<{"user-id": string}>;
+  searchParams: Promise<object>;
 }
 
-export default async function ProfilePage({params}: PageProps) {
+export default async function ProfilePage(props: PageProps) {
+  const params = await props.params;
+  const userId = params["user-id"];
+
   const supabase = await createClient();
 
-  // Fetch user profile
-  const {data: profile, error: profileError} = await supabase.from("profiles").select("*").eq("id", params["user-id"]).single();
+  // Get user profile
+  const {data: profile} = await supabase
+    .from("profiles")
+    .select(
+      `
+      id,
+      username,
+      full_name,
+      avatar_url,
+      location,
+      created_at,
+      rating
+    `
+    )
+    .eq("id", userId)
+    .single();
 
-  if (profileError || !profile) {
+  if (!profile) {
     notFound();
   }
 
-  // Fetch user's current listings
-  const {data: currentListings} = await supabase
+  // Get user's listings
+  const {data: listings} = await supabase
     .from("pet_listings")
     .select(
       `
       *,
-      pet_images (
-        url
-      ),
-      breed:breed_id (
-        id,
-        name
-      )
+      pet_images (*)
     `
     )
-    .eq("user_id", params["user-id"])
+    .eq("user_id", userId)
     .order("created_at", {ascending: false});
 
   // Fetch user's reviews
@@ -56,7 +66,7 @@ export default async function ProfilePage({params}: PageProps) {
       )
     `
     )
-    .eq("reviewee_id", params["user-id"])
+    .eq("reviewee_id", userId)
     .order("created_at", {ascending: false});
 
   return (
@@ -132,9 +142,9 @@ export default async function ProfilePage({params}: PageProps) {
         </TabsList>
 
         <TabsContent value="listings" className="space-y-6">
-          {currentListings && currentListings.length > 0 ? (
+          {listings && listings.length > 0 ? (
             <div className="grid gap-6">
-              {currentListings.map((listing) => (
+              {listings.map((listing) => (
                 <ListingCard
                   key={listing.id}
                   id={listing.id}
