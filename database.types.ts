@@ -164,38 +164,87 @@ export type Database = {
       }
       partner_listings: {
         Row: {
+          availability_period: string | null
           breeding_experience: string | null
+          category: string
           created_at: string | null
-          desired_age_range: unknown | null
+          description: string | null
+          desired_age_range: Json | null
           desired_breed: string | null
+          desired_gender: string
+          health_requirements: string[] | null
           id: string
+          location: string
           pedigree_required: boolean | null
-          pet_listing_id: string
+          pet_listing_id: string | null
+          photos: string[] | null
+          preferred_meeting_location: string | null
+          price_range: Json | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          user_id: string
+          vaccination_required: boolean | null
         }
         Insert: {
+          availability_period?: string | null
           breeding_experience?: string | null
+          category: string
           created_at?: string | null
-          desired_age_range?: unknown | null
+          description?: string | null
+          desired_age_range?: Json | null
           desired_breed?: string | null
+          desired_gender: string
+          health_requirements?: string[] | null
           id?: string
+          location: string
           pedigree_required?: boolean | null
-          pet_listing_id: string
+          pet_listing_id?: string | null
+          photos?: string[] | null
+          preferred_meeting_location?: string | null
+          price_range?: Json | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+          vaccination_required?: boolean | null
         }
         Update: {
+          availability_period?: string | null
           breeding_experience?: string | null
+          category?: string
           created_at?: string | null
-          desired_age_range?: unknown | null
+          description?: string | null
+          desired_age_range?: Json | null
           desired_breed?: string | null
+          desired_gender?: string
+          health_requirements?: string[] | null
           id?: string
+          location?: string
           pedigree_required?: boolean | null
-          pet_listing_id?: string
+          pet_listing_id?: string | null
+          photos?: string[] | null
+          preferred_meeting_location?: string | null
+          price_range?: Json | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+          vaccination_required?: boolean | null
         }
         Relationships: [
           {
-            foreignKeyName: "partner_listings_pet_listing_id_fkey"
+            foreignKeyName: "fk_pet_listing"
             columns: ["pet_listing_id"]
             isOneToOne: false
             referencedRelation: "pet_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_user"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
