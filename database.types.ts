@@ -162,6 +162,38 @@ export type Database = {
           },
         ]
       }
+      partner_images: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_primary: boolean | null
+          listing_id: string
+          url: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_primary?: boolean | null
+          listing_id: string
+          url: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_primary?: boolean | null
+          listing_id?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_images_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "partner_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       partner_listings: {
         Row: {
           availability_period: string | null
@@ -174,6 +206,7 @@ export type Database = {
           desired_gender: string
           health_requirements: string[] | null
           id: string
+          is_price_negotiable: boolean
           location: string
           pedigree_required: boolean | null
           pet_listing_id: string | null
@@ -197,6 +230,7 @@ export type Database = {
           desired_gender: string
           health_requirements?: string[] | null
           id?: string
+          is_price_negotiable?: boolean
           location: string
           pedigree_required?: boolean | null
           pet_listing_id?: string | null
@@ -220,6 +254,7 @@ export type Database = {
           desired_gender?: string
           health_requirements?: string[] | null
           id?: string
+          is_price_negotiable?: boolean
           location?: string
           pedigree_required?: boolean | null
           pet_listing_id?: string | null

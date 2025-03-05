@@ -147,54 +147,73 @@ export function PartnerListingForm({userId}: PartnerListingFormProps) {
       // Upload images
       if (images.length > 0) {
         console.log(`Starting upload of ${images.length} images`);
-        for (const [index, image] of images.entries()) {
-          console.log(`Processing image ${index + 1}:`, {
-            name: image.name,
-            size: image.size,
-            type: image.type,
-          });
-
-          const fileExt = image.name.split(".").pop();
-          const filePath = `${listing.id}/${index}.${fileExt}`;
-          console.log("Generated file path:", filePath);
-
-          const {error: uploadError} = await supabase.storage.from("partner-images").upload(filePath, image);
-
-          if (uploadError) {
-            console.error(`Error uploading image ${index + 1}:`, {
-              name: uploadError.name,
-              message: uploadError.message,
+        try {
+          for (const [index, image] of images.entries()) {
+            console.log(`Processing image ${index + 1}:`, {
+              name: image.name,
+              size: image.size,
+              type: image.type,
             });
-            throw new Error(`Failed to upload image ${index + 1}: ${uploadError.message}`);
-          }
 
-          const {
-            data: {publicUrl},
-          } = supabase.storage.from("partner-images").getPublicUrl(filePath);
+            const fileExt = image.name.split(".").pop();
+            const filePath = `${listing.id}/${index}.${fileExt}`;
+            console.log("Generated file path:", filePath);
 
-          console.log(`Image ${index + 1} uploaded, public URL:`, publicUrl);
+            // Ensure user is authenticated before upload
+            const {
+              data: {session},
+            } = await supabase.auth.getSession();
 
-          // Insert image record
-          const imageData = {
-            listing_id: listing.id,
-            url: publicUrl,
-            is_primary: index === 0,
-          };
-          console.log(`Saving image record ${index + 1}:`, imageData);
+            if (!session) {
+              throw new Error("User not authenticated");
+            }
 
-          const {error: imageError} = await supabase.from("partner_images").insert(imageData);
-
-          if (imageError) {
-            console.error(`Error saving image record ${index + 1}:`, {
-              code: imageError.code,
-              message: imageError.message,
-              details: imageError.details,
-              hint: imageError.hint,
+            const {error: uploadError} = await supabase.storage.from("partner-images").upload(filePath, image, {
+              upsert: true,
+              cacheControl: "3600",
             });
-            throw new Error(`Failed to save image record ${index + 1}: ${imageError.message}`);
+
+            if (uploadError) {
+              console.error(`Error uploading image ${index + 1}:`, {
+                name: uploadError.name,
+                message: uploadError.message,
+              });
+              throw new Error(`Failed to upload image ${index + 1}: ${uploadError.message}`);
+            }
+
+            const {
+              data: {publicUrl},
+            } = supabase.storage.from("partner-images").getPublicUrl(filePath);
+
+            console.log(`Image ${index + 1} uploaded, public URL:`, publicUrl);
+
+            // Insert image record in the partner_images table
+            const imageData = {
+              listing_id: listing.id,
+              url: publicUrl,
+              is_primary: index === 0,
+            };
+            console.log(`Saving image record ${index + 1}:`, imageData);
+
+            const {data: imageRecord, error: imageError} = await supabase.from("partner_images").insert(imageData).select();
+
+            if (imageError) {
+              console.error(`Error saving image record ${index + 1}:`, {
+                code: imageError.code,
+                message: imageError.message,
+                details: imageError.details,
+                hint: imageError.hint,
+              });
+              throw new Error(`Failed to save image record ${index + 1}: ${imageError.message || "Check Supabase logs for details"}`);
+            }
+
+            console.log(`Image record ${index + 1} saved successfully:`, imageRecord);
           }
+          console.log("All images processed successfully");
+        } catch (error) {
+          console.error("Error processing images:", error);
+          throw error;
         }
-        console.log("All images processed successfully");
       }
 
       toast.success("Огласот е успешно креиран");
