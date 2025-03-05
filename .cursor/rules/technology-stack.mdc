@@ -1,10 +1,13 @@
 ---
 description: nextjs 15
 globs: 
+alwaysApply: false
 ---
 
 # Your rule content
 
 - Always use Next.js 15 with React 19 in all solutions. Avoid outdated solutions based on React 18 or Next.js 14.
+
+- Use shadcn/ui and tailwind for ui components, the command to add components is npx shadcn@latest add ...
 
 - We are using Supabase as the database. Whenever a solution involves interacting with the database, refer to [database.types.ts](mdc:database.types.ts) for the structure and context.

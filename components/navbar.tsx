@@ -57,6 +57,12 @@ export function Navbar({user}: NavbarProps) {
                     Нов оглас
                   </Button>
                 </Link>
+                <Link href="/create-partner-listing">
+                  <Button size="sm" variant="ghost">
+                    <Heart className="h-5 w-5" />
+                    Нов оглас за партнер
+                  </Button>
+                </Link>
                 <Link href="/chat" className="relative">
                   <Button variant="ghost" size="icon">
                     <MessageSquare className="h-5 w-5" />
@@ -154,6 +160,12 @@ export function Navbar({user}: NavbarProps) {
                         <Button variant="ghost" className="w-full justify-start">
                           <Plus className="mr-2 h-5 w-5" />
                           Нов оглас
+                        </Button>
+                      </Link>
+                      <Link href="/create-partner-listing">
+                        <Button variant="ghost" className="w-full justify-start">
+                          <Heart className="mr-2 h-5 w-5" />
+                          Нов оглас за партнер
                         </Button>
                       </Link>
                       <div className="h-px bg-border" />
