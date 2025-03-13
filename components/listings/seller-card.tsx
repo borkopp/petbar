@@ -12,7 +12,6 @@ interface SellerCardProps {
     full_name: string;
     avatar_url: string | null;
     created_at: string;
-    rating: number | null;
   };
   responseTime: string;
   responseRate: number;
@@ -32,12 +31,6 @@ export default function SellerCard({seller}: SellerCardProps) {
               {seller.full_name}
             </Link>
             <p className="text-sm text-muted-foreground">Член од {format(new Date(seller.created_at), "MM.yyyy")}</p>
-            {/* {seller.rating && (
-              <div className="flex items-center gap-1 mt-1">
-                <Star className="h-4 w-4" />
-                <span className="text-sm font-medium">{seller.rating.toFixed(1)}</span>
-              </div>
-            )} */}
           </div>
         </div>
       </div>

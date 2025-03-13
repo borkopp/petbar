@@ -196,7 +196,6 @@ export type Database = {
       }
       partner_listings: {
         Row: {
-          availability_period: string | null
           breeding_experience: string | null
           category: string
           created_at: string | null
@@ -204,15 +203,20 @@ export type Database = {
           desired_age_range: Json | null
           desired_breed: string | null
           desired_gender: string
+          dog_age: number | null
+          dog_breed: string | null
+          dog_description: string | null
+          dog_gender: string | null
+          dog_pedigree: boolean | null
+          dog_vaccinated: boolean | null
           health_requirements: string[] | null
           id: string
           is_price_negotiable: boolean
           location: string
           pedigree_required: boolean | null
           pet_listing_id: string | null
-          photos: string[] | null
           preferred_meeting_location: string | null
-          price_range: Json | null
+          price: number | null
           status: string | null
           title: string
           updated_at: string | null
@@ -220,7 +224,6 @@ export type Database = {
           vaccination_required: boolean | null
         }
         Insert: {
-          availability_period?: string | null
           breeding_experience?: string | null
           category: string
           created_at?: string | null
@@ -228,15 +231,20 @@ export type Database = {
           desired_age_range?: Json | null
           desired_breed?: string | null
           desired_gender: string
+          dog_age?: number | null
+          dog_breed?: string | null
+          dog_description?: string | null
+          dog_gender?: string | null
+          dog_pedigree?: boolean | null
+          dog_vaccinated?: boolean | null
           health_requirements?: string[] | null
           id?: string
           is_price_negotiable?: boolean
           location: string
           pedigree_required?: boolean | null
           pet_listing_id?: string | null
-          photos?: string[] | null
           preferred_meeting_location?: string | null
-          price_range?: Json | null
+          price?: number | null
           status?: string | null
           title: string
           updated_at?: string | null
@@ -244,7 +252,6 @@ export type Database = {
           vaccination_required?: boolean | null
         }
         Update: {
-          availability_period?: string | null
           breeding_experience?: string | null
           category?: string
           created_at?: string | null
@@ -252,15 +259,20 @@ export type Database = {
           desired_age_range?: Json | null
           desired_breed?: string | null
           desired_gender?: string
+          dog_age?: number | null
+          dog_breed?: string | null
+          dog_description?: string | null
+          dog_gender?: string | null
+          dog_pedigree?: boolean | null
+          dog_vaccinated?: boolean | null
           health_requirements?: string[] | null
           id?: string
           is_price_negotiable?: boolean
           location?: string
           pedigree_required?: boolean | null
           pet_listing_id?: string | null
-          photos?: string[] | null
           preferred_meeting_location?: string | null
-          price_range?: Json | null
+          price?: number | null
           status?: string | null
           title?: string
           updated_at?: string | null
@@ -404,7 +416,6 @@ export type Database = {
           full_name: string | null
           id: string
           location: string | null
-          rating: number | null
           updated_at: string | null
           username: string
         }
@@ -414,7 +425,6 @@ export type Database = {
           full_name?: string | null
           id: string
           location?: string | null
-          rating?: number | null
           updated_at?: string | null
           username: string
         }
@@ -424,7 +434,6 @@ export type Database = {
           full_name?: string | null
           id?: string
           location?: string | null
-          rating?: number | null
           updated_at?: string | null
           username?: string
         }
@@ -487,7 +496,6 @@ export type Database = {
           comment: string | null
           created_at: string | null
           id: string
-          rating: number
           reviewee_id: string
           reviewer_id: string
         }
@@ -495,7 +503,6 @@ export type Database = {
           comment?: string | null
           created_at?: string | null
           id?: string
-          rating: number
           reviewee_id: string
           reviewer_id: string
         }
@@ -503,7 +510,6 @@ export type Database = {
           comment?: string | null
           created_at?: string | null
           id?: string
-          rating?: number
           reviewee_id?: string
           reviewer_id?: string
         }

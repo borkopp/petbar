@@ -35,8 +35,7 @@ export default async function ListingPage(props: PageProps) {
         id,
         full_name,
         avatar_url,
-        created_at,
-        rating
+        created_at
       )
     `
     )

@@ -1,6 +1,6 @@
 import {createClient} from "@/lib/supabase/server";
 import {notFound} from "next/navigation";
-import {Star, MapPin, Calendar} from "lucide-react";
+import {MapPin, Calendar} from "lucide-react";
 import {formatDistanceToNow} from "date-fns";
 import {mk} from "date-fns/locale";
 
@@ -31,8 +31,7 @@ export default async function ProfilePage(props: PageProps) {
       full_name,
       avatar_url,
       location,
-      created_at,
-      rating
+      created_at
     `
     )
     .eq("id", userId)
@@ -89,18 +88,7 @@ export default async function ProfilePage(props: PageProps) {
 
             {/* Stats and Info */}
             <div className="flex-1 w-full">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* Rating */}
-                <Card>
-                  <CardContent className="pt-6">
-                    <div className="flex items-center gap-2">
-                      <Star className="h-5 w-5 text-primary" />
-                      <span className="text-xl font-semibold">{profile.rating?.toFixed(1) || "Нема"}</span>
-                      <span className="text-muted-foreground">рејтинг</span>
-                    </div>
-                  </CardContent>
-                </Card>
-
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Location */}
                 {profile.location && (
                   <Card>
@@ -188,10 +176,6 @@ export default async function ProfilePage(props: PageProps) {
                                 locale: mk,
                               })}
                             </p>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-                            <span className="font-medium">{review.rating}</span>
                           </div>
                         </div>
                         {review.comment && (

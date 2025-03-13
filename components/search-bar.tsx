@@ -14,7 +14,7 @@ import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger} from "@/comp
 type Category = Database["public"]["Tables"]["categories"]["Row"];
 
 interface SearchBarProps {
-  variant?: "hero" | "listings";
+  variant?: "hero" | "listings" | "partners";
   className?: string;
 }
 
@@ -126,7 +126,10 @@ export function SearchBar({variant = "hero", className}: SearchBarProps) {
       params.delete("location");
     }
 
-    router.push(`/listings${params.toString() ? `?${params.toString()}` : ""}`);
+    // Determine which page to route to based on variant
+    const targetPage = variant === "partners" ? "/find-partner" : "/listings";
+
+    router.push(`${targetPage}${params.toString() ? `?${params.toString()}` : ""}`);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
