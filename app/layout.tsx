@@ -7,7 +7,6 @@ import {Toaster} from "sonner";
 import {cn} from "@/lib/utils";
 import {Suspense} from "react";
 import {LoadingScreen} from "@/components/ui/loading-screen";
-import {InitialLoader} from "@/components/initial-loader";
 import {Analytics} from "@vercel/analytics/react";
 import {FooterWrapper} from "@/components/footer-wrapper";
 import {createClient} from "@/lib/supabase/server";
@@ -49,7 +48,6 @@ export default async function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </head>
       <body className={cn("min-h-screen bg-background font-sans antialiased", rubik.variable, fredoka.variable)}>
-        <InitialLoader />
         <Suspense fallback={<LoadingScreen />}>
           <UnreadMessagesProvider userId={user?.id}>
             <Navbar user={user} />
