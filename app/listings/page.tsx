@@ -2,17 +2,11 @@ import Link from "next/link";
 import {createClient} from "@/lib/supabase/server";
 
 import ListingsFilters from "@/components/listings/filters";
-import ListingCard from "@/components/listings/listing-card";
 import SortSelect from "@/components/listings/sort-select";
 import {Button} from "@/components/ui/button";
 import {Plus} from "lucide-react";
-import type {Database} from "@/database.types";
 import {SearchBar} from "@/components/search-bar";
-
-type PetListing = Database["public"]["Tables"]["pet_listings"]["Row"] & {
-  pet_images: {url: string}[];
-  breed: Database["public"]["Tables"]["breeds"]["Row"] | null;
-};
+import LazyListings from "@/components/listings/lazy-listings";
 
 interface SearchParams {
   type?: string;
@@ -188,24 +182,7 @@ export default async function ListingsPage(props: PageProps) {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-6 max-w-4xl">
-              {listings.map((listing: PetListing) => (
-                <ListingCard
-                  key={listing.id}
-                  id={listing.id}
-                  title={listing.title}
-                  price={listing.price}
-                  description={listing.description ?? undefined}
-                  location={listing.location}
-                  vaccine={listing.vaccine ?? undefined}
-                  pedigree={listing.pedigree ?? undefined}
-                  gender={listing.gender ?? undefined}
-                  images={listing.pet_images}
-                  createdAt={listing.created_at ?? new Date().toISOString()}
-                  breed={listing.breed?.name}
-                />
-              ))}
-            </div>
+            <LazyListings initialListings={listings} pageSize={10} />
           )}
         </div>
       </div>

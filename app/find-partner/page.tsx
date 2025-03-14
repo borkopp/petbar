@@ -2,25 +2,11 @@ import Link from "next/link";
 import {createClient} from "@/lib/supabase/server";
 
 import PartnerFilters from "@/components/partner-listing/partner-filters";
-import PartnerCard from "@/components/partner-listing/partner-card";
 import PartnerSortSelect from "@/components/partner-listing/partner-sort-select";
 import {Button} from "@/components/ui/button";
 import {SearchBar} from "@/components/search-bar";
 import {Heart, Plus} from "lucide-react";
-import type {Database} from "@/database.types";
-
-type PartnerListing = Database["public"]["Tables"]["partner_listings"]["Row"] & {
-  partner_images?: {url: string}[];
-  user: Database["public"]["Tables"]["profiles"]["Row"] | null;
-  price?: number;
-  is_price_negotiable?: boolean;
-  dog_breed?: string;
-  dog_age?: number;
-  dog_gender?: string;
-  dog_pedigree?: boolean;
-  dog_vaccinated?: boolean;
-  phone?: string;
-};
+import LazyPartnerListings from "@/components/partner-listing/lazy-partner-listings";
 
 interface SearchParams {
   category?: string;
@@ -198,33 +184,7 @@ export default async function FindPartnerPage(props: PageProps) {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-6 max-w-4xl">
-              {listings.map((listing: PartnerListing) => (
-                <PartnerCard
-                  key={listing.id}
-                  id={listing.id}
-                  title={listing.title}
-                  description={listing.description ?? undefined}
-                  location={listing.location}
-                  category={listing.category}
-                  dog_breed={listing.dog_breed ?? undefined}
-                  dog_age={listing.dog_age ?? undefined}
-                  dog_gender={listing.dog_gender ?? undefined}
-                  dog_pedigree={listing.dog_pedigree ?? false}
-                  dog_vaccinated={listing.dog_vaccinated ?? false}
-                  desired_breed={listing.desired_breed ?? undefined}
-                  desired_gender={listing.desired_gender}
-                  pedigree_required={listing.pedigree_required ?? false}
-                  vaccination_required={listing.vaccination_required ?? false}
-                  price={listing.price}
-                  is_price_negotiable={listing.is_price_negotiable}
-                  phone={listing.phone}
-                  images={listing.partner_images ?? []}
-                  createdAt={listing.created_at ?? new Date().toISOString()}
-                  user={listing.user}
-                />
-              ))}
-            </div>
+            <LazyPartnerListings initialListings={listings} pageSize={10} />
           )}
         </div>
       </div>
