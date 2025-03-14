@@ -55,7 +55,7 @@ export function Hero() {
           <div className="flex flex-wrap justify-center gap-4 mt-8">
             {!isLoading &&
               categories
-                .slice(0, 3)
+                .slice(0, 2)
                 .map((category) => (
                   <CategoryLink
                     key={category.id}
@@ -65,6 +65,7 @@ export function Hero() {
                   />
                 ))}
             <CategoryLink icon="🐾" label="Сите животни" onClick={() => router.push("/listings")} />
+            <CategoryLink icon="💖" label="Пронајди партнер" onClick={() => router.push("/find-partner")} />
           </div>
         </div>
       </div>
