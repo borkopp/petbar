@@ -2,7 +2,7 @@
 
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {ArrowUpDown, Clock, TrendingDown, TrendingUp} from "lucide-react";
+import {ArrowUpDown} from "lucide-react";
 import {motion} from "framer-motion";
 
 export default function PartnerSortSelect() {
