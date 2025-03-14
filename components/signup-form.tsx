@@ -235,6 +235,8 @@ export function SignupForm({className, ...props}: React.ComponentProps<"div">) {
               alt="Image"
               width={1380}
               height={1500}
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=="
               className="h-full w-full object-cover object-left dark:brightness-[0.2] dark:grayscale"
               priority
             />

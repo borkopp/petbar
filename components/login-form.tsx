@@ -5,7 +5,6 @@ import {Button} from "@/components/ui/button";
 import {Card, CardContent} from "@/components/ui/card";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
-import Image from "next/image";
 import {login, signInWithGoogle, signInWithApple} from "@/app/login/actions";
 import {useFormStatus} from "react-dom";
 import {useState} from "react";
@@ -14,6 +13,7 @@ import Link from "next/link";
 import {useRouter} from "next/navigation";
 import {Loader2} from "lucide-react";
 import {PasswordInput} from "@/components/ui/password-input";
+import {BlurImage} from "@/components/ui/blur-image";
 
 // Helper function to translate Supabase error messages to Macedonian
 function translateErrorMessage(error: string): string {
@@ -58,9 +58,14 @@ function SubmitButton() {
 
 interface LoginFormProps {
   redirectTo?: string;
+  loginBgPlaceholder?: {
+    blurDataURL: string;
+    width?: number;
+    height?: number;
+  };
 }
 
-export function LoginForm({redirectTo}: LoginFormProps) {
+export function LoginForm({redirectTo, loginBgPlaceholder}: LoginFormProps) {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -175,12 +180,14 @@ export function LoginForm({redirectTo}: LoginFormProps) {
             </div>
           </form>
           <div className="relative hidden bg-muted md:block">
-            <Image
+            <BlurImage
               src="/login-bg.png"
               alt="Image"
-              width={1380}
-              height={1500}
+              width={loginBgPlaceholder?.width || 1380}
+              height={loginBgPlaceholder?.height || 1500}
+              blurDataURL={loginBgPlaceholder?.blurDataURL}
               className="h-full w-full object-cover object-left dark:brightness-[0.2] dark:grayscale"
+              loadingClassName="animate-pulse"
               priority
             />
           </div>
