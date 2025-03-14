@@ -95,7 +95,6 @@ export default function LazyPartnerListings({initialListings, pageSize = 10}: La
           title={listing.title}
           description={listing.description ?? undefined}
           location={listing.location}
-          category={listing.category}
           dog_breed={listing.dog_breed}
           dog_age={listing.dog_age}
           dog_gender={listing.dog_gender}
