@@ -30,7 +30,7 @@ export function LogoutButton() {
   };
 
   return (
-    <Button className="flex items-center " variant={"ghost"} onClick={handleLogout} disabled={isLoggingOut}>
+    <Button className="flex items-center text-red-500 " variant={"ghost"} onClick={handleLogout} disabled={isLoggingOut}>
       <LogOut className="h-4 w-4" />
       {isLoggingOut ? <Loader2 className="h-4 w-4 animate-spin" /> : "Одјави се"}
     </Button>

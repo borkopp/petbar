@@ -8,13 +8,8 @@ import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Checkbox} from "@/components/ui/checkbox";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
-import {Button} from "@/components/ui/button";
 
-interface PetDetailsProps {
-  onNext: () => void;
-}
-
-export function PetDetails({onNext}: PetDetailsProps) {
+export function PetDetails() {
   const form = useFormContext();
 
   const containerVariants = {
@@ -32,19 +27,12 @@ export function PetDetails({onNext}: PetDetailsProps) {
     visible: {y: 0, opacity: 1},
   };
 
-  const handleNext = async () => {
-    const isValid = await form.trigger("gender");
-    if (isValid) {
-      onNext();
-    }
-  };
-
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
       <Card>
         <CardHeader>
           <CardTitle>Карактеристики</CardTitle>
-          <CardDescription>Внесете ги карактеристиките на вашето милениче</CardDescription>
+          <CardDescription>Внесете ги карактеристиките на вашето милениче (сите полиња се задолжителни)</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <motion.div variants={itemVariants}>
@@ -53,7 +41,7 @@ export function PetDetails({onNext}: PetDetailsProps) {
               name="gender"
               render={({field}) => (
                 <FormItem>
-                  <FormLabel>Пол</FormLabel>
+                  <FormLabel>Пол *</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
@@ -77,7 +65,7 @@ export function PetDetails({onNext}: PetDetailsProps) {
               name="age"
               render={({field}) => (
                 <FormItem>
-                  <FormLabel>Возраст (месеци)</FormLabel>
+                  <FormLabel>Возраст (месеци) *</FormLabel>
                   <FormControl>
                     <Input type="number" placeholder="Внесете возраст" {...field} />
                   </FormControl>
@@ -93,7 +81,7 @@ export function PetDetails({onNext}: PetDetailsProps) {
               name="weight"
               render={({field}) => (
                 <FormItem>
-                  <FormLabel>Тежина (кг)</FormLabel>
+                  <FormLabel>Тежина (кг) *</FormLabel>
                   <FormControl>
                     <Input type="number" placeholder="Внесете тежина" {...field} />
                   </FormControl>
@@ -109,7 +97,7 @@ export function PetDetails({onNext}: PetDetailsProps) {
               name="color"
               render={({field}) => (
                 <FormItem>
-                  <FormLabel>Боја</FormLabel>
+                  <FormLabel>Боја *</FormLabel>
                   <FormControl>
                     <Input placeholder="Внесете боја" {...field} />
                   </FormControl>
@@ -154,11 +142,6 @@ export function PetDetails({onNext}: PetDetailsProps) {
           </motion.div>
         </CardContent>
       </Card>
-      <div className="flex justify-end pt-6">
-        <Button type="button" onClick={handleNext}>
-          Следно
-        </Button>
-      </div>
     </motion.div>
   );
 }

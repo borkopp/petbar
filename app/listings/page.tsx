@@ -199,6 +199,7 @@ export default async function ListingsPage(props: PageProps) {
                   location={listing.location}
                   vaccine={listing.vaccine ?? undefined}
                   pedigree={listing.pedigree ?? undefined}
+                  gender={listing.gender ?? undefined}
                   images={listing.pet_images}
                   createdAt={listing.created_at ?? new Date().toISOString()}
                   breed={listing.breed?.name}

@@ -30,7 +30,7 @@ export default function ListingInfo({id, breed, price, location, sellerId}: List
             {breed}
           </Link>
         )}
-        {price && <p className="text-2xl font-semibold">{price.toLocaleString()} ден</p>}
+        {price !== null && <p className="text-2xl font-semibold">{price === 0 ? "За вдомување" : `${price.toLocaleString()} ден`}</p>}
       </div>
 
       <div className="flex gap-4">

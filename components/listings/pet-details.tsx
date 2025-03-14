@@ -1,6 +1,6 @@
 "use client";
 
-import {Shield, Award, Verified, Calendar, Mars, Venus, Dog, Palette, Weight, Syringe} from "lucide-react";
+import {Award, Calendar, Mars, Venus, Dog, Palette, Weight, Syringe} from "lucide-react";
 
 import {Card} from "@/components/ui/card";
 import {Badge} from "@/components/ui/badge";
@@ -22,20 +22,33 @@ export default function PetDetails({age, gender, breed, color, weight, pedigree,
     <Card className="p-6 space-y-6">
       {/* Badges */}
       <div className="flex flex-wrap gap-2">
-        <Badge variant="secondary" className="flex items-center gap-1">
-          <Shield className="h-3 w-3" />
-          <span>Проверен одгледувач</span>
-        </Badge>
-        <Badge variant="secondary" className="flex items-center gap-1">
-          <Verified className="h-3 w-3" />
-          <span>Проверен идентитет</span>
-        </Badge>
+        {gender && (
+          <Badge variant="secondary" className="flex items-center gap-1">
+            {gender === "male" ? <Mars className="h-4 w-4 " /> : <Venus className="h-4 w-4" />}
+            <span>{gender === "male" ? "Машко" : "Женско"}</span>
+          </Badge>
+        )}
+        {age && (
+          <Badge variant="secondary" className="flex items-center gap-1">
+            <Calendar className="h-3 w-3" />
+            <span>
+              {age} {age === 1 ? "месец" : "месеци"}
+            </span>
+          </Badge>
+        )}
         {pedigree && (
           <Badge variant="secondary" className="flex items-center gap-1">
             <Award className="h-3 w-3" />
             <span>Педигре</span>
           </Badge>
         )}
+        {vaccine && (
+          <Badge variant="secondary" className="flex items-center gap-1">
+            <Syringe className="h-3 w-3" />
+            <span>Вакцинирано</span>
+          </Badge>
+        )}
+
         {age !== null && age <= 1 && <Badge variant="secondary">Кученце</Badge>}
       </div>
 

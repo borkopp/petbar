@@ -34,6 +34,10 @@ const partnerListingSchema = z.object({
   desired_breed: z.string().optional(),
   desired_gender: z.string().min(1, "Полот е задолжителен"),
   location: z.string().min(1, "Локацијата е задолжителна"),
+  phone: z
+    .string()
+    .min(1, "Телефонскиот број е задолжителен")
+    .regex(/^[0-9+\s()-]{6,20}$/, "Внесете валиден телефонски број"),
   pedigree_required: z.boolean().default(false),
   breeding_experience: z.string().optional(),
   vaccination_required: z.boolean().default(false),
@@ -82,6 +86,7 @@ export function PartnerListingForm({userId}: PartnerListingFormProps) {
       desired_breed: "",
       desired_gender: "",
       location: "",
+      phone: "",
       pedigree_required: false,
       breeding_experience: "",
       vaccination_required: false,
@@ -147,6 +152,7 @@ export function PartnerListingForm({userId}: PartnerListingFormProps) {
         {name: "dog_gender", label: "Пол на миленичето"},
         {name: "desired_gender", label: "Посакуван пол на партнерот"},
         {name: "location", label: "Локација"},
+        {name: "phone", label: "Телефонски број"},
       ];
 
       const missingFields = requiredFields.filter((field) => {
@@ -742,11 +748,24 @@ export function PartnerListingForm({userId}: PartnerListingFormProps) {
           control={form.control}
           name="location"
           render={({field}) => (
-            <FormItem>
+            <FormItem className="flex flex-col">
               <FormLabel>Локација</FormLabel>
+              <LocationCombobox value={field.value} onChange={field.onChange} />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="phone"
+          render={({field}) => (
+            <FormItem>
+              <FormLabel>Телефонски број *</FormLabel>
               <FormControl>
-                <LocationCombobox {...field} />
+                <Input type="tel" placeholder="070 123 456" {...field} className={form.formState.errors.phone ? "border-destructive" : ""} />
               </FormControl>
+              <FormDescription>Вашиот телефонски број ќе биде видлив само за најавени корисници</FormDescription>
               <FormMessage />
             </FormItem>
           )}

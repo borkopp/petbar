@@ -19,6 +19,7 @@ type PartnerListing = Database["public"]["Tables"]["partner_listings"]["Row"] & 
   dog_gender?: string;
   dog_pedigree?: boolean;
   dog_vaccinated?: boolean;
+  phone?: string;
 };
 
 interface SearchParams {
@@ -125,6 +126,12 @@ export default async function FindPartnerPage(props: PageProps) {
     case "oldest":
       query = query.order("created_at", {ascending: true});
       break;
+    case "price-asc":
+      query = query.order("price", {ascending: true, nullsFirst: false});
+      break;
+    case "price-desc":
+      query = query.order("price", {ascending: false, nullsFirst: true});
+      break;
     default:
       query = query.order("created_at", {ascending: false});
   }
@@ -211,6 +218,7 @@ export default async function FindPartnerPage(props: PageProps) {
                   vaccination_required={listing.vaccination_required ?? false}
                   price={listing.price}
                   is_price_negotiable={listing.is_price_negotiable}
+                  phone={listing.phone}
                   images={listing.partner_images ?? []}
                   createdAt={listing.created_at ?? new Date().toISOString()}
                   user={listing.user}

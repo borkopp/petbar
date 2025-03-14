@@ -1,6 +1,6 @@
 "use client";
 
-import {Verified, Shield, Award} from "lucide-react";
+import {Shield, Award, Mars, Venus} from "lucide-react";
 import {formatDistanceToNow} from "date-fns";
 import {mk} from "date-fns/locale";
 import Image from "next/image";
@@ -16,7 +16,7 @@ interface ListingCardProps {
   location: string;
   images: {url: string}[];
   createdAt: string;
-  hasIdentityVerified?: boolean;
+  gender?: string;
   vaccine?: boolean;
   pedigree?: boolean;
   description?: string;
@@ -30,7 +30,7 @@ export default function ListingCard({
   location,
   images,
   createdAt,
-  hasIdentityVerified,
+  gender,
   vaccine,
   pedigree,
   description,
@@ -83,10 +83,10 @@ export default function ListingCard({
 
           {/* Badges */}
           <div className="flex flex-wrap gap-2">
-            {hasIdentityVerified && (
+            {gender && (
               <Badge variant="outline" className="flex items-center gap-1.5 px-3 py-1 rounded-full border-gray-300">
-                <Verified className="h-4 w-4 text-blue-500" />
-                <span className="text-gray-600">Идентифициран</span>
+                {gender === "male" ? <Mars className="h-4 w-4 text-blue-500" /> : <Venus className="h-4 w-4 text-pink-500" />}
+                <span className="text-gray-600">{gender === "male" ? "Машко" : "Женско"}</span>
               </Badge>
             )}
             {vaccine && (

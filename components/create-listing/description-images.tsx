@@ -4,18 +4,15 @@ import {useFormContext} from "react-hook-form";
 import {FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Textarea} from "@/components/ui/textarea";
 import {Label} from "@/components/ui/label";
-import {Button} from "@/components/ui/button";
 import {Upload} from "lucide-react";
 import Image from "next/image";
-import {toast} from "sonner";
 
 interface DescriptionImagesProps {
-  onNext: () => void;
   images: File[];
   onImagesChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export function DescriptionImages({onNext, images, onImagesChange}: DescriptionImagesProps) {
+export function DescriptionImages({images, onImagesChange}: DescriptionImagesProps) {
   const form = useFormContext();
 
   const containerVariants = {
@@ -26,16 +23,6 @@ export function DescriptionImages({onNext, images, onImagesChange}: DescriptionI
         staggerChildren: 0.1,
       },
     },
-  };
-
-  const handleNext = async () => {
-    if (images.length === 0) {
-      toast.error("Потребна е слика", {
-        description: "Ве молиме додадете барем една слика.",
-      });
-      return;
-    }
-    onNext();
   };
 
   return (
@@ -76,12 +63,6 @@ export function DescriptionImages({onNext, images, onImagesChange}: DescriptionI
             <input type="file" id="images" multiple accept="image/*" className="hidden" onChange={onImagesChange} />
           </label>
         </div>
-      </div>
-
-      <div className="flex justify-end pt-6">
-        <Button type="button" onClick={handleNext}>
-          Следно
-        </Button>
       </div>
     </motion.div>
   );

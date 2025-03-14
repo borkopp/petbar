@@ -13,11 +13,10 @@ import {ScrollArea} from "@/components/ui/scroll-area";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 
 interface BreedSelectionProps {
-  onNext: () => void;
   category: string;
 }
 
-export function BreedSelection({onNext, category}: BreedSelectionProps) {
+export function BreedSelection({category}: BreedSelectionProps) {
   const form = useFormContext();
   const [open, setOpen] = React.useState(false);
   const [search, setSearch] = React.useState("");
@@ -81,19 +80,12 @@ export function BreedSelection({onNext, category}: BreedSelectionProps) {
     visible: {y: 0, opacity: 1},
   };
 
-  const handleNext = async () => {
-    const isValid = await form.trigger("breed");
-    if (isValid) {
-      onNext();
-    }
-  };
-
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-6">
       <Card>
         <CardHeader>
           <CardTitle>Изберете раса</CardTitle>
-          <CardDescription>Изберете ја расата на вашето милениче</CardDescription>
+          <CardDescription>Изберете ја расата на вашето милениче (задолжително)</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <motion.div variants={itemVariants}>
@@ -102,7 +94,7 @@ export function BreedSelection({onNext, category}: BreedSelectionProps) {
               name="breed"
               render={({field}) => (
                 <FormItem>
-                  <FormLabel>Раса</FormLabel>
+                  <FormLabel>Раса *</FormLabel>
                   <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -157,11 +149,6 @@ export function BreedSelection({onNext, category}: BreedSelectionProps) {
           </motion.div>
         </CardContent>
       </Card>
-      <div className="flex justify-end pt-6">
-        <Button type="button" onClick={handleNext}>
-          Следно
-        </Button>
-      </div>
     </motion.div>
   );
 }

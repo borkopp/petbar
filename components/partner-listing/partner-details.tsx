@@ -196,8 +196,8 @@ export default function PartnerDetails({
 
           {description && (
             <div className="mt-6 pt-4 border-t">
-              <h3 className="text-sm font-medium text-muted-foreground mb-2">Опис на барањето</h3>
-              <p className="text-sm whitespace-pre-line">{description}</p>
+              <h3 className="text-sm font-medium text-muted-foreground mb-2">Опис</h3>
+              <p className="text-muted-foreground whitespace-pre-line">{description}</p>
             </div>
           )}
         </CardContent>

@@ -215,6 +215,7 @@ export type Database = {
           location: string
           pedigree_required: boolean | null
           pet_listing_id: string | null
+          phone: string | null
           preferred_meeting_location: string | null
           price: number | null
           status: string | null
@@ -243,6 +244,7 @@ export type Database = {
           location: string
           pedigree_required?: boolean | null
           pet_listing_id?: string | null
+          phone?: string | null
           preferred_meeting_location?: string | null
           price?: number | null
           status?: string | null
@@ -271,6 +273,7 @@ export type Database = {
           location?: string
           pedigree_required?: boolean | null
           pet_listing_id?: string | null
+          phone?: string | null
           preferred_meeting_location?: string | null
           price?: number | null
           status?: string | null

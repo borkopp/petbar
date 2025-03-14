@@ -24,8 +24,8 @@ export default function ContactInfo({location, phone}: ContactInfoProps) {
         {phone && (
           <div className="flex items-center gap-3">
             <Phone className="h-5 w-5 text-muted-foreground" />
-            <Button variant="link" className="h-auto p-0">
-              {phone}
+            <Button variant="link" className="h-auto p-0" asChild>
+              <a href={`tel:${phone}`}>{phone}</a>
             </Button>
           </div>
         )}

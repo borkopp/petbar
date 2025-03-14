@@ -51,18 +51,28 @@ export function Navbar({user}: NavbarProps) {
                     Пронајди партнер
                   </Button>
                 </Link>
-                <Link href="/create-listing">
-                  <Button size="sm" variant="ghost">
-                    <Plus className="h-5 w-5" />
-                    Нов оглас
-                  </Button>
-                </Link>
-                <Link href="/create-partner-listing">
-                  <Button size="sm" variant="ghost">
-                    <Heart className="h-5 w-5" />
-                    Нов оглас за партнер
-                  </Button>
-                </Link>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size="sm" variant="ghost">
+                      <Plus className="h-5 w-5" />
+                      Нов оглас
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <Link href="/create-listing">
+                      <DropdownMenuItem className="cursor-pointer">
+                        <Plus className="mr-2 h-5 w-5" />
+                        Нов оглас за милениче
+                      </DropdownMenuItem>
+                    </Link>
+                    <Link href="/create-partner-listing">
+                      <DropdownMenuItem className="cursor-pointer">
+                        <Heart className="mr-2 h-5 w-5" />
+                        Нов оглас за партнер
+                      </DropdownMenuItem>
+                    </Link>
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 <Link href="/chat" className="relative">
                   <Button variant="ghost" size="icon">
                     <MessageSquare className="h-5 w-5" />
@@ -81,13 +91,13 @@ export function Navbar({user}: NavbarProps) {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <Link href="/profile">
-                      <DropdownMenuItem>
+                      <DropdownMenuItem className="cursor-pointer">
                         <User className="mr-2 h-4 w-4" />
                         Мој профил
                       </DropdownMenuItem>
                     </Link>
                     <Link href="/profile?tab=listings">
-                      <DropdownMenuItem>
+                      <DropdownMenuItem className="cursor-pointer">
                         <List className="mr-2 h-4 w-4" />
                         Мои огласи
                       </DropdownMenuItem>
@@ -128,10 +138,10 @@ export function Navbar({user}: NavbarProps) {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <Link href="/login">
-                      <DropdownMenuItem>Најава</DropdownMenuItem>
+                      <DropdownMenuItem className="cursor-pointer">Најава</DropdownMenuItem>
                     </Link>
                     <Link href="/signup">
-                      <DropdownMenuItem>Регистрација</DropdownMenuItem>
+                      <DropdownMenuItem className="cursor-pointer">Регистрација</DropdownMenuItem>
                     </Link>
                   </DropdownMenuContent>
                 </DropdownMenu>

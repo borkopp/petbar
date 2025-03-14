@@ -2,6 +2,8 @@
 
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
+import {ArrowUpDown, Clock, TrendingDown, TrendingUp} from "lucide-react";
+import {motion} from "framer-motion";
 
 export default function PartnerSortSelect() {
   const router = useRouter();
@@ -29,16 +31,27 @@ export default function PartnerSortSelect() {
   };
 
   return (
-    <div className="w-40">
-      <Select value={searchParams.get("sort") || "newest"} onValueChange={handleSortChange}>
-        <SelectTrigger>
-          <SelectValue placeholder="Сортирај" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="newest">Најнови</SelectItem>
-          <SelectItem value="oldest">Најстари</SelectItem>
-        </SelectContent>
-      </Select>
-    </div>
+    <Select value={searchParams.get("sort") || "newest"} onValueChange={handleSortChange}>
+      <SelectTrigger className="w-auto flex items-center gap-2 focus:ring-0 focus:ring-offset-0">
+        <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+        <SelectValue placeholder="Сортирај" />
+      </SelectTrigger>
+      <SelectContent>
+        <motion.div initial={{opacity: 0, y: -5}} animate={{opacity: 1, y: 0}} transition={{duration: 0.2}}>
+          <SelectItem value="newest" className="flex items-center">
+            Најнови прво
+          </SelectItem>
+          <SelectItem value="oldest" className="flex items-center">
+            Најстари прво
+          </SelectItem>
+          <SelectItem value="price-asc" className="flex items-center">
+            Цена: најниска прво
+          </SelectItem>
+          <SelectItem value="price-desc" className="flex items-center">
+            Цена: највисока прво
+          </SelectItem>
+        </motion.div>
+      </SelectContent>
+    </Select>
   );
 }

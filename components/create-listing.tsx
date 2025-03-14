@@ -28,15 +28,13 @@ const formSchema = z.object({
     required_error: "Тип на оглас е задолжително",
   }),
   breed_id: z.number().optional().nullable(),
-  breed: z.string().optional().nullable(),
-  age: z.string().optional().nullable(),
-  gender: z
-    .enum(["male", "female"], {
-      required_error: "Пол е задолжително",
-    })
-    .optional(),
-  weight: z.string().optional().nullable(),
-  color: z.string().optional(),
+  breed: z.string().min(1, "Раса е задолжително"),
+  age: z.string().min(1, "Возраст е задолжително"),
+  gender: z.enum(["male", "female"], {
+    required_error: "Пол е задолжително",
+  }),
+  weight: z.string().min(1, "Тежина е задолжително"),
+  color: z.string().min(1, "Боја е задолжително"),
   pedigree: z.boolean().default(false),
   vaccine: z.boolean().default(false),
   description: z.string().optional(),
@@ -46,9 +44,7 @@ const formSchema = z.object({
     .string()
     .min(9, "Телефонскиот број мора да има 9 цифри")
     .max(11, "Телефонскиот број не може да има повеќе од 9 цифри")
-    .regex(/^07[0-9\s]{7,8}$/, "Телефонскиот број мора да започне со 07")
-    .optional()
-    .nullable(),
+    .regex(/^07[0-9\s]{7,8}$/, "Телефонскиот број мора да започне со 07"),
 });
 
 // This is the type we'll use for the form
@@ -140,7 +136,7 @@ export default function CreateListing({user}: CreateListingProps) {
         pedigree: transformedValues.pedigree,
         vaccine: transformedValues.vaccine,
         description: transformedValues.description || null,
-        phone: transformedValues.phone || null,
+        phone: transformedValues.phone,
         user_id: user.id,
       };
 
@@ -287,18 +283,11 @@ export default function CreateListing({user}: CreateListingProps) {
               exit={{opacity: 0, x: -20}}
               transition={{duration: 0.2}}
               className="rounded-lg border p-6 shadow-lg">
-              {step === 1 && (
-                <CategorySelection
-                  onComplete={handleCategoryComplete}
-                  onNext={() => {
-                    setStep(2);
-                  }}
-                />
-              )}
-              {step === 2 && <BreedSelection onNext={() => setStep(3)} category={form.getValues().category} />}
-              {step === 3 && <BasicDetails onNext={() => setStep(4)} />}
-              {step === 4 && <PetDetails onNext={() => setStep(5)} />}
-              {step === 5 && <DescriptionImages onNext={() => setStep(6)} images={images} onImagesChange={handleImageUpload} />}
+              {step === 1 && <CategorySelection onComplete={handleCategoryComplete} />}
+              {step === 2 && <BreedSelection category={form.getValues().category} />}
+              {step === 3 && <BasicDetails />}
+              {step === 4 && <PetDetails />}
+              {step === 5 && <DescriptionImages images={images} onImagesChange={handleImageUpload} />}
               {step === 6 && (
                 <div className="space-y-6">
                   <h2 className="text-xl font-semibold">Преглед и потврда</h2>
@@ -365,11 +354,13 @@ export default function CreateListing({user}: CreateListingProps) {
               )}
 
               <div className="flex justify-between pt-4">
-                {step > 1 && (
+                {step > 1 ? (
                   <Button type="button" variant="outline" onClick={handleBack}>
                     <ArrowLeft className="h-4 w-4" />
                     Назад
                   </Button>
+                ) : (
+                  <div></div> /* Placeholder for consistent spacing */
                 )}
 
                 {step === 6 ? (
@@ -377,7 +368,81 @@ export default function CreateListing({user}: CreateListingProps) {
                     {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Објави оглас
                   </Button>
-                ) : null}
+                ) : (
+                  <Button
+                    type="button"
+                    onClick={async () => {
+                      // Validate the current step before proceeding
+                      let isValid = true;
+
+                      if (step === 1) {
+                        // Category selection validation
+                        if (!form.getValues().category) {
+                          toast.error("Изберете категорија", {
+                            description: "Ве молиме изберете категорија за да продолжите.",
+                          });
+                          isValid = false;
+                        }
+                      } else if (step === 2) {
+                        // Breed selection validation
+                        isValid = await form.trigger("breed");
+                        if (!form.getValues().breed) {
+                          toast.error("Изберете раса", {
+                            description: "Ве молиме изберете раса за да продолжите.",
+                          });
+                          isValid = false;
+                        }
+                      } else if (step === 3) {
+                        // Basic details validation
+                        isValid = await form.trigger(["title", "listingType", "location", "phone"]);
+                      } else if (step === 4) {
+                        // Pet details validation
+                        isValid = await form.trigger(["gender", "age", "weight", "color"]);
+
+                        // Additional validation with custom error messages
+                        const petDetails = form.getValues();
+                        if (!petDetails.gender) {
+                          toast.error("Изберете пол", {
+                            description: "Полот на миленичето е задолжителен.",
+                          });
+                          isValid = false;
+                        }
+                        if (!petDetails.age) {
+                          toast.error("Внесете возраст", {
+                            description: "Возраста на миленичето е задолжителна.",
+                          });
+                          isValid = false;
+                        }
+                        if (!petDetails.weight) {
+                          toast.error("Внесете тежина", {
+                            description: "Тежината на миленичето е задолжителна.",
+                          });
+                          isValid = false;
+                        }
+                        if (!petDetails.color) {
+                          toast.error("Внесете боја", {
+                            description: "Бојата на миленичето е задолжителна.",
+                          });
+                          isValid = false;
+                        }
+                      } else if (step === 5) {
+                        // Description and images validation
+                        if (images.length === 0) {
+                          toast.error("Потребна е слика", {
+                            description: "Ве молиме додадете барем една слика.",
+                          });
+                          isValid = false;
+                        }
+                      }
+
+                      // Proceed to next step if validation passed
+                      if (isValid) {
+                        setStep(step + 1);
+                      }
+                    }}>
+                    Следно
+                  </Button>
+                )}
               </div>
             </motion.div>
           </AnimatePresence>

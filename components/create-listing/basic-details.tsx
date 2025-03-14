@@ -5,14 +5,9 @@ import {FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/compon
 import {Input} from "@/components/ui/input";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
-import {Button} from "@/components/ui/button";
 import {LocationCombobox} from "@/components/ui/location-combobox";
 
-interface BasicDetailsProps {
-  onNext: () => void;
-}
-
-export function BasicDetails({onNext}: BasicDetailsProps) {
+export function BasicDetails() {
   const form = useFormContext();
   const listingType = form.watch("listingType");
 
@@ -61,13 +56,6 @@ export function BasicDetails({onNext}: BasicDetailsProps) {
   const itemVariants = {
     hidden: {y: 20, opacity: 0},
     visible: {y: 0, opacity: 1},
-  };
-
-  const handleNext = async () => {
-    const isValid = await form.trigger(["title", "listingType", "location"]);
-    if (isValid) {
-      onNext();
-    }
   };
 
   return (
@@ -158,7 +146,7 @@ export function BasicDetails({onNext}: BasicDetailsProps) {
               name="phone"
               render={({field}) => (
                 <FormItem>
-                  <FormLabel>Контакт телефон</FormLabel>
+                  <FormLabel>Контакт телефон *</FormLabel>
                   <FormControl>
                     <Input
                       type="tel"
@@ -175,11 +163,6 @@ export function BasicDetails({onNext}: BasicDetailsProps) {
           </motion.div>
         </CardContent>
       </Card>
-      <div className="flex justify-end pt-6">
-        <Button type="button" onClick={handleNext}>
-          Следно
-        </Button>
-      </div>
     </motion.div>
   );
 }

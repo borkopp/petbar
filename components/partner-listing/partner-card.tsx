@@ -30,6 +30,7 @@ interface PartnerCardProps {
   vaccination_required: boolean;
   price?: number;
   is_price_negotiable?: boolean;
+  phone?: string;
   images: {url: string}[];
   createdAt: string;
   user?: User;
@@ -61,7 +62,7 @@ export default function PartnerCard({
   const formattedGender = desired_gender === "male" ? "Машки" : "Женски";
 
   // Format the category for display
-  const formattedCategory = category === "dog" ? "Куче" : "Мачка";
+  const formattedCategory = category === "dog" ? "Куче" : "Маче";
 
   // Format the dog gender for display
   const formattedDogGender = dog_gender === "male" ? "Машко" : "Женско";
