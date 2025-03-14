@@ -24,11 +24,10 @@ interface Listing {
   category: string;
   listingType: string;
   gender: string | null;
-  vaccinated: boolean | null;
+  vaccine: boolean | null;
   pedigree: boolean | null;
   createdAt: string | null;
   images: ListingImage[];
-  description: string;
 }
 
 interface NewestListingsCarouselProps {
@@ -130,7 +129,6 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
                       <div className="flex justify-between items-start mb-2">
                         <h3 className="font-semibold text-base line-clamp-1">{listing.title}</h3>
                       </div>
-                      <div className="text-sm text-muted-foreground mb-2 line-clamp-2">{listing.description}</div>
 
                       <div className="flex justify-between items-center mt-auto">
                         <div className="font-medium text-muted-foreground">{listing.price ? `${listing.price} ден.` : "По договор"}</div>
@@ -152,7 +150,7 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
                             </Tooltip>
                           )}
 
-                          {listing.vaccinated && (
+                          {listing.vaccine && (
                             <Tooltip>
                               <TooltipTrigger asChild>
                                 <span>
