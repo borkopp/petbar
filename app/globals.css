@@ -2,19 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  overscroll-behavior-y: none; /* Prevents overscroll on modern browsers */
-  overflow-y: auto;
-  height: 100%;
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  overscroll-behavior-y: none; /* Fallback for browsers that don't support it on html */
-  position: relative;
-  min-height: 100%;
-}
-
 @layer base {
   :root {
     --background: 0 0% 98%; /* #FAFAFA */
@@ -79,6 +66,13 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Disable overscrolling past navbar on desktop only */
+  @media (min-width: 768px) {
+    html {
+      overscroll-behavior-y: none;
+    }
   }
 }
 
