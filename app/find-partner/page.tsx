@@ -179,9 +179,6 @@ export default async function FindPartnerPage(props: PageProps) {
                 <Heart className="mx-auto h-12 w-12 text-primary/50" />
                 <h3 className="mt-4 text-lg font-semibold">Нема пронајдено партнери</h3>
                 <p className="mt-2 text-sm text-muted-foreground">Променете ги филтрите или објавете ново барање.</p>
-                <Button asChild className="mt-4 bg-primary hover:bg-primary/90">
-                  <Link href="/create-partner-listing">Објави барање</Link>
-                </Button>
               </div>
             </div>
           ) : (

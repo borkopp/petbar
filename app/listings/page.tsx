@@ -4,7 +4,7 @@ import {createClient} from "@/lib/supabase/server";
 import ListingsFilters from "@/components/listings/filters";
 import SortSelect from "@/components/listings/sort-select";
 import {Button} from "@/components/ui/button";
-import {Plus} from "lucide-react";
+import {Dog, Plus} from "lucide-react";
 import {SearchBar} from "@/components/search-bar";
 import LazyListings from "@/components/listings/lazy-listings";
 
@@ -177,8 +177,9 @@ export default async function ListingsPage(props: PageProps) {
           {listings.length === 0 ? (
             <div className="flex h-[450px] max-w-4xl items-center justify-center rounded-lg border border-dashed">
               <div className="mx-auto max-w-[420px] text-center">
+                <Dog className="mx-auto h-12 w-12 text-primary/50" />
                 <h3 className="mt-4 text-lg font-semibold">Нема пронајдено огласи</h3>
-                <p className="mt-2 text-sm text-muted-foreground">Променете ги филтрите за да видите повеќе огласи.</p>
+                <p className="mt-2 text-sm text-muted-foreground">Променете ги филтрите или објавете нов оглас.</p>
               </div>
             </div>
           ) : (

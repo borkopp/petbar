@@ -13,7 +13,6 @@ interface PartnerCardProps {
   title: string;
   description?: string;
   location: string;
-  category: string;
   // User's dog information
   dog_breed?: string;
   dog_age?: number;
@@ -37,7 +36,6 @@ export default function PartnerCard({
   title,
   description,
   location,
-  category,
   // User's dog information
   dog_breed,
   dog_age,
@@ -57,9 +55,6 @@ export default function PartnerCard({
   // Format the gender for display
   const formattedGender = desired_gender === "male" ? "Машки" : "Женски";
 
-  // Format the category for display
-  const formattedCategory = category === "dog" ? "Куче" : "Маче";
-
   // Format the dog gender for display
   const formattedDogGender = dog_gender === "male" ? "Машко" : "Женско";
 
@@ -78,9 +73,7 @@ export default function PartnerCard({
               </div>
             )}
             <div className="absolute top-3 right-3 z-20">
-              <Badge variant="outline" className="bg-white/80 backdrop-blur-sm px-2 py-1 text-xs">
-                {formattedCategory}
-              </Badge>
+              <Heart className="h-6 w-6 text-white" />
             </div>
           </div>
 
