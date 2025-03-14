@@ -45,7 +45,7 @@ export function Navbar({user}: NavbarProps) {
                     Огласи
                   </Button>
                 </Link>
-                <Link href="/find-partner">
+                <Link href="/find-partner" prefetch>
                   <Button size="sm" variant="ghost">
                     <Heart className="h-5 w-5" />
                     Пронајди партнер
@@ -118,7 +118,7 @@ export function Navbar({user}: NavbarProps) {
                     Огласи
                   </Button>
                 </Link>
-                <Link href="/find-partner">
+                <Link href="/find-partner" prefetch>
                   <Button size="sm" variant="ghost">
                     <Heart className="h-5 w-5" />
                     Пронајди партнер
@@ -184,7 +184,7 @@ export function Navbar({user}: NavbarProps) {
                           Пазар
                         </Button>
                       </Link>
-                      <Link href="/find-partner">
+                      <Link href="/find-partner" prefetch>
                         <Button variant="ghost" className="w-full justify-start">
                           <Heart className="mr-2 h-5 w-5" />
                           Пронајди партнер

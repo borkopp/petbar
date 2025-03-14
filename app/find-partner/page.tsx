@@ -44,6 +44,9 @@ function getListingTitle(searchParams: SearchParams, categoryName?: string | nul
   return "Сите партнери";
 }
 
+// Add revalidation to improve performance
+export const revalidate = 60; // Revalidate this page every 60 seconds
+
 export default async function FindPartnerPage(props: PageProps) {
   const searchParams = await props.searchParams;
   const supabase = await createClient();
@@ -55,18 +58,17 @@ export default async function FindPartnerPage(props: PageProps) {
     categoryName = category?.name;
   }
 
-  // Build the query
-  let query = supabase.from("partner_listings").select(
-    `
-      *,
-      user:user_id (
-        id,
-        full_name,
-        avatar_url,
-        username
-      )
-    `
-  );
+  // Build the query - fetch listings with images in a single query
+  let query = supabase.from("partner_listings").select(`
+    *,
+    user:user_id (
+      id,
+      full_name,
+      avatar_url,
+      username
+    ),
+    partner_images(url, is_primary)
+  `);
 
   // Apply filters
   if (searchParams.category) {
@@ -123,21 +125,20 @@ export default async function FindPartnerPage(props: PageProps) {
   }
 
   // Get listings
-  const {data: partnerListings, error} = await query;
+  const {data: listings, error} = await query;
 
   // Log error if any
   if (error) {
     console.error("Error fetching partner listings:", error);
   }
 
-  const listings = partnerListings ?? [];
-
-  // For each listing, fetch images
-  for (const listing of listings) {
-    const {data: images} = await supabase.from("partner_images").select("url").eq("listing_id", listing.id).order("is_primary", {ascending: false});
-
-    listing.partner_images = images || [];
-  }
+  // Process the listings to format the images array
+  const processedListings = (listings || []).map((listing) => {
+    return {
+      ...listing,
+      partner_images: listing.partner_images || [],
+    };
+  });
 
   return (
     <div className="container mx-auto py-10 px-4 md:px-0">
@@ -164,7 +165,7 @@ export default async function FindPartnerPage(props: PageProps) {
             <div className="justify-between flex">
               <div className="space-y-1">
                 <h1 className="text-xl font-medium">
-                  {getListingTitle(searchParams, categoryName)} ({listings.length})
+                  {getListingTitle(searchParams, categoryName)} ({processedListings.length})
                 </h1>
                 <p className="text-sm text-muted-foreground">Пронајдете совршен партнер за вашето милениче</p>
               </div>
@@ -172,7 +173,7 @@ export default async function FindPartnerPage(props: PageProps) {
             </div>
           </div>
 
-          {listings.length === 0 ? (
+          {processedListings.length === 0 ? (
             <div className="flex h-[450px] max-w-4xl items-center justify-center rounded-lg border border-dashed">
               <div className="mx-auto max-w-[420px] text-center">
                 <Heart className="mx-auto h-12 w-12 text-primary/50" />
@@ -184,7 +185,7 @@ export default async function FindPartnerPage(props: PageProps) {
               </div>
             </div>
           ) : (
-            <LazyPartnerListings initialListings={listings} pageSize={10} />
+            <LazyPartnerListings initialListings={processedListings} pageSize={10} />
           )}
         </div>
       </div>

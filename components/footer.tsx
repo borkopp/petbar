@@ -28,7 +28,7 @@ export function Footer() {
                   </Link>
                 </li>
                 <li className="mb-2">
-                  <Link href="/listings" className="hover:text-primary">
+                  <Link href="/find-partner" className="hover:text-primary">
                     Пронајди партнер
                   </Link>
                 </li>
