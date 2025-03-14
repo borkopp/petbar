@@ -24,10 +24,11 @@ interface Listing {
   category: string;
   listingType: string;
   gender: string | null;
-  vaccine: boolean | null;
+  vaccinated: boolean | null;
   pedigree: boolean | null;
   createdAt: string | null;
   images: ListingImage[];
+  description?: string;
 }
 
 interface NewestListingsCarouselProps {
@@ -39,9 +40,12 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
     loop: false,
     align: "start",
     slidesToScroll: 1,
+    dragFree: true,
+    containScroll: "trimSnaps",
     breakpoints: {
+      "(min-width: 640px)": {slidesToScroll: 1},
       "(min-width: 768px)": {slidesToScroll: 2},
-      "(min-width: 1024px)": {slidesToScroll: 4},
+      "(min-width: 1024px)": {slidesToScroll: 3},
     },
   });
 
@@ -76,10 +80,10 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
   }, [emblaApi, onSelect]);
 
   return (
-    <div className="relative max-w-6xl mx-auto px-4">
+    <div className="relative max-w-6xl mx-auto">
       <TooltipProvider>
-        {/* Navigation Buttons */}
-        <div className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 md:-left-6">
+        {/* Navigation Buttons - Hidden on small screens */}
+        <div className="hidden md:block absolute -left-4 top-1/2 -translate-y-1/2 z-10 md:-left-6">
           <Button
             variant="outline"
             size="icon"
@@ -91,7 +95,7 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
           </Button>
         </div>
 
-        <div className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 md:-right-6">
+        <div className="hidden md:block absolute -right-4 top-1/2 -translate-y-1/2 z-10 md:-right-6">
           <Button
             variant="outline"
             size="icon"
@@ -105,9 +109,9 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
 
         {/* Embla Carousel */}
         <div className="overflow-hidden" ref={emblaRef}>
-          <div className="flex gap-6 px-6">
+          <div className="flex gap-3 sm:gap-4 md:gap-6 pl-4 pr-4 md:px-6">
             {listings.map((listing) => (
-              <div key={listing.id} className="flex-[0_0_100%] sm:flex-[0_0_calc(50%-12px)] md:flex-[0_0_calc(25%-18px)] min-w-0">
+              <div key={listing.id} className="flex-[0_0_80%] sm:flex-[0_0_calc(50%-8px)] md:flex-[0_0_calc(33.333%-16px)] min-w-0">
                 <Link href={`/listings/${listing.id}`}>
                   <Card className="overflow-hidden group h-full transition-all hover:shadow-md border border-gray-200 rounded-xl">
                     <div className="relative aspect-square overflow-hidden">
@@ -115,7 +119,7 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
                         src={typeof listing.images[0] === "string" ? listing.images[0] : listing.images[0]?.url || "/placeholder.png"}
                         alt={listing.title}
                         fill
-                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
+                        sizes="(max-width: 640px) 80vw, (max-width: 768px) 50vw, 33vw"
                         className="object-cover transition-transform group-hover:scale-105"
                       />
                       <div className="absolute top-2 left-2">
@@ -124,23 +128,25 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
                         </Badge>
                       </div>
                     </div>
-                    <CardContent className="p-4">
+                    <CardContent className="p-3 sm:p-4">
                       {listing.location && <div className="flex items-center gap-1.5 mb-2 text-xs text-muted-foreground">{listing.location}</div>}
                       <div className="flex justify-between items-start mb-2">
-                        <h3 className="font-semibold text-base line-clamp-1">{listing.title}</h3>
+                        <h3 className="font-semibold text-sm sm:text-base line-clamp-1">{listing.title}</h3>
                       </div>
 
                       <div className="flex justify-between items-center mt-auto">
-                        <div className="font-medium text-muted-foreground">{listing.price ? `${listing.price} ден.` : "По договор"}</div>
+                        <div className="font-medium text-sm sm:text-base text-muted-foreground">
+                          {listing.price ? `${listing.price} ден.` : "По договор"}
+                        </div>
                         <div className="flex gap-1.5 items-center">
                           {listing.gender && (
                             <Tooltip>
                               <TooltipTrigger asChild>
                                 <span>
                                   {listing.gender === "male" ? (
-                                    <Mars className="h-4 w-4 text-blue-500" />
+                                    <Mars className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-500" />
                                   ) : (
-                                    <Venus className="h-4 w-4 text-pink-500" />
+                                    <Venus className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-pink-500" />
                                   )}
                                 </span>
                               </TooltipTrigger>
@@ -150,11 +156,11 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
                             </Tooltip>
                           )}
 
-                          {listing.vaccine && (
+                          {listing.vaccinated && (
                             <Tooltip>
                               <TooltipTrigger asChild>
                                 <span>
-                                  <Syringe className="h-4 w-4 text-green-500" />
+                                  <Syringe className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-green-500" />
                                 </span>
                               </TooltipTrigger>
                               <TooltipContent>
@@ -167,7 +173,7 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
                             <Tooltip>
                               <TooltipTrigger asChild>
                                 <span>
-                                  <Award className="h-4 w-4 text-yellow-500" />
+                                  <Award className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-yellow-500" />
                                 </span>
                               </TooltipTrigger>
                               <TooltipContent>
@@ -187,11 +193,13 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
 
         {/* Pagination Dots */}
         {scrollSnaps.length > 1 && (
-          <div className="flex justify-center mt-8 gap-2">
+          <div className="flex justify-center mt-4 md:mt-8 gap-1.5 md:gap-2">
             {scrollSnaps.map((_, index) => (
               <button
                 key={index}
-                className={`h-2 rounded-full transition-all ${selectedIndex === index ? "w-6 bg-primary" : "w-2 bg-gray-300"}`}
+                className={`h-1.5 md:h-2 rounded-full transition-all ${
+                  selectedIndex === index ? "w-5 md:w-6 bg-primary" : "w-1.5 md:w-2 bg-gray-300"
+                }`}
                 onClick={() => scrollTo(index)}
                 aria-label={`Go to slide ${index + 1}`}
               />
