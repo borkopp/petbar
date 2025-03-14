@@ -8,11 +8,12 @@ interface StepProgressProps {
   steps: Array<{
     label: string;
   }>;
+  className?: string;
 }
 
-export function StepProgress({currentStep, steps}: StepProgressProps) {
+export function StepProgress({currentStep, steps, className}: StepProgressProps) {
   return (
-    <div className="w-full py-4">
+    <div className={cn("w-full py-4", className)}>
       <div className="relative">
         {/* Progress line */}
         <div

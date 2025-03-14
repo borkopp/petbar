@@ -258,8 +258,12 @@ export default function CreateListing({user}: CreateListingProps) {
   ];
 
   return (
-    <div className="mx-auto max-w-3xl space-y-16 p-4 pb-16 min-h-screen">
-      <StepProgress currentStep={step} steps={steps} />
+    <div className="container max-w-3xl py-10 mx-auto px-4 min-h-screen">
+      <StepProgress className="hidden md:block" currentStep={step} steps={steps} />
+      <div className="block md:hidden mb-6 px-6">
+        <h1 className="text-2xl font-semibold tracking-tight">Креирај оглас за продавање</h1>
+        <p className="text-sm text-muted-foreground">Пополнете ги деталите подолу за да креирате оглас за продавање на вашето милениче</p>
+      </div>
 
       <Form {...form}>
         <form
@@ -282,7 +286,7 @@ export default function CreateListing({user}: CreateListingProps) {
               animate={{opacity: 1, x: 0}}
               exit={{opacity: 0, x: -20}}
               transition={{duration: 0.2}}
-              className="rounded-lg border p-6 shadow-lg">
+              className="rounded-lg bg-transparent p-6">
               {step === 1 && <CategorySelection onComplete={handleCategoryComplete} />}
               {step === 2 && <BreedSelection category={form.getValues().category} />}
               {step === 3 && <BasicDetails />}

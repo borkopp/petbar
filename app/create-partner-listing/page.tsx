@@ -14,7 +14,7 @@ export default async function CreatePartnerListingPage() {
   }
 
   return (
-    <div className="container max-w-3xl py-10 mx-auto">
+    <div className="container max-w-3xl py-10 mx-auto px-6">
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Креирај оглас за партнер</h1>

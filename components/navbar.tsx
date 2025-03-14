@@ -67,7 +67,7 @@ export function Navbar({user}: NavbarProps) {
                     </Link>
                     <Link href="/create-partner-listing">
                       <DropdownMenuItem className="cursor-pointer">
-                        <Heart className="mr-2 h-5 w-5" />
+                        <Plus className="mr-2 h-5 w-5" />
                         Нов оглас за партнер
                       </DropdownMenuItem>
                     </Link>
@@ -181,7 +181,7 @@ export function Navbar({user}: NavbarProps) {
                       <Link href="/listings">
                         <Button variant="ghost" className="w-full justify-start">
                           <List className="mr-2 h-5 w-5" />
-                          Пазар
+                          Огласи
                         </Button>
                       </Link>
                       <Link href="/find-partner" prefetch>
@@ -193,13 +193,13 @@ export function Navbar({user}: NavbarProps) {
                       <Link href="/create-listing">
                         <Button variant="ghost" className="w-full justify-start">
                           <Plus className="mr-2 h-5 w-5" />
-                          Нов оглас
+                          Нов оглас за милениче
                         </Button>
                       </Link>
                       <Link href="/create-partner-listing">
                         <Button variant="ghost" className="w-full justify-start">
-                          <Heart className="mr-2 h-5 w-5" />
-                          Нов оглас за партнер
+                          <Plus className="mr-2 h-5 w-5" />
+                          Нов оглас за продавање
                         </Button>
                       </Link>
                       <div className="h-px bg-border" />
