@@ -5,6 +5,7 @@ import {toast} from "sonner";
 import {createClient} from "@/lib/supabase/client";
 import {useState} from "react";
 import {useRouter} from "next/navigation";
+import {Button} from "./ui/button";
 
 export function LogoutButton() {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -29,9 +30,9 @@ export function LogoutButton() {
   };
 
   return (
-    <button className="flex items-center gap-2 text-red-500" onClick={handleLogout} disabled={isLoggingOut}>
+    <Button className="flex items-center " variant={"ghost"} onClick={handleLogout} disabled={isLoggingOut}>
       <LogOut className="h-4 w-4" />
       {isLoggingOut ? <Loader2 className="h-4 w-4 animate-spin" /> : "Одјави се"}
-    </button>
+    </Button>
   );
 }

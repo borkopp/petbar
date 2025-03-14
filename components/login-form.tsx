@@ -14,6 +14,30 @@ import Link from "next/link";
 import {useRouter} from "next/navigation";
 import {Loader2} from "lucide-react";
 
+// Helper function to translate Supabase error messages to Macedonian
+function translateErrorMessage(error: string): string {
+  // Map common Supabase error messages to Macedonian translations
+  const errorTranslations: Record<string, string> = {
+    "Invalid login credentials": "Невалидни податоци за најава",
+    "Email not confirmed": "Е-поштата не е потврдена",
+    "Invalid email or password": "Невалидна е-пошта или лозинка",
+    "Email rate limit exceeded": "Надминат е лимитот за обиди. Обидете се повторно подоцна",
+    "Password should be at least 6 characters": "Лозинката треба да има најмалку 6 карактери",
+    "User not found": "Корисникот не е пронајден",
+    "Too many requests": "Премногу обиди. Обидете се повторно подоцна",
+  };
+
+  // Check if the error message matches any of our known translations
+  for (const [englishError, translation] of Object.entries(errorTranslations)) {
+    if (error.includes(englishError)) {
+      return translation;
+    }
+  }
+
+  // Return the original error if no translation is found
+  return error;
+}
+
 type State = {
   error: string | null;
 };
@@ -51,9 +75,10 @@ export function LoginForm({redirectTo}: LoginFormProps) {
               }
               const result = await login(initialState, formData);
               if (result?.error) {
-                setError(result.error);
+                const macedonianError = translateErrorMessage(result.error);
+                setError(macedonianError);
                 toast.error("Грешка при најавување", {
-                  description: result.error,
+                  description: macedonianError,
                 });
               } else {
                 toast.success("Добредојдовте назад!", {
@@ -95,8 +120,9 @@ export function LoginForm({redirectTo}: LoginFormProps) {
                   onClick={async () => {
                     const result = await signInWithApple();
                     if (result?.error) {
+                      const macedonianError = translateErrorMessage(result.error);
                       toast.error("Грешка при најавување со Apple", {
-                        description: result.error,
+                        description: macedonianError,
                       });
                     }
                   }}>
@@ -115,8 +141,9 @@ export function LoginForm({redirectTo}: LoginFormProps) {
                   onClick={async () => {
                     const result = await signInWithGoogle();
                     if (result?.error) {
+                      const macedonianError = translateErrorMessage(result.error);
                       toast.error("Грешка при најавување со Google", {
-                        description: result.error,
+                        description: macedonianError,
                       });
                     }
                   }}>

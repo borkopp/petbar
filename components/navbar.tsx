@@ -93,24 +93,48 @@ export function Navbar({user}: NavbarProps) {
                       </DropdownMenuItem>
                     </Link>
                     <DropdownMenuSeparator />
-                    <form action="/auth/signout" method="post">
-                      <DropdownMenuItem className="text-destructive" asChild>
-                        <button type="submit" className="w-full">
-                          Одјави се
-                        </button>
-                      </DropdownMenuItem>
-                    </form>
+
+                    <div className="w-full">
+                      <LogoutButton />
+                    </div>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </>
             ) : (
               <>
-                <Link href="/login">
-                  <Button variant="ghost">Најава</Button>
+                <Link href="/listings">
+                  <Button size="sm" variant="ghost">
+                    <List className="h-5 w-5" />
+                    Пазар
+                  </Button>
                 </Link>
-                <Link href="/register">
-                  <Button>Регистрација</Button>
+                <Link href="/find-partner">
+                  <Button size="sm" variant="ghost">
+                    <Heart className="h-5 w-5" />
+                    Пронајди партнер
+                  </Button>
                 </Link>
+                <Link href="/create-listing">
+                  <Button size="sm" variant="ghost">
+                    <Plus className="h-5 w-5" />
+                    Нов оглас
+                  </Button>
+                </Link>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <User className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <Link href="/login">
+                      <DropdownMenuItem>Најава</DropdownMenuItem>
+                    </Link>
+                    <Link href="/signup">
+                      <DropdownMenuItem>Регистрација</DropdownMenuItem>
+                    </Link>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </>
             )}
           </div>
