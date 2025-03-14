@@ -112,7 +112,6 @@ export default function LazyPartnerListings({initialListings, pageSize = 10}: La
           phone={listing.phone}
           images={listing.partner_images || []}
           createdAt={listing.created_at ?? new Date().toISOString()}
-          user={listing.user}
         />
       ))}
 
