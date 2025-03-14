@@ -53,7 +53,7 @@ export async function NewestListings() {
   return (
     <section className="py-8 md:py-16 font-rubik bg-slate-50">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between mb-6 md:mb-12 max-w-6xl mx-auto">
+        <div className="flex items-center justify-between mb-6 md:mb-12 max-w-6xl px-6 mx-auto">
           <h2 className="text-xl md:text-2xl font-medium">Најнови огласи за миленичиња</h2>
           <Link href="/listings" className="text-sm font-medium text-primary hover:underline">
             Види ги сите
