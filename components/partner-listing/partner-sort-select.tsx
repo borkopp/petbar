@@ -32,8 +32,8 @@ export default function PartnerSortSelect() {
 
   return (
     <Select value={searchParams.get("sort") || "newest"} onValueChange={handleSortChange}>
-      <SelectTrigger className="w-auto flex items-center gap-2 focus:ring-0 focus:ring-offset-0">
-        <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+      <SelectTrigger className="w-auto flex items-center gap-2 focus:ring-0 focus:ring-offset-0 border-secondary/30 focus:border-secondary/50">
+        <ArrowUpDown className="h-4 w-4 text-secondary" />
         <SelectValue placeholder="Сортирај" />
       </SelectTrigger>
       <SelectContent>

@@ -92,8 +92,8 @@ export default function MyListings({listings: initialListings}: MyListingsProps)
               fill
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
-            <Badge variant="secondary" className="absolute left-2 top-2 capitalize text-xs">
-              {listing.category}
+            <Badge variant="outline" className="absolute left-2 top-2 bg-white capitalize text-xs">
+              {listing.category === "dog" ? "Куче" : listing.category === "cat" ? "Маче" : "Друго"}
             </Badge>
           </Link>
           <CardContent className="p-2.5">

@@ -1,55 +1,51 @@
 "use client";
 
 import {useRouter, useSearchParams} from "next/navigation";
+import type {Tables} from "@/database.types";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import ProfileForm from "./profile-form";
 import MyListings from "./my-listings";
-import type {Tables} from "@/database.types";
-import {User2, List} from "lucide-react";
+import MyPartnerListings from "./my-partner-listings";
 
-interface ProfileTabsProps {
+export interface ProfileTabsProps {
   profile: Tables<"profiles">;
-  listings: Array<
-    Tables<"pet_listings"> & {
-      pet_images: Array<Tables<"pet_images">>;
-    }
-  >;
+  listings: (Tables<"pet_listings"> & {
+    pet_images: Tables<"pet_images">[];
+  })[];
+  partnerListings?: (Tables<"partner_listings"> & {
+    partner_images: Tables<"partner_images">[];
+  })[];
   defaultTab?: string;
 }
 
-export default function ProfileTabs({profile, listings, defaultTab = "profile"}: ProfileTabsProps) {
+export default function ProfileTabs({profile, listings, partnerListings = [], defaultTab = "profile"}: ProfileTabsProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const tab = searchParams.get("tab") || defaultTab;
 
-  const onTabChange = (value: string) => {
+  const handleTabChange = (value: string) => {
     const params = new URLSearchParams(searchParams);
-    if (value === "listings") {
-      params.set("tab", "listings");
-    } else {
-      params.delete("tab");
-    }
+    params.set("tab", value);
     router.push(`/profile?${params.toString()}`);
   };
 
   return (
-    <Tabs defaultValue={defaultTab} className="space-y-6" onValueChange={onTabChange}>
-      <TabsList>
-        <TabsTrigger value="profile">
-          <User2 className="h-4 w-4 mr-2" />
-          Профил
-        </TabsTrigger>
-        <TabsTrigger value="listings">
-          <List className="h-4 w-4 mr-2" />
-          Мои огласи
-        </TabsTrigger>
+    <Tabs value={tab} onValueChange={handleTabChange} className="w-full">
+      <TabsList className="grid w-full grid-cols-3">
+        <TabsTrigger value="profile">Профил</TabsTrigger>
+        <TabsTrigger value="listings">Мои огласи</TabsTrigger>
+        <TabsTrigger value="partner-listings">Мои партнер огласи</TabsTrigger>
       </TabsList>
-      <TabsContent value="profile" className="space-y-6">
+      <TabsContent value="profile">
         <div className="rounded-lg border p-6 shadow-sm">
           <ProfileForm profile={profile} />
         </div>
       </TabsContent>
-      <TabsContent value="listings" className="space-y-6">
+      <TabsContent value="listings">
         <MyListings listings={listings} />
+      </TabsContent>
+      <TabsContent value="partner-listings">
+        <MyPartnerListings partnerListings={partnerListings} />
       </TabsContent>
     </Tabs>
   );

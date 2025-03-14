@@ -392,8 +392,8 @@ export default function EditListing({user, listing}: EditListingProps) {
                 <div className="grid gap-6 md:grid-cols-2">
                   <div className="flex items-center justify-between space-x-2 rounded-md border p-4">
                     <div className="space-y-0.5">
-                      <Label htmlFor="pedigree">Родословие</Label>
-                      <p className="text-sm text-muted-foreground">Дали миленикот има родословие?</p>
+                      <Label htmlFor="pedigree">Педигре</Label>
+                      <p className="text-sm text-muted-foreground">Дали миленикот има педигре?</p>
                     </div>
                     <Switch
                       id="pedigree"

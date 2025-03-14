@@ -3,39 +3,44 @@
 import {useState, useCallback, useEffect} from "react";
 import Link from "next/link";
 import Image from "next/image";
-import {ChevronLeft, ChevronRight, Syringe, Award, Mars, Venus} from "lucide-react";
+import {ChevronLeft, ChevronRight, Award, Shield, Mars, Venus} from "lucide-react";
 import {Card, CardContent} from "@/components/ui/card";
 import {Badge} from "@/components/ui/badge";
 import {Button} from "@/components/ui/button";
 import {Tooltip, TooltipContent, TooltipProvider, TooltipTrigger} from "@/components/ui/tooltip";
 import useEmblaCarousel from "embla-carousel-react";
 
-interface ListingImage {
+interface PartnerImage {
   id: string;
   url: string;
   is_primary: boolean | null;
 }
 
-interface Listing {
+interface PartnerListing {
   id: string;
   title: string;
-  price: number | null;
-  location: string | null;
-  category: string;
-  listingType: string;
-  gender: string | null;
-  vaccinated: boolean | null;
-  pedigree: boolean | null;
-  createdAt: string | null;
-  images: ListingImage[];
   description?: string;
+  location: string | null;
+  dogBreed?: string;
+  dogAge?: number;
+  dogGender?: string;
+  dogPedigree?: boolean;
+  dogVaccinated?: boolean;
+  desiredBreed?: string;
+  desiredGender: string;
+  pedigreeRequired: boolean;
+  vaccinationRequired: boolean;
+  price?: number | null;
+  isPriceNegotiable?: boolean;
+  createdAt: string | null;
+  images: PartnerImage[];
 }
 
-interface NewestListingsCarouselProps {
-  listings: Listing[];
+interface PartnerListingsCarouselProps {
+  listings: PartnerListing[];
 }
 
-export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) {
+export function PartnerListingsCarousel({listings}: PartnerListingsCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: false,
     align: "start",
@@ -90,7 +95,7 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
             className="h-9 w-9 rounded-full bg-background shadow-md"
             onClick={scrollPrev}
             disabled={!prevBtnEnabled}>
-            <ChevronLeft className="h-5 w-5 text-primary" />
+            <ChevronLeft className="h-5 w-5 text-secondary" />
             <span className="sr-only">Previous</span>
           </Button>
         </div>
@@ -102,7 +107,7 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
             className="h-9 w-9 rounded-full bg-background shadow-md"
             onClick={scrollNext}
             disabled={!nextBtnEnabled}>
-            <ChevronRight className="h-5 w-5 text-primary" />
+            <ChevronRight className="h-5 w-5 text-secondary" />
             <span className="sr-only">Next</span>
           </Button>
         </div>
@@ -112,7 +117,7 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
           <div className="flex gap-3 sm:gap-4 md:gap-6 pl-4 pr-4 md:px-6">
             {listings.map((listing) => (
               <div key={listing.id} className="flex-[0_0_80%] sm:flex-[0_0_calc(50%-8px)] md:flex-[0_0_calc(33.333%-16px)] min-w-0">
-                <Link href={`/listings/${listing.id}`}>
+                <Link href={`/find-partner/${listing.id}`}>
                   <Card className="overflow-hidden group h-full transition-all hover:shadow-md border border-gray-200 rounded-xl">
                     <div className="relative aspect-square overflow-hidden">
                       <Image
@@ -123,8 +128,8 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
                         className="object-cover transition-transform group-hover:scale-105"
                       />
                       <div className="absolute top-2 left-2">
-                        <Badge variant="default" className="text-xs font-medium">
-                          {listing.category === "dog" ? "Куче" : listing.category === "cat" ? "Маче" : "Друго"}
+                        <Badge variant="secondary" className="text-xs font-medium">
+                          Партнер
                         </Badge>
                       </div>
                     </div>
@@ -134,16 +139,18 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
                         <h3 className="font-semibold text-sm sm:text-base line-clamp-1">{listing.title}</h3>
                       </div>
 
+                      {listing.description && <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2 mb-2">{listing.description}</p>}
+
                       <div className="flex justify-between items-center mt-auto">
                         <div className="font-medium text-sm sm:text-base text-muted-foreground">
-                          {listing.price ? `${listing.price} ден.` : "По договор"}
+                          {listing.price ? `${listing.price} ден.` : listing.isPriceNegotiable ? "По договор" : ""}
                         </div>
                         <div className="flex gap-1.5 items-center">
-                          {listing.gender && (
+                          {listing.desiredGender && (
                             <Tooltip>
                               <TooltipTrigger asChild>
                                 <span>
-                                  {listing.gender === "male" ? (
+                                  {listing.desiredGender === "male" ? (
                                     <Mars className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-500" />
                                   ) : (
                                     <Venus className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-pink-500" />
@@ -151,25 +158,12 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
                                 </span>
                               </TooltipTrigger>
                               <TooltipContent>
-                                <p>{listing.gender === "male" ? "Машко" : "Женско"}</p>
+                                <p>Бара {listing.desiredGender === "male" ? "машки" : "женски"} партнер</p>
                               </TooltipContent>
                             </Tooltip>
                           )}
 
-                          {listing.vaccinated && (
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <span>
-                                  <Syringe className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-green-500" />
-                                </span>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p>Вакцинирано</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          )}
-
-                          {listing.pedigree && (
+                          {listing.pedigreeRequired && (
                             <Tooltip>
                               <TooltipTrigger asChild>
                                 <span>
@@ -177,7 +171,20 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
                                 </span>
                               </TooltipTrigger>
                               <TooltipContent>
-                                <p>Со педигре</p>
+                                <p>Бара со педигре</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          )}
+
+                          {listing.vaccinationRequired && (
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span>
+                                  <Shield className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-green-500" />
+                                </span>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Бара вакцинирано</p>
                               </TooltipContent>
                             </Tooltip>
                           )}
@@ -198,7 +205,7 @@ export function NewestListingsCarousel({listings}: NewestListingsCarouselProps) 
               <button
                 key={index}
                 className={`h-1.5 md:h-2 rounded-full transition-all ${
-                  selectedIndex === index ? "w-5 md:w-6 bg-primary" : "w-1.5 md:w-2 bg-gray-300"
+                  selectedIndex === index ? "w-5 md:w-6 bg-secondary" : "w-1.5 md:w-2 bg-gray-300"
                 }`}
                 onClick={() => scrollTo(index)}
                 aria-label={`Go to slide ${index + 1}`}

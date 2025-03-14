@@ -14,6 +14,7 @@ interface PartnerCardProps {
   description?: string;
   location: string;
   // User's dog information
+
   dog_breed?: string;
   dog_age?: number;
   dog_gender?: string;
@@ -60,7 +61,7 @@ export default function PartnerCard({
 
   return (
     <Link href={`/find-partner/${id}`} className="block">
-      <Card className="overflow-hidden hover:shadow-md transition-shadow duration-300 border">
+      <Card className="overflow-hidden hover:shadow-md transition-shadow hover:border-secondary/50 duration-300 border">
         <div className="flex flex-col md:flex-row">
           {/* Left side - Image */}
           <div className="relative w-full md:w-1/3 aspect-video md:aspect-square">
@@ -73,7 +74,7 @@ export default function PartnerCard({
               </div>
             )}
             <div className="absolute top-3 right-3 z-20">
-              <Heart className="h-6 w-6 text-white" />
+              <Heart className="h-6 w-6 text-secondary" />
             </div>
           </div>
 

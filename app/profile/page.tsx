@@ -39,9 +39,24 @@ export default async function ProfilePage({searchParams}: PageProps) {
     .eq("user_id", user.id)
     .order("created_at", {ascending: false});
 
+  // Fetch partner listings
+  const {data: partnerListings} = await supabase
+    .from("partner_listings")
+    .select(
+      `
+      *,
+      partner_images (
+        url,
+        is_primary
+      )
+    `
+    )
+    .eq("user_id", user.id)
+    .order("created_at", {ascending: false});
+
   return (
     <div className="container mx-auto py-10 px-4 md:px-0">
-      <ProfileTabs profile={profile} listings={listings || []} defaultTab={params.tab === "listings" ? "listings" : "profile"} />
+      <ProfileTabs profile={profile} listings={listings || []} partnerListings={partnerListings || []} defaultTab={params.tab || "profile"} />
     </div>
   );
 }

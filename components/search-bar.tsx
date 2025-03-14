@@ -196,7 +196,14 @@ export function SearchBar({variant = "hero", className}: SearchBarProps) {
         </div>
         <Button
           onClick={() => handleSearch()}
-          className={cn("h-12 px-8 font-medium", isHeroVariant ? "bg-primary hover:bg-primary/90 rounded-lg" : "")}>
+          className={cn(
+            "h-12 px-8 font-medium",
+            variant === "partners"
+              ? "bg-secondary hover:bg-secondary/90 rounded-lg"
+              : isHeroVariant
+              ? "bg-primary hover:bg-primary/90 rounded-lg"
+              : ""
+          )}>
           <Search className="h-5 w-5" />
         </Button>
       </div>

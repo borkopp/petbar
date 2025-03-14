@@ -148,7 +148,7 @@ export default async function FindPartnerPage(props: PageProps) {
           <div className="sticky top-20">
             <PartnerFilters />
             <div className="mt-4 w-full">
-              <Button asChild className="w-full bg-primary hover:bg-primary/90">
+              <Button asChild className="w-full bg-secondary hover:bg-secondary/90">
                 <Link href="/create-partner-listing" className="flex items-center justify-center gap-2">
                   <Plus className="h-4 w-4" />
                   Објави барање

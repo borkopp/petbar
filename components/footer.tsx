@@ -12,7 +12,11 @@ export function Footer() {
             <Link href="/" className="flex items-center space-x-2 mb-4">
               <Image src="/dogbar-transparent.png" alt="petbar.mk" width={75} height={75} className="h-12 w-auto" />
               <div className="flex flex-col">
-                <span className="text-xl font-semibold text-primary font-fredoka">petbar.mk</span>
+                <span className="text-xl md:text-3xl font-semibold font-fredoka">
+                  <span className="text-primary">petbar</span>
+                  <span className="text-secondary">.</span>
+                  <span className="text-primary">mk</span>
+                </span>
                 <span className="text-xs text-muted-foreground font-rubik">Вашиот бар за животни</span>
               </div>
             </Link>

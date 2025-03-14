@@ -131,7 +131,7 @@ function FiltersContent() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <h2 className="text-lg font-semibold">Филтри</h2>
-          {activeFilterCount > 0 && <Badge variant="secondary">{activeFilterCount}</Badge>}
+          {activeFilterCount > 0 && <Badge className="bg-secondary text-secondary-foreground">{activeFilterCount}</Badge>}
         </div>
         {activeFilterCount > 0 && (
           <Button variant="ghost" size="sm" onClick={() => router.push("/find-partner")}>
@@ -155,6 +155,7 @@ function FiltersContent() {
                       id={category.slug}
                       checked={searchParams.get("category") === category.slug}
                       onCheckedChange={() => handleFilterChange("category", category.slug)}
+                      className="border-secondary/50 data-[state=checked]:bg-secondary data-[state=checked]:border-secondary"
                     />
                     <Label htmlFor={category.slug}>{category.name}</Label>
                   </div>
@@ -169,7 +170,7 @@ function FiltersContent() {
             <AccordionTrigger>Раса</AccordionTrigger>
             <AccordionContent>
               <Select value={searchParams.get("desired_breed") || ""} onValueChange={(value) => handleFilterChange("desired_breed", value)}>
-                <SelectTrigger className="focus:ring-0 focus:ring-offset-0 focus:ring-transparent focus:outline-none select-none">
+                <SelectTrigger className="focus:ring-0 focus:ring-offset-0 focus:ring-transparent focus:outline-none select-none border-secondary/30 focus:border-secondary/50">
                   <SelectValue placeholder="Изберете раса" />
                 </SelectTrigger>
                 <SelectContent>
@@ -195,11 +196,11 @@ function FiltersContent() {
               defaultValue={searchParams.get("desired_gender") || ""}
               onValueChange={(value) => handleFilterChange("desired_gender", value)}>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="male" id="male" />
+                <RadioGroupItem value="male" id="male" className="border-secondary/50 text-secondary" />
                 <Label htmlFor="male">Машки</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value="female" id="female" />
+                <RadioGroupItem value="female" id="female" className="border-secondary/50 text-secondary" />
                 <Label htmlFor="female">Женски</Label>
               </div>
             </RadioGroup>
@@ -210,7 +211,7 @@ function FiltersContent() {
           <AccordionTrigger>Локација</AccordionTrigger>
           <AccordionContent>
             <Select value={searchParams.get("location") || ""} onValueChange={(value) => handleFilterChange("location", value)}>
-              <SelectTrigger className="focus:ring-0 focus:ring-offset-0 focus:ring-transparent focus:outline-none select-none">
+              <SelectTrigger className="focus:ring-0 focus:ring-offset-0 focus:ring-transparent focus:outline-none select-none border-secondary/30 focus:border-secondary/50">
                 <SelectValue placeholder="Изберете локација" />
               </SelectTrigger>
               <SelectContent className="max-h-[300px]">
@@ -238,6 +239,7 @@ function FiltersContent() {
                 step={1000}
                 onValueChange={setPriceRange}
                 onValueCommit={() => handleFilterChange("price", `${priceRange[0]}-${priceRange[1]}`)}
+                className="[&>[role=slider]]:bg-secondary [&>.range]:bg-secondary"
               />
               <div className="flex items-center space-x-4">
                 <Input
@@ -245,7 +247,7 @@ function FiltersContent() {
                   placeholder="Мин"
                   value={priceRange[0]}
                   onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
-                  className="w-24"
+                  className="w-24 border-secondary/30 focus-visible:ring-secondary/30"
                 />
                 <span>-</span>
                 <Input
@@ -253,7 +255,7 @@ function FiltersContent() {
                   placeholder="Макс"
                   value={priceRange[1]}
                   onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                  className="w-24"
+                  className="w-24 border-secondary/30 focus-visible:ring-secondary/30"
                 />
               </div>
             </div>
@@ -270,6 +272,7 @@ function FiltersContent() {
                 step={1}
                 onValueChange={setAgeRange}
                 onValueCommit={() => handleFilterChange("age", `${ageRange[0]}-${ageRange[1]}`)}
+                className="[&>[role=slider]]:bg-secondary [&>.range]:bg-secondary"
               />
               <div className="flex items-center space-x-4">
                 <Input
@@ -277,7 +280,7 @@ function FiltersContent() {
                   placeholder="Мин"
                   value={ageRange[0]}
                   onChange={(e) => setAgeRange([Number(e.target.value), ageRange[1]])}
-                  className="w-24"
+                  className="w-24 border-secondary/30 focus-visible:ring-secondary/30"
                 />
                 <span>-</span>
                 <Input
@@ -285,32 +288,34 @@ function FiltersContent() {
                   placeholder="Макс"
                   value={ageRange[1]}
                   onChange={(e) => setAgeRange([ageRange[0], Number(e.target.value)])}
-                  className="w-24"
+                  className="w-24 border-secondary/30 focus-visible:ring-secondary/30"
                 />
               </div>
             </div>
           </AccordionContent>
         </AccordionItem>
 
-        <AccordionItem value="additional">
-          <AccordionTrigger>Дополнителни карактеристики</AccordionTrigger>
+        <AccordionItem value="requirements">
+          <AccordionTrigger>Дополнителни барања</AccordionTrigger>
           <AccordionContent>
-            <div className="space-y-2">
+            <div className="space-y-3">
               <div className="flex items-center space-x-2">
                 <Checkbox
-                  id="pedigree_required"
+                  id="pedigree"
                   checked={searchParams.get("pedigree_required") === "true"}
                   onCheckedChange={(checked) => handleFilterChange("pedigree_required", checked ? "true" : null)}
+                  className="border-secondary/50 data-[state=checked]:bg-secondary data-[state=checked]:border-secondary"
                 />
-                <Label htmlFor="pedigree_required">Педигре</Label>
+                <Label htmlFor="pedigree">Со педигре</Label>
               </div>
               <div className="flex items-center space-x-2">
                 <Checkbox
-                  id="vaccination_required"
+                  id="vaccinated"
                   checked={searchParams.get("vaccination_required") === "true"}
                   onCheckedChange={(checked) => handleFilterChange("vaccination_required", checked ? "true" : null)}
+                  className="border-secondary/50 data-[state=checked]:bg-secondary data-[state=checked]:border-secondary"
                 />
-                <Label htmlFor="vaccination_required">Вакцинирано</Label>
+                <Label htmlFor="vaccinated">Вакцинирано</Label>
               </div>
             </div>
           </AccordionContent>
@@ -332,16 +337,16 @@ export default function PartnerFilters() {
       <div className="md:hidden">
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="outline" size="sm" className="w-full flex items-center justify-center gap-2">
-              <Filter className="h-4 w-4" />
-              <span>Филтри</span>
+            <Button variant="outline" className="w-full border-secondary/30 text-secondary hover:bg-secondary/5 hover:text-secondary">
+              <Filter className="mr-2 h-4 w-4" />
+              Филтри
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-[85%] sm:w-[350px]">
+          <SheetContent side="left" className="w-[300px] sm:w-[400px]">
             <SheetHeader>
               <SheetTitle>Филтри</SheetTitle>
             </SheetHeader>
-            <div className="mt-4">
+            <div className="py-4">
               <FiltersContent />
             </div>
           </SheetContent>
