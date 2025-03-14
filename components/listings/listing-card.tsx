@@ -41,7 +41,13 @@ export default function ListingCard({
       <Card className="flex flex-col md:flex-row overflow-hidden border rounded-xl font-rubik hover:border-primary/50 transition-colors">
         {/* Image */}
         <div className="relative w-full md:w-[400px] aspect-video md:aspect-auto md:h-[300px]">
-          <Image src={images[0]?.url || "/placeholder.png"} alt={title} fill className="object-cover" />
+          <Image
+            src={images && images.length > 0 && images[0]?.url ? images[0].url : "/placeholder.png"}
+            alt={title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 400px"
+          />
         </div>
 
         {/* Content */}

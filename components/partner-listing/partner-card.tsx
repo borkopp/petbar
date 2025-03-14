@@ -7,9 +7,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {Badge} from "@/components/ui/badge";
 import {Card, CardContent} from "@/components/ui/card";
-import type {Database} from "@/database.types";
-
-type User = Database["public"]["Tables"]["profiles"]["Row"] | null;
 
 interface PartnerCardProps {
   id: string;
@@ -33,7 +30,6 @@ interface PartnerCardProps {
   phone?: string;
   images: {url: string}[];
   createdAt: string;
-  user?: User;
 }
 
 export default function PartnerCard({

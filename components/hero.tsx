@@ -3,7 +3,7 @@
 import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import {createClient} from "@/lib/supabase/client";
-import type {Database} from "@/database.types";
+import {Database} from "@/database.types";
 import {SearchBar} from "@/components/search-bar";
 import Image from "next/image";
 
