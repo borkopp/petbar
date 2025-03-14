@@ -46,6 +46,8 @@ export default async function RootLayout({
     <html lang="mk">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <link rel="preload" href="/hero4.webp" as="image" type="image/webp" />
+        <link rel="preload" href="/hero4.jpg" as="image" type="image/jpeg" />
       </head>
       <body className={cn("min-h-screen bg-background font-sans antialiased", rubik.variable, fredoka.variable)}>
         <Suspense fallback={<LoadingScreen />}>

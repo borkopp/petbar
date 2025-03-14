@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import {createClient} from "@/lib/supabase/client";
 import type {Database} from "@/database.types";
 import {SearchBar} from "@/components/search-bar";
+import Image from "next/image";
 
 type Category = Database["public"]["Tables"]["categories"]["Row"];
 
@@ -31,7 +32,12 @@ export function Hero() {
   return (
     <div className="relative min-h-[80vh] flex items-center justify-center bg-muted">
       {/* Background Image with Overlay */}
-      <div className="absolute inset-0 bg-[url('/hero4.jpg')] bg-cover bg-center"></div>
+      <div className="absolute inset-0 overflow-hidden">
+        <picture>
+          <source srcSet="/hero4.webp" type="image/webp" />
+          <Image src="/hero4.jpg" alt="Hero background" fill priority sizes="100vw" quality={80} className="object-cover object-center" />
+        </picture>
+      </div>
       {/* Dark Overlay */}
       <div className="absolute inset-0 bg-black/25"></div>
 
