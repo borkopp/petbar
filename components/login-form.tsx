@@ -13,6 +13,7 @@ import {toast} from "sonner";
 import Link from "next/link";
 import {useRouter} from "next/navigation";
 import {Loader2} from "lucide-react";
+import {PasswordInput} from "@/components/ui/password-input";
 
 // Helper function to translate Supabase error messages to Macedonian
 function translateErrorMessage(error: string): string {
@@ -97,7 +98,7 @@ export function LoginForm({redirectTo}: LoginFormProps) {
               {error && <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">{error}</div>}
               <div className="grid gap-2">
                 <Label htmlFor="email">Е-пошта</Label>
-                <Input name="email" id="email" type="email" placeholder="m@example.com" required autoComplete="email" />
+                <Input name="email" id="email" type="email" placeholder="ime@mail.com" required autoComplete="email" />
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
@@ -106,7 +107,7 @@ export function LoginForm({redirectTo}: LoginFormProps) {
                     Ја заборавивте лозинката?
                   </Link>
                 </div>
-                <Input name="password" id="password" type="password" required autoComplete="current-password" />
+                <PasswordInput name="password" id="password" placeholder="••••••••" required autoComplete="current-password" />
               </div>
               <SubmitButton />
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">

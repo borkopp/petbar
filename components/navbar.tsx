@@ -42,7 +42,7 @@ export function Navbar({user}: NavbarProps) {
                 <Link href="/listings">
                   <Button size="sm" variant="ghost">
                     <List className="h-5 w-5" />
-                    Пазар
+                    Огласи
                   </Button>
                 </Link>
                 <Link href="/find-partner">
@@ -115,7 +115,7 @@ export function Navbar({user}: NavbarProps) {
                 <Link href="/listings">
                   <Button size="sm" variant="ghost">
                     <List className="h-5 w-5" />
-                    Пазар
+                    Огласи
                   </Button>
                 </Link>
                 <Link href="/find-partner">

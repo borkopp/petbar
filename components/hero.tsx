@@ -31,14 +31,16 @@ export function Hero() {
   return (
     <div className="relative min-h-[80vh] flex items-center justify-center bg-muted">
       {/* Background Image with Overlay */}
-      <div className="absolute inset-0 bg-[url('/blob.svg')] bg-cover bg-center"></div>
+      <div className="absolute inset-0 bg-[url('/hero4.jpg')] bg-cover bg-center"></div>
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black/25"></div>
 
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4">
-        <div className="max-w-4xl mx-auto text-center text-black space-y-8">
+        <div className="max-w-4xl mx-auto text-center text-white space-y-8">
           {/* Main Title */}
-          <h1 className="text-5xl font-medium mb-4 font-rubik">Пронајди го твоето милениче</h1>
-          <p className="text-xl mb-8 font-rubik">во најголемиот и најдобриот бар за животни во Македонија!</p>
+          <h1 className="text-5xl font-bold mb-1 font-rubik">Пронајди го твоето милениче</h1>
+          <p className="text-xl mb-4 font-rubik">во најголемиот и најдобриот бар за животни во Македонија!</p>
 
           {/* Search Form */}
           <SearchBar variant="hero" />
