@@ -9,6 +9,7 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import ListingCard from "@/components/listings/listing-card";
 import {Separator} from "@/components/ui/separator";
+import {obfuscateUsername} from "@/lib/utils/obfuscate";
 
 interface PageProps {
   params: Promise<{"user-id": string}>;
@@ -78,11 +79,10 @@ export default async function ProfilePage(props: PageProps) {
             <div className="flex flex-col items-center md:items-start gap-4">
               <Avatar className="h-32 w-32">
                 <AvatarImage src={profile.avatar_url || undefined} />
-                <AvatarFallback>{profile.username[0].toUpperCase()}</AvatarFallback>
+                <AvatarFallback>{profile.full_name?.slice(0, 1).toUpperCase() || profile.username?.slice(0, 1).toUpperCase()}</AvatarFallback>
               </Avatar>
               <div className="text-center md:text-left">
                 <h1 className="text-2xl font-bold">{profile.full_name || profile.username}</h1>
-                <p className="text-muted-foreground">@{profile.username}</p>
               </div>
             </div>
 
@@ -164,12 +164,12 @@ export default async function ProfilePage(props: PageProps) {
                     <div className="flex items-start gap-4">
                       <Avatar>
                         <AvatarImage src={review.reviewer.avatar_url || undefined} />
-                        <AvatarFallback>{review.reviewer.username[0].toUpperCase()}</AvatarFallback>
+                        <AvatarFallback>{review.reviewer.username?.[0]?.toUpperCase() || "?"}</AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="font-medium">@{review.reviewer.username}</p>
+                            <p className="font-medium">{obfuscateUsername()}</p>
                             <p className="text-sm text-muted-foreground">
                               {formatDistanceToNow(new Date(review.created_at || new Date()), {
                                 addSuffix: true,

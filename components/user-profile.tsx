@@ -6,6 +6,7 @@ import {Button} from "@/components/ui/button";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Skeleton} from "@/components/ui/skeleton";
 import {CalendarIcon, CheckCircle2Icon, MailIcon, UserIcon} from "lucide-react";
+import {obfuscateUsername} from "@/lib/utils/obfuscate";
 
 export function UserProfile() {
   const {user, isLoading, signOut} = useAuth();
@@ -104,8 +105,8 @@ export function UserProfile() {
         <div className="mt-4 text-center">
           <CardTitle className="text-xl">{user.user_metadata?.full_name || "Корисник"}</CardTitle>
           <CardDescription className="flex items-center justify-center gap-1 mt-1">
-            <MailIcon className="h-3 w-3" />
-            <span>{user.email}</span>
+            <UserIcon className="h-3 w-3" />
+            <span>{obfuscateUsername()}</span>
           </CardDescription>
         </div>
       </CardHeader>

@@ -12,6 +12,7 @@ import {formatDistanceToNow} from "date-fns";
 import {Send, Info} from "lucide-react";
 import {cn} from "@/lib/utils";
 import {useUnreadMessages} from "@/lib/context/unread-messages-context";
+import Link from "next/link";
 
 type Message = Database["public"]["Tables"]["messages"]["Row"];
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
@@ -180,13 +181,15 @@ export function ChatMessages({userId, otherUserId, listingId, otherUser}: ChatMe
           </Avatar>
           <div>
             <h2 className="font-semibold">{otherUser.full_name}</h2>
-            <p className="text-xs md:text-sm text-muted-foreground">{otherUser.username}</p>
+            {/* <p className="text-xs md:text-sm text-muted-foreground">{otherUser.username}</p> */}
           </div>
         </div>
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" className="hidden md:inline-flex">
-            <Info className="h-5 w-5" />
-          </Button>
+          <Link href={`/profile/${otherUser.id}`}>
+            <Button variant="ghost" size="icon" className="hidden md:inline-flex">
+              <Info className="h-5 w-5" />
+            </Button>
+          </Link>
         </div>
       </div>
 
