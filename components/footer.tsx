@@ -36,9 +36,14 @@ export function Footer() {
                     Пронајди партнер
                   </Link>
                 </li>
-                <li>
+                <li className="mb-2">
                   <Link href="/create-listing" className="hover:text-primary">
                     Нов оглас
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/create-partner-listing" className="hover:text-primary">
+                    Нов оглас за партнер
                   </Link>
                 </li>
               </ul>
@@ -57,8 +62,8 @@ export function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/about" className="hover:text-primary">
-                    За нас
+                  <Link href="/feedback" className="hover:text-primary">
+                    Фидбек
                   </Link>
                 </li>
               </ul>
@@ -68,12 +73,12 @@ export function Footer() {
               <ul className="text-muted-foreground">
                 <li className="mb-2">
                   <Link href="/privacy" className="hover:text-primary">
-                    Приватност
+                    Политика за приватност
                   </Link>
                 </li>
                 <li>
                   <Link href="/terms" className="hover:text-primary">
-                    Услови
+                    Услови за користење
                   </Link>
                 </li>
               </ul>

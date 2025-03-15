@@ -10,10 +10,10 @@ export default function Home() {
     <main>
       <Hero />
       <NewestListings />
-      <div className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[600px] overflow-hidden">
+      <div className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[600px] overflow-hidden mt-16 bg-gray-50">
         <picture>
           <source srcSet="/banner.webp" type="image/webp" />
-          <Image src="/banner.png" alt="dog-banner" fill priority quality={90} sizes="100vw" className="object-cover object-left-center" />
+          <Image src="/banner.png" alt="dog-banner" fill priority quality={90} sizes="100vw" className="object-contain" />
         </picture>
       </div>
       <PartnerListings />

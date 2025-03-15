@@ -5,7 +5,7 @@ import Image from "next/image";
 import {Button} from "@/components/ui/button";
 import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
 import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet";
-import {Heart, List, Menu, MessageSquare, Plus, User} from "lucide-react";
+import {Heart, HelpCircle, List, Mail, Menu, MessageSquare, Plus, User} from "lucide-react";
 import {useUnreadMessages} from "@/lib/context/unread-messages-context";
 import {LogoutButton} from "./logout-button";
 
@@ -219,6 +219,26 @@ export function Navbar({user}: NavbarProps) {
                           Мои огласи
                         </Button>
                       </Link>
+                      <div className="h-px bg-border" />
+                      <Link href="/contact">
+                        <Button variant="ghost" className="w-full justify-start">
+                          <Mail className="mr-2 h-5 w-5" />
+                          Контакт
+                        </Button>
+                      </Link>
+                      <Link href="/#faq">
+                        <Button variant="ghost" className="w-full justify-start">
+                          <HelpCircle className="mr-2 h-5 w-5" />
+                          ЧПП
+                        </Button>
+                      </Link>
+                      <Link href="/feedback">
+                        <Button variant="ghost" className="w-full justify-start">
+                          <MessageSquare className="mr-2 h-5 w-5" />
+                          Фидбек
+                        </Button>
+                      </Link>
+
                       <div className="h-px bg-border" />
                       <LogoutButton />
                     </>

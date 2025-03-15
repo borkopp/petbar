@@ -11,6 +11,7 @@ import {Analytics} from "@vercel/analytics/react";
 import {FooterWrapper} from "@/components/footer-wrapper";
 import {createClient} from "@/lib/supabase/server";
 import {UnreadMessagesProvider} from "@/lib/context/unread-messages-context";
+// import {CookieConsent} from "@/components/cookie-consent";
 
 const rubik = Rubik({
   subsets: ["latin", "cyrillic"],
@@ -56,6 +57,7 @@ export default async function RootLayout({
             <main className="flex-1">{children}</main>
             <FooterWrapper />
             <Toaster richColors position="bottom-right" />
+            {/* <CookieConsent /> */}
           </UnreadMessagesProvider>
         </Suspense>
         <Analytics />

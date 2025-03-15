@@ -1,0 +1,35 @@
+<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Stars -->
+  <path d="M140 80L150 100L170 105L150 120L155 140L140 130L125 140L130 120L110 105L130 100L140 80Z" fill="#F59E0B"/>
+  <path d="M190 60L200 80L220 85L200 100L205 120L190 110L175 120L180 100L160 85L180 80L190 60Z" fill="#F59E0B"/>
+  <path d="M240 80L250 100L270 105L250 120L255 140L240 130L225 140L230 120L210 105L230 100L240 80Z" fill="#F59E0B"/>
+  
+  <!-- Dog -->
+  <path d="M260 180C260 207.614 237.614 230 210 230C182.386 230 160 207.614 160 180C160 152.386 182.386 130 210 130C237.614 130 260 152.386 260 180Z" fill="#FEF3C7"/>
+  
+  <!-- Dog face -->
+  <circle cx="195" cy="170" r="5" fill="#1F2937"/> <!-- Left eye -->
+  <circle cx="225" cy="170" r="5" fill="#1F2937"/> <!-- Right eye -->
+  <path d="M210 185C215 185 220 190 210 195C200 190 205 185 210 185Z" fill="#1F2937"/> <!-- Nose -->
+  <path d="M205 200C205 200 210 205 215 200" stroke="#1F2937" stroke-width="2" stroke-linecap="round"/> <!-- Smile -->
+  
+  <!-- Dog ears -->
+  <path d="M175 150C175 150 160 130 155 145C150 160 165 165 175 150Z" fill="#F59E0B"/>
+  <path d="M245 150C245 150 260 130 265 145C270 160 255 165 245 150Z" fill="#F59E0B"/>
+  
+  <!-- Dog paws -->
+  <circle cx="180" cy="210" r="15" fill="#F59E0B"/>
+  <circle cx="240" cy="210" r="15" fill="#F59E0B"/>
+  
+  <!-- Tail -->
+  <path d="M270 180C270 180 290 170 285 155C280 140 260 160 270 180Z" fill="#F59E0B"/>
+  
+  <!-- Thought bubble -->
+  <circle cx="290" cy="130" r="10" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="2"/>
+  <circle cx="310" cy="115" r="15" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="2"/>
+  <circle cx="340" cy="100" r="25" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="2"/>
+  
+  <!-- Thumbs up in thought bubble -->
+  <path d="M330 95L335 85C335 85 337 80 340 80C343 80 345 85 345 85L350 95H330Z" fill="#F59E0B"/>
+  <rect x="325" y="95" width="10" height="15" rx="2" fill="#F59E0B"/>
+</svg> 
