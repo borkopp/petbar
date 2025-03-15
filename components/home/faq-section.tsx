@@ -64,7 +64,7 @@ export function FAQSection() {
   };
 
   return (
-    <section className="py-20 px-4 font-rubik">
+    <section id="faq" className="py-20 px-4 font-rubik">
       <div className="container mx-auto max-w-4xl">
         <h2 className="text-3xl md:text-4xl font-medium text-center text-gray-800 mb-4">Најчесто поставувани прашања</h2>
         <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12">

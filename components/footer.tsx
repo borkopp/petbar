@@ -47,7 +47,7 @@ export function Footer() {
               <h2 className="mb-4 text-sm font-semibold uppercase">Помош</h2>
               <ul className="text-muted-foreground">
                 <li className="mb-2">
-                  <Link href="/faq" className="hover:text-primary">
+                  <Link href="/#faq" className="hover:text-primary">
                     ЧПП
                   </Link>
                 </li>
