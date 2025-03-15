@@ -5,13 +5,35 @@ import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {Button} from "@/components/ui/button";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Skeleton} from "@/components/ui/skeleton";
-import {CalendarIcon, CheckCircle2Icon, MailIcon, UserIcon} from "lucide-react";
+import {CheckCircle2Icon, MailIcon, UserIcon} from "lucide-react";
 import {obfuscateUsername} from "@/lib/utils/obfuscate";
+import {useEffect, useState} from "react";
+import {createClient} from "@/lib/supabase/client";
+import type {Tables} from "@/database.types";
 
 export function UserProfile() {
   const {user, isLoading, signOut} = useAuth();
+  const [profile, setProfile] = useState<Tables<"profiles"> | null>(null);
+  const [profileLoading, setProfileLoading] = useState(false);
 
-  if (isLoading) {
+  useEffect(() => {
+    async function fetchProfile() {
+      if (!user) return;
+
+      setProfileLoading(true);
+      const supabase = createClient();
+      const {data, error} = await supabase.from("profiles").select("*").eq("id", user.id).single();
+
+      if (!error && data) {
+        setProfile(data);
+      }
+      setProfileLoading(false);
+    }
+
+    fetchProfile();
+  }, [user]);
+
+  if (isLoading || profileLoading) {
     return (
       <Card className="w-full overflow-hidden border-none shadow-lg">
         <div className="h-32 bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url(/placeholder.png)"}} />
@@ -99,14 +121,17 @@ export function UserProfile() {
       <div className="h-32 bg-cover bg-center bg-no-repeat" style={{backgroundImage: "url(/placeholder.png)"}} />
       <CardHeader className="-mt-12 flex flex-col items-center">
         <Avatar className="h-24 w-24 border-4 border-background shadow-md">
-          <AvatarImage src={user.user_metadata?.avatar_url} alt={user.user_metadata?.full_name || user.email} />
-          <AvatarFallback>BP</AvatarFallback>
+          <AvatarImage
+            src={profile?.avatar_url || user.user_metadata?.avatar_url}
+            alt={profile?.full_name || user.user_metadata?.full_name || user.email}
+          />
+          <AvatarFallback>{getInitials(profile?.full_name || user.user_metadata?.full_name || "")}</AvatarFallback>
         </Avatar>
         <div className="mt-4 text-center">
-          <CardTitle className="text-xl">{user.user_metadata?.full_name || "Корисник"}</CardTitle>
+          <CardTitle className="text-xl">{profile?.full_name || user.user_metadata?.full_name || "Корисник"}</CardTitle>
           <CardDescription className="flex items-center justify-center gap-1 mt-1">
             <UserIcon className="h-3 w-3" />
-            <span>{obfuscateUsername()}</span>
+            <span>{profile?.username || obfuscateUsername()}</span>
           </CardDescription>
         </div>
       </CardHeader>
@@ -120,25 +145,25 @@ export function UserProfile() {
               </h3>
               <div className="grid gap-3 bg-muted/30 rounded-lg p-4">
                 <div className="flex justify-between items-center py-2 border-b border-border/40">
-                  <span className="font-medium text-sm text-muted-foreground">Провајдер:</span>
-                  <span className="flex items-center gap-1.5 font-medium">
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-medium text-sm text-muted-foreground">Провајдер:</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
                     {providerIcon}
                     <span className="capitalize">{translateProvider(user.app_metadata?.provider) || "е-пошта"}</span>
-                  </span>
+                  </div>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-border/40">
-                  <span className="font-medium text-sm text-muted-foreground">Последна најава:</span>
-                  <span className="flex items-center gap-1.5">
-                    <CalendarIcon className="h-3.5 w-3.5 text-muted-foreground" />
-                    {formatDate(user.last_sign_in_at)}
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-medium text-sm text-muted-foreground">Последна најава:</span>
+                  </div>
+                  <span className="flex items-center gap-1.5">{formatDate(user.last_sign_in_at)}</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-border/40">
-                  <span className="font-medium text-sm text-muted-foreground">Датум на регистрација:</span>
-                  <span className="flex items-center gap-1.5">
-                    <CalendarIcon className="h-3.5 w-3.5 text-muted-foreground" />
-                    {formatDate(user.created_at)}
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-medium text-sm text-muted-foreground">Датум на регистрација:</span>
+                  </div>
+                  <span className="flex items-center gap-1.5">{formatDate(user.created_at)}</span>
                 </div>
                 <div className="flex justify-between items-center py-2">
                   <span className="font-medium text-sm text-muted-foreground">Е-пошта потврдена:</span>
@@ -155,7 +180,6 @@ export function UserProfile() {
                         />
                       </svg>
                     )}
-                    <span>{user.email_confirmed_at ? "Да" : "Не"}</span>
                   </span>
                 </div>
               </div>
@@ -241,6 +265,15 @@ function translateProvider(provider: string | undefined): string {
   };
 
   return translations[provider.toLowerCase()] || provider;
+}
+
+function getInitials(name: string): string {
+  if (!name) return "BP";
+
+  const parts = name.split(" ");
+  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
 function getProviderIcon(provider: string | undefined) {
