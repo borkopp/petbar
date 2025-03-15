@@ -71,12 +71,44 @@ export async function signInWithApple() {
     provider: 'apple',
     options: {
       redirectTo: 'https://bsyrobgaeadswftzzvay.supabase.co/auth/v1/callback',
+      scopes: 'name email',
+      queryParams: {
+        response_mode: 'form_post'
+      }
     },
   })
 
   if (error) {
+    console.error("Apple sign-in error:", error)
     return { error: error.message }
   }
 
   return { data }
+}
+
+export async function signInWithFacebook() {
+  const supabase = await createClient()
+  
+  const redirectUrl = 'https://bsyrobgaeadswftzzvay.supabase.co/auth/v1/callback'
+  
+  try {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'facebook',
+      options: {
+        redirectTo: redirectUrl,
+        scopes: 'email,public_profile',
+      },
+    })
+
+    if (error) {
+      console.error("Facebook sign-in error:", error)
+      return { error: error.message }
+    }
+    
+    console.log("Facebook auth URL to redirect to:", data?.url)
+    return { data }
+  } catch (e) {
+    console.error("Exception during Facebook OAuth setup:", e)
+    return { error: e instanceof Error ? e.message : 'Unknown error occurred' }
+  }
 } 
