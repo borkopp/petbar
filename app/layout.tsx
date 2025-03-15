@@ -11,7 +11,7 @@ import {Analytics} from "@vercel/analytics/react";
 import {FooterWrapper} from "@/components/footer-wrapper";
 import {createClient} from "@/lib/supabase/server";
 import {UnreadMessagesProvider} from "@/lib/context/unread-messages-context";
-// import {CookieConsent} from "@/components/cookie-consent";
+import {AuthProvider} from "@/lib/context/auth-provider";
 
 const rubik = Rubik({
   subsets: ["latin", "cyrillic"],
@@ -44,23 +44,25 @@ export default async function RootLayout({
   const user = await getUser();
 
   return (
-    <html lang="mk">
+    <html lang="mk" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <link rel="preload" href="/hero4.webp" as="image" type="image/webp" />
         <link rel="preload" href="/hero4.jpg" as="image" type="image/jpeg" />
       </head>
       <body className={cn("min-h-screen bg-background font-sans antialiased", rubik.variable, fredoka.variable)}>
-        <Suspense fallback={<LoadingScreen />}>
-          <UnreadMessagesProvider userId={user?.id}>
-            <Navbar user={user} />
-            <main className="flex-1">{children}</main>
-            <FooterWrapper />
-            <Toaster richColors position="bottom-right" />
-            {/* <CookieConsent /> */}
-          </UnreadMessagesProvider>
-        </Suspense>
-        <Analytics />
+        <AuthProvider>
+          <Suspense fallback={<LoadingScreen />}>
+            <UnreadMessagesProvider userId={user?.id}>
+              <Navbar user={user} />
+              <main className="flex-1">{children}</main>
+              <FooterWrapper />
+              <Toaster richColors position="bottom-right" />
+              {/* <CookieConsent /> */}
+            </UnreadMessagesProvider>
+          </Suspense>
+          <Analytics />
+        </AuthProvider>
       </body>
     </html>
   );

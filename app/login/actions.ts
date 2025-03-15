@@ -31,19 +31,37 @@ export async function login(prevState: State, formData: FormData): Promise<State
 
 export async function signInWithGoogle() {
   const supabase = await createClient()
+  
+  // Use the correct Supabase callback URL
+  const redirectUrl = 'https://bsyrobgaeadswftzzvay.supabase.co/auth/v1/callback'
+  console.log("Redirect URL:", redirectUrl)
+  
+  try {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: redirectUrl,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+        scopes: 'email profile',
+      },
+    })
 
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
-    },
-  })
+    if (error) {
+      console.error("Supabase OAuth error:", error)
+      return { error: error.message }
+    }
 
-  if (error) {
-    return { error: error.message }
+    // Log the URL that the user should be redirected to
+    console.log("Auth URL to redirect to:", data?.url)
+    
+    return { data }
+  } catch (e) {
+    console.error("Exception during OAuth setup:", e)
+    return { error: e instanceof Error ? e.message : 'Unknown error occurred' }
   }
-
-  return { data }
 }
 
 export async function signInWithApple() {
@@ -52,7 +70,7 @@ export async function signInWithApple() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'apple',
     options: {
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+      redirectTo: 'https://bsyrobgaeadswftzzvay.supabase.co/auth/v1/callback',
     },
   })
 

@@ -145,12 +145,28 @@ export function LoginForm({redirectTo, loginBgPlaceholder}: LoginFormProps) {
                   variant="outline"
                   className="w-full"
                   onClick={async () => {
-                    const result = await signInWithGoogle();
-                    if (result?.error) {
-                      const macedonianError = translateErrorMessage(result.error);
-                      toast.error("Грешка при најавување со Google", {
-                        description: macedonianError,
-                      });
+                    try {
+                      console.log("Google sign-in button clicked");
+                      toast.info("Attempting to sign in with Google...");
+                      const result = await signInWithGoogle();
+                      console.log("Google sign-in result:", result);
+
+                      if (result?.error) {
+                        const macedonianError = translateErrorMessage(result.error);
+                        toast.error("Грешка при најавување со Google", {
+                          description: macedonianError,
+                        });
+                      } else if (result?.data?.url) {
+                        // If we have a URL, redirect the user to it
+                        toast.success("Redirecting to Google...");
+                        window.location.href = result.data.url;
+                      } else {
+                        toast.error("Missing redirect URL from Google OAuth");
+                        console.error("Missing URL in OAuth response:", result);
+                      }
+                    } catch (error) {
+                      console.error("Error during Google sign-in:", error);
+                      toast.error("Unexpected error during Google sign-in");
                     }
                   }}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

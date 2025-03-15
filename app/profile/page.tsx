@@ -1,6 +1,13 @@
 import {redirect} from "next/navigation";
 import {createClient} from "@/lib/supabase/server";
 import ProfileTabs from "@/components/profile/profile-tabs";
+import {UserProfile} from "@/components/user-profile";
+import {Metadata} from "next";
+
+export const metadata: Metadata = {
+  title: "Мојот профил - petbar.mk",
+  description: "Управувајте со вашиот профил и огласи на petbar.mk",
+};
 
 interface SearchParams {
   tab?: string;
@@ -56,6 +63,10 @@ export default async function ProfilePage({searchParams}: PageProps) {
 
   return (
     <div className="container mx-auto py-10 px-4 md:px-0">
+      <h1 className="text-3xl font-bold mb-8">Мојот профил</h1>
+      <div className="mb-10 w-full">
+        <UserProfile />
+      </div>
       <ProfileTabs profile={profile} listings={listings || []} partnerListings={partnerListings || []} defaultTab={params.tab || "profile"} />
     </div>
   );
