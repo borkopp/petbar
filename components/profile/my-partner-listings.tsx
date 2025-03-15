@@ -63,23 +63,13 @@ export default function MyPartnerListings({partnerListings}: MyPartnerListingsPr
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Мои партнер огласи</h2>
-        <Button asChild>
-          <Link href="/find-partner/create">
-            <Plus className="mr-2 h-4 w-4" />
-            Нов оглас
-          </Link>
-        </Button>
-      </div>
-
+    <div className="space-y-6 mt-10">
       {listings.length === 0 ? (
         <div className="rounded-lg border border-dashed p-8 text-center">
           <h3 className="text-lg font-medium">Немате активни огласи</h3>
           <p className="mt-2 text-sm text-muted-foreground">Креирајте нов оглас за да најдете партнер за вашето милениче.</p>
           <Button asChild className="mt-4">
-            <Link href="/find-partner/create">
+            <Link href="/create-partner-listing">
               <Plus className="mr-2 h-4 w-4" />
               Креирај оглас
             </Link>
@@ -120,7 +110,7 @@ export default function MyPartnerListings({partnerListings}: MyPartnerListingsPr
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem asChild>
-                      <Link href={`/find-partner/edit/${listing.id}`} className="flex w-full cursor-pointer items-center">
+                      <Link href={`/find-partner/${listing.id}/edit`} className="flex w-full cursor-pointer items-center">
                         <Edit className="mr-2 h-4 w-4" />
                         Измени
                       </Link>

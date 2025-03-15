@@ -11,7 +11,7 @@ import {toast} from "sonner";
 import {Button} from "@/components/ui/button";
 import {Form, FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
+import {LocationCombobox} from "@/components/location-combobox";
 import type {Tables} from "@/database.types";
 
 const formSchema = z.object({
@@ -80,10 +80,11 @@ export default function ProfileForm({profile}: ProfileFormProps) {
           name="username"
           render={({field}) => (
             <FormItem>
-              <FormLabel>Корисничко име</FormLabel>
+              <FormLabel>Е-пошта</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input disabled {...field} />
               </FormControl>
+              <p className="text-sm text-muted-foreground">Е-поштата не може да се промени</p>
               <FormMessage />
             </FormItem>
           )}
@@ -109,20 +110,9 @@ export default function ProfileForm({profile}: ProfileFormProps) {
           render={({field}) => (
             <FormItem>
               <FormLabel>Локација</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Изберете локација" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="skopje">Скопје</SelectItem>
-                  <SelectItem value="bitola">Битола</SelectItem>
-                  <SelectItem value="kumanovo">Куманово</SelectItem>
-                  <SelectItem value="tetovo">Тетово</SelectItem>
-                  <SelectItem value="ohrid">Охрид</SelectItem>
-                </SelectContent>
-              </Select>
+              <FormControl>
+                <LocationCombobox value={field.value} onChange={field.onChange} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}

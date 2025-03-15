@@ -1,13 +1,15 @@
 "use client";
 
 import * as React from "react";
-import Image from "next/image";
 import Link from "next/link";
-import {Pencil, Trash2} from "lucide-react";
+import {Plus, MoreHorizontal, Edit, Trash2, Loader2} from "lucide-react";
 import {createClient} from "@/lib/supabase/client";
 import {toast} from "sonner";
 
 import {Button} from "@/components/ui/button";
+import {Card, CardContent, CardFooter} from "@/components/ui/card";
+import {Badge} from "@/components/ui/badge";
+import {BlurImage} from "@/components/ui/blur-image";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,8 +21,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {Card, CardContent, CardFooter} from "@/components/ui/card";
-import {Badge} from "@/components/ui/badge";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
 import type {Tables} from "@/database.types";
 
 interface MyListingsProps {
@@ -67,71 +68,99 @@ export default function MyListings({listings: initialListings}: MyListingsProps)
     }
   };
 
-  if (listings.length === 0) {
-    return (
-      <div className="flex h-[450px] items-center justify-center rounded-lg border border-dashed">
-        <div className="mx-auto max-w-[420px] text-center">
-          <h3 className="mt-4 text-lg font-semibold">Немате активни огласи</h3>
+  return (
+    <div className="space-y-6 mt-10">
+      {listings.length === 0 ? (
+        <div className="rounded-lg border border-dashed p-8 text-center">
+          <h3 className="text-lg font-medium">Немате активни огласи</h3>
           <p className="mt-2 text-sm text-muted-foreground">Креирајте нов оглас за да започнете со продажба или вдомување на миленици.</p>
           <Button asChild className="mt-4">
-            <Link href="/create-listing">Креирај Оглас</Link>
+            <Link href="/create-listing">
+              <Plus className="mr-2 h-4 w-4" />
+              Креирај оглас
+            </Link>
           </Button>
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {listings.map((listing) => (
-        <Card key={listing.id} className="group overflow-hidden">
-          <Link href={`/listings/${listing.id}`} className="relative block aspect-[4/3]">
-            <Image
-              src={listing.pet_images[0]?.url || "/placeholder.png"}
-              alt={listing.title}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-            <Badge variant="outline" className="absolute left-2 top-2 bg-white capitalize text-xs">
-              {listing.category === "dog" ? "Куче" : listing.category === "cat" ? "Маче" : "Друго"}
-            </Badge>
-          </Link>
-          <CardContent className="p-2.5">
-            <div className="space-y-0.5">
-              <h3 className="font-medium line-clamp-1 text-sm">{listing.title}</h3>
-              <p className="text-xs text-muted-foreground capitalize">{listing.location}</p>
-            </div>
-          </CardContent>
-          <CardFooter className="grid grid-cols-2 gap-1.5 p-2.5 pt-0">
-            <Button variant="outline" size="sm" asChild className="h-8 text-xs">
-              <Link href={`/listings/${listing.id}/edit`}>
-                <Pencil className="mr-1.5 h-3.5 w-3.5" />
-                Измени
-              </Link>
-            </Button>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="destructive" size="sm" disabled={isDeleting} className="h-8 text-xs">
-                  <Trash2 className="mr-1.5 h-3.5 w-3.5" />
-                  Избриши
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {listings.map((listing) => (
+            <Card key={listing.id} className="overflow-hidden">
+              <div className="relative aspect-square">
+                <BlurImage
+                  src={listing.pet_images[0]?.url || "/placeholder.png"}
+                  alt={listing.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
+                <Badge variant="outline" className="absolute left-2 top-2 bg-white capitalize text-xs">
+                  {listing.category === "dog" ? "Куче" : listing.category === "cat" ? "Маче" : "Друго"}
+                </Badge>
+              </div>
+              <CardContent className="p-4">
+                <h3 className="line-clamp-1 text-lg font-semibold">{listing.title}</h3>
+                <p className="line-clamp-1 text-sm text-muted-foreground">{listing.location}</p>
+                {listing.price ? (
+                  <p className="mt-2 font-medium">{listing.price.toLocaleString()} ден</p>
+                ) : (
+                  <p className="mt-2 font-medium">За вдомување</p>
+                )}
+              </CardContent>
+              <CardFooter className="flex items-center justify-between p-4 pt-0">
+                <Button asChild variant="outline" size="sm">
+                  <Link href={`/listings/${listing.id}`}>Прегледај</Link>
                 </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Дали сте сигурни?</AlertDialogTitle>
-                  <AlertDialogDescription>Оваа акција не може да се врати назад. Огласот ќе биде трајно избришан.</AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Откажи</AlertDialogCancel>
-                  <AlertDialogAction onClick={() => handleDelete(listing.id)} className="bg-destructive text-destructive-foreground">
-                    Избриши
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </CardFooter>
-        </Card>
-      ))}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon">
+                      <MoreHorizontal className="h-4 w-4" />
+                      <span className="sr-only">Опции</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild>
+                      <Link href={`/listings/${listing.id}/edit`} className="flex w-full cursor-pointer items-center">
+                        <Edit className="mr-2 h-4 w-4" />
+                        Измени
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-destructive">
+                          <Trash2 className="mr-2 h-4 w-4" />
+                          Избриши
+                        </DropdownMenuItem>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Дали сте сигурни?</AlertDialogTitle>
+                          <AlertDialogDescription>Оваа акција не може да се врати назад. Огласот ќе биде трајно избришан.</AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Откажи</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={() => handleDelete(listing.id)}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                            {isDeleting ? (
+                              <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Бришење...
+                              </>
+                            ) : (
+                              <>Избриши</>
+                            )}
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

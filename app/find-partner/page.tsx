@@ -151,7 +151,7 @@ export default async function FindPartnerPage(props: PageProps) {
               <Button asChild className="w-full bg-secondary hover:bg-secondary/90">
                 <Link href="/create-partner-listing" className="flex items-center justify-center gap-2">
                   <Plus className="h-4 w-4" />
-                  Објави барање
+                  Ново барање
                 </Link>
               </Button>
             </div>

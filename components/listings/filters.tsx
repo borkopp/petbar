@@ -124,7 +124,7 @@ function FiltersContent() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <h2 className="text-lg font-semibold">Филтри</h2>
-          {activeFilterCount > 0 && <Badge variant="secondary">{activeFilterCount}</Badge>}
+          {activeFilterCount > 0 && <Badge variant="default">{activeFilterCount}</Badge>}
         </div>
         {activeFilterCount > 0 && (
           <Button variant="ghost" size="sm" onClick={() => router.push("/listings")}>

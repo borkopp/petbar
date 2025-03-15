@@ -37,7 +37,7 @@ export default function ProfileTabs({profile, listings, partnerListings = [], de
         <TabsTrigger value="partner-listings">Мои партнер огласи</TabsTrigger>
       </TabsList>
       <TabsContent value="profile">
-        <div className="rounded-lg border p-6 shadow-sm">
+        <div className="rounded-lg border p-6 mt-10 shadow-sm">
           <ProfileForm profile={profile} />
         </div>
       </TabsContent>
