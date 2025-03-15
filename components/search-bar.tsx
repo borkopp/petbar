@@ -10,7 +10,6 @@ import {createClient} from "@/lib/supabase/client";
 import type {Database} from "@/database.types";
 import {cn} from "@/lib/utils";
 import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet";
-import {normalizeForSearch} from "@/lib/utils/transliteration";
 
 type Category = Database["public"]["Tables"]["categories"]["Row"];
 
