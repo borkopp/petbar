@@ -32,8 +32,8 @@ export async function login(prevState: State, formData: FormData): Promise<State
 export async function signInWithGoogle() {
   const supabase = await createClient()
   
-  // Use the correct Supabase callback URL
-  const redirectUrl = 'https://bsyrobgaeadswftzzvay.supabase.co/auth/v1/callback'
+  // Use your domain for the callback URL
+  const redirectUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`
   console.log("Redirect URL:", redirectUrl)
   
   try {
@@ -67,10 +67,12 @@ export async function signInWithGoogle() {
 export async function signInWithApple() {
   const supabase = await createClient()
 
+  const redirectUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`
+
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'apple',
     options: {
-      redirectTo: 'https://bsyrobgaeadswftzzvay.supabase.co/auth/v1/callback',
+      redirectTo: redirectUrl,
       scopes: 'name email',
       queryParams: {
         response_mode: 'form_post'
@@ -89,7 +91,7 @@ export async function signInWithApple() {
 export async function signInWithFacebook() {
   const supabase = await createClient()
   
-  const redirectUrl = 'https://bsyrobgaeadswftzzvay.supabase.co/auth/v1/callback'
+  const redirectUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`
   
   try {
     const { data, error } = await supabase.auth.signInWithOAuth({
