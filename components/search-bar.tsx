@@ -10,6 +10,7 @@ import {createClient} from "@/lib/supabase/client";
 import type {Database} from "@/database.types";
 import {cn} from "@/lib/utils";
 import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet";
+import {normalizeForSearch} from "@/lib/utils/transliteration";
 
 type Category = Database["public"]["Tables"]["categories"]["Row"];
 
@@ -110,16 +111,19 @@ export function SearchBar({variant = "hero", className}: SearchBarProps) {
     const category = values?.selectedCategory ?? selectedCategory;
     const loc = values?.location ?? location;
 
+    // For search query, we'll store the original input (which could be Latin or Cyrillic)
     if (query) {
       params.set("search", query);
     } else {
       params.delete("search");
     }
+
     if (category && category !== "all") {
       params.set("category", category);
     } else {
       params.delete("category");
     }
+
     if (loc) {
       params.set("location", loc);
     } else {

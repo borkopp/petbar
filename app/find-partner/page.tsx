@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {createClient} from "@/lib/supabase/server";
+import {createBilingualSearchFilter} from "@/lib/utils/server-transliteration";
 
 import PartnerFilters from "@/components/partner-listing/partner-filters";
 import PartnerSortSelect from "@/components/partner-listing/partner-sort-select";
@@ -18,6 +19,7 @@ interface SearchParams {
   price?: string;
   age?: string;
   sort?: string;
+  search?: string;
 }
 
 interface PageProps {
@@ -26,26 +28,30 @@ interface PageProps {
 }
 
 function getListingTitle(searchParams: SearchParams, categoryName?: string | null) {
+  // If search query is provided, show search results title
+  if (searchParams.search) {
+    return `Резултати за "${searchParams.search}"`;
+  }
+
   // If breed is selected, show only breed
   if (searchParams.desired_breed) {
-    return `Партнери: ${searchParams.desired_breed}`;
+    return `Барања за ${searchParams.desired_breed}`;
   }
 
   // If only category is selected, show category name
   if (searchParams.category && categoryName) {
-    return `Партнери: ${categoryName}`;
+    return categoryName;
   }
 
   // If only location is selected, show location
   if (searchParams.location) {
-    return `Партнери во ${searchParams.location}`;
+    return `Барања во ${searchParams.location}`;
   }
 
-  return "Сите партнери";
+  return "Сите барања за партнер";
 }
 
-// Add revalidation to improve performance
-export const revalidate = 60; // Revalidate this page every 60 seconds
+// Revalidate this page every 60 seconds
 
 export default async function FindPartnerPage(props: PageProps) {
   const searchParams = await props.searchParams;
@@ -70,6 +76,36 @@ export default async function FindPartnerPage(props: PageProps) {
     partner_images(url, is_primary)
   `);
 
+  // Apply search query if provided
+  if (searchParams.search) {
+    const titleSearchConditions = createBilingualSearchFilter("title", searchParams.search);
+    const descriptionSearchConditions = createBilingualSearchFilter("description", searchParams.search);
+
+    // Get breeds that match the search query
+    const {data: matchingBreeds} = await supabase
+      .from("breeds")
+      .select("name")
+      .or(createBilingualSearchFilter("name", searchParams.search).join(","));
+
+    // Create breed search conditions
+    const breedSearchConditions: string[] = [];
+    if (matchingBreeds && matchingBreeds.length > 0) {
+      // Create an array of breed names for the IN condition
+      const breedNames = matchingBreeds.map((breed) => `'${breed.name.replace(/'/g, "''")}'`);
+      breedSearchConditions.push(`desired_breed.in.(${breedNames.join(",")})`);
+    }
+
+    // Also search in dog breed field
+    const dogBreedSearchConditions = createBilingualSearchFilter("dog_breed", searchParams.search);
+
+    // Combine all search conditions with OR
+    const searchConditions = [...titleSearchConditions, ...descriptionSearchConditions, ...breedSearchConditions, ...dogBreedSearchConditions];
+
+    if (searchConditions.length > 0) {
+      query = query.or(searchConditions.join(","));
+    }
+  }
+
   // Apply filters
   if (searchParams.category) {
     query = query.eq("category", searchParams.category);
@@ -77,7 +113,20 @@ export default async function FindPartnerPage(props: PageProps) {
 
   // Add breed filtering using the breed name
   if (searchParams.desired_breed) {
-    query = query.eq("desired_breed", searchParams.desired_breed);
+    // Get breed data from the database
+    const {data: breedData} = await supabase
+      .from("breeds")
+      .select("id, name")
+      .or(createBilingualSearchFilter("name", searchParams.desired_breed).join(","))
+      .limit(1);
+
+    if (breedData && breedData.length > 0) {
+      // Use the exact breed name from the database
+      query = query.eq("desired_breed", breedData[0].name);
+    } else {
+      // Fallback to direct comparison if breed not found in database
+      query = query.eq("desired_breed", searchParams.desired_breed);
+    }
   }
 
   if (searchParams.desired_gender) {
@@ -85,7 +134,20 @@ export default async function FindPartnerPage(props: PageProps) {
   }
 
   if (searchParams.location) {
-    query = query.eq("location", searchParams.location);
+    // Get location data from the database
+    const {data: locationData} = await supabase
+      .from("locations")
+      .select("id, name")
+      .or(createBilingualSearchFilter("name", searchParams.location).join(","))
+      .limit(1);
+
+    if (locationData && locationData.length > 0) {
+      // Use the exact location name from the database
+      query = query.eq("location", locationData[0].name);
+    } else {
+      // Fallback to direct comparison if location not found in database
+      query = query.eq("location", searchParams.location);
+    }
   }
 
   if (searchParams.pedigree_required === "true") {
@@ -176,8 +238,8 @@ export default async function FindPartnerPage(props: PageProps) {
           {processedListings.length === 0 ? (
             <div className="flex h-[450px] max-w-4xl items-center justify-center rounded-lg border border-dashed">
               <div className="mx-auto max-w-[420px] text-center">
-                <Heart className="mx-auto h-12 w-12 text-primary/50" />
-                <h3 className="mt-4 text-lg font-semibold">Нема пронајдено партнери</h3>
+                <Heart className="mx-auto h-12 w-12 text-secondary/50" />
+                <h3 className="mt-4 text-lg font-semibold">Нема пронајдено барања</h3>
                 <p className="mt-2 text-sm text-muted-foreground">Променете ги филтрите или објавете ново барање.</p>
               </div>
             </div>

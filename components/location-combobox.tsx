@@ -7,6 +7,7 @@ import {Button} from "@/components/ui/button";
 import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem} from "@/components/ui/command";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
 import {createClient} from "@/lib/supabase/client";
+import {normalizeForSearch} from "@/lib/utils/transliteration";
 
 type LocationComboboxProps = {
   value?: string;
@@ -17,6 +18,7 @@ type LocationComboboxProps = {
 export function LocationCombobox({value, onChange, className}: LocationComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [locations, setLocations] = React.useState<{id: number; name: string}[]>([]);
+  const [searchQuery, setSearchQuery] = React.useState("");
 
   React.useEffect(() => {
     const fetchLocations = async () => {
@@ -30,6 +32,21 @@ export function LocationCombobox({value, onChange, className}: LocationComboboxP
     fetchLocations();
   }, []);
 
+  // Filter locations based on search query, supporting both Latin and Cyrillic
+  const filteredLocations = React.useMemo(() => {
+    if (!searchQuery) return locations;
+
+    const normalizedSearchTerms = normalizeForSearch(searchQuery);
+
+    return locations.filter((location) => {
+      // Get normalized versions of the location name
+      const normalizedLocationNames = normalizeForSearch(location.name);
+
+      // Check if any normalized search term matches any normalized location name
+      return normalizedSearchTerms.some((searchTerm) => normalizedLocationNames.some((locationName) => locationName.includes(searchTerm)));
+    });
+  }, [locations, searchQuery]);
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -40,16 +57,17 @@ export function LocationCombobox({value, onChange, className}: LocationComboboxP
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
         <Command>
-          <CommandInput placeholder="Пребарајте локација..." />
+          <CommandInput placeholder="Пребарајте локација..." value={searchQuery} onValueChange={setSearchQuery} />
           <CommandEmpty>Не е пронајдена локација.</CommandEmpty>
           <CommandGroup className="max-h-64 overflow-auto">
-            {locations.map((location) => (
+            {filteredLocations.map((location) => (
               <CommandItem
                 key={location.id}
                 value={location.name}
                 onSelect={(currentValue) => {
                   onChange?.(currentValue);
                   setOpen(false);
+                  setSearchQuery("");
                 }}>
                 <Check className={cn("mr-2 h-4 w-4", value === location.name ? "opacity-100" : "opacity-0")} />
                 {location.name}

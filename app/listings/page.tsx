@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {createClient} from "@/lib/supabase/server";
+import {createBilingualSearchFilter} from "@/lib/utils/server-transliteration";
 
 import ListingsFilters from "@/components/listings/filters";
 import SortSelect from "@/components/listings/sort-select";
@@ -19,6 +20,7 @@ interface SearchParams {
   pedigree?: string;
   vaccinated?: string;
   sort?: string;
+  search?: string;
 }
 
 interface PageProps {
@@ -27,6 +29,11 @@ interface PageProps {
 }
 
 function getListingTitle(searchParams: SearchParams, categoryName?: string | null) {
+  // If search query is provided, show search results title
+  if (searchParams.search) {
+    return `Резултати за "${searchParams.search}"`;
+  }
+
   // If breed is selected, show only breed
   if (searchParams.breed) {
     return searchParams.breed;
@@ -70,6 +77,29 @@ export default async function ListingsPage(props: PageProps) {
     `
   );
 
+  // Apply search query if provided
+  if (searchParams.search) {
+    const titleSearchConditions = createBilingualSearchFilter("title", searchParams.search);
+    const descriptionSearchConditions = createBilingualSearchFilter("description", searchParams.search);
+
+    // Get breed IDs that match the search query
+    const {data: matchingBreeds} = await supabase.from("breeds").select("id").or(createBilingualSearchFilter("name", searchParams.search).join(","));
+
+    // Create breed search conditions
+    const breedSearchConditions: string[] = [];
+    if (matchingBreeds && matchingBreeds.length > 0) {
+      const breedIds = matchingBreeds.map((breed) => breed.id);
+      breedSearchConditions.push(`breed_id.in.(${breedIds.join(",")})`);
+    }
+
+    // Combine all search conditions with OR
+    const searchConditions = [...titleSearchConditions, ...descriptionSearchConditions, ...breedSearchConditions];
+
+    if (searchConditions.length > 0) {
+      query = query.or(searchConditions.join(","));
+    }
+  }
+
   // Apply filters
   if (searchParams.type) {
     query = query.eq("listing_type", searchParams.type);
@@ -81,10 +111,22 @@ export default async function ListingsPage(props: PageProps) {
 
   // Add breed filtering using the breed name
   if (searchParams.breed) {
-    const {data: breedData} = await supabase.from("breeds").select("id").eq("name", searchParams.breed).single();
+    // Get breed data from the database
+    const {data: breedData} = await supabase
+      .from("breeds")
+      .select("id, name")
+      .or(createBilingualSearchFilter("name", searchParams.breed).join(","))
+      .limit(1);
 
-    if (breedData) {
-      query = query.eq("breed_id", breedData.id);
+    if (breedData && breedData.length > 0) {
+      // Use the exact breed ID from the database
+      query = query.eq("breed_id", breedData[0].id);
+    } else {
+      // Try direct comparison as fallback
+      const {data: directBreedData} = await supabase.from("breeds").select("id").eq("name", searchParams.breed).single();
+      if (directBreedData) {
+        query = query.eq("breed_id", directBreedData.id);
+      }
     }
   }
 
@@ -103,7 +145,20 @@ export default async function ListingsPage(props: PageProps) {
   }
 
   if (searchParams.location) {
-    query = query.eq("location", searchParams.location);
+    // Get location data from the database
+    const {data: locationData} = await supabase
+      .from("locations")
+      .select("id, name")
+      .or(createBilingualSearchFilter("name", searchParams.location).join(","))
+      .limit(1);
+
+    if (locationData && locationData.length > 0) {
+      // Use the exact location name from the database
+      query = query.eq("location", locationData[0].name);
+    } else {
+      // Fallback to direct comparison if location not found in database
+      query = query.eq("location", searchParams.location);
+    }
   }
 
   if (searchParams.pedigree === "true") {

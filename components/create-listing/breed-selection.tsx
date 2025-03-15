@@ -4,6 +4,7 @@ import {useFormContext} from "react-hook-form";
 import {createClient} from "@/lib/supabase/client";
 import {Check, ChevronsUpDown, Search} from "lucide-react";
 import {cn} from "@/lib/utils";
+import {normalizeForSearch} from "@/lib/utils/transliteration";
 
 import {FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
@@ -61,8 +62,19 @@ export function BreedSelection({category}: BreedSelectionProps) {
     fetchBreeds();
   }, [category]);
 
+  // Filter breeds based on search query, supporting both Latin and Cyrillic
   const filteredBreeds = React.useMemo(() => {
-    return breeds.filter((breed) => breed.name.toLowerCase().includes(search.toLowerCase()));
+    if (!search) return breeds;
+
+    const normalizedSearchTerms = normalizeForSearch(search);
+
+    return breeds.filter((breed) => {
+      // Get normalized versions of the breed name
+      const normalizedBreedNames = normalizeForSearch(breed.name);
+
+      // Check if any normalized search term matches any normalized breed name
+      return normalizedSearchTerms.some((searchTerm) => normalizedBreedNames.some((breedName) => breedName.includes(searchTerm)));
+    });
   }, [breeds, search]);
 
   const containerVariants = {
@@ -128,6 +140,7 @@ export function BreedSelection({category}: BreedSelectionProps) {
                                   field.onChange(breed.name);
                                   form.setValue("breed_id", breed.id);
                                   setOpen(false);
+                                  setSearch(""); // Clear search when selection is made
                                 }}
                                 className={cn(
                                   "relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50 hover:bg-accent hover:text-accent-foreground",
