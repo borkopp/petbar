@@ -23,13 +23,13 @@ export default function PetDetails({age, gender, breed, color, weight, pedigree,
       {/* Badges */}
       <div className="flex flex-wrap gap-2">
         {gender && (
-          <Badge variant="secondary" className="flex items-center gap-1">
+          <Badge variant="outline" className="flex items-center gap-1">
             {gender === "male" ? <Mars className="h-4 w-4 " /> : <Venus className="h-4 w-4" />}
             <span>{gender === "male" ? "Машко" : "Женско"}</span>
           </Badge>
         )}
         {age && (
-          <Badge variant="secondary" className="flex items-center gap-1">
+          <Badge variant="outline" className="flex items-center gap-1">
             <Calendar className="h-3 w-3" />
             <span>
               {age} {age === 1 ? "месец" : "месеци"}
@@ -37,19 +37,19 @@ export default function PetDetails({age, gender, breed, color, weight, pedigree,
           </Badge>
         )}
         {pedigree && (
-          <Badge variant="secondary" className="flex items-center gap-1">
+          <Badge variant="outline" className="flex items-center gap-1">
             <Award className="h-3 w-3" />
             <span>Педигре</span>
           </Badge>
         )}
         {vaccine && (
-          <Badge variant="secondary" className="flex items-center gap-1">
+          <Badge variant="outline" className="flex items-center gap-1">
             <Syringe className="h-3 w-3" />
             <span>Вакцинирано</span>
           </Badge>
         )}
 
-        {age !== null && age <= 1 && <Badge variant="secondary">Кученце</Badge>}
+        {age !== null && age <= 1 && <Badge variant="outline">Кученце</Badge>}
       </div>
 
       {/* Details Grid */}
