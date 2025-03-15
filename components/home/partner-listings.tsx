@@ -63,7 +63,7 @@ export async function PartnerListings() {
   }));
 
   return (
-    <section className="py-8 md:py-16 font-rubik">
+    <section className="py-16 md:py-32 font-rubik">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between mb-6 md:mb-12 px-6 max-w-6xl mx-auto">
           <h2 className="text-xl md:text-2xl font-medium">Најнови барања за партнери</h2>
