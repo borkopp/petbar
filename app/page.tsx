@@ -10,17 +10,17 @@ export default function Home() {
     <main>
       <Hero />
       <NewestListings />
-      <div className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[600px] overflow-hidden mt-16 bg-gray-50">
+      <div className="relative w-full min-h-[65vh] overflow-hidden mt-16 bg-gray-50">
         <picture>
           <source srcSet="/banner.webp" type="image/webp" />
-          <Image src="/banner.png" alt="dog-banner" fill priority quality={90} sizes="100vw" className="object-contain" />
+          <Image src="/banner.png" alt="dog-banner" fill priority quality={90} sizes="100vw" className="object-contain object-center" />
         </picture>
       </div>
       <PartnerListings />
-      <div className="relative w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[600px] overflow-hidden mt-16 bg-gray-50">
+      <div className="relative w-full min-h-[65vh] overflow-hidden mt-16 bg-gray-50">
         <picture>
           <source srcSet="/banner2.webp" type="image/webp" />
-          <Image src="/banner2.png" alt="dog-banner-2" fill priority quality={90} sizes="100vw" className="object-contain" />
+          <Image src="/banner2.png" alt="dog-banner-2" fill priority quality={90} sizes="100vw" className="object-contain object-center" />
         </picture>
       </div>
       <PetFocusedSection />

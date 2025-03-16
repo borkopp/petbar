@@ -1,0 +1,18 @@
+[install]
+# Use exact versions by default
+exact = true
+
+# Install peer dependencies automatically
+peer = true
+
+# Use the Node.js resolution algorithm
+node-resolution = true
+
+[install.cache]
+# Enable the global cache
+dir = ".bun/cache"
+disable = false
+
+[test]
+# Use the default test configuration
+coverage = true 
