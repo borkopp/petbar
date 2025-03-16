@@ -9,8 +9,10 @@ export async function DELETE() {
     const supabase = createRouteHandlerClient({cookies});
     
     // Get the current user
-    
-    const {data: {user}, error: userError} = await supabase.auth.getUser();
+    const {
+      data: {user},
+      error: userError
+    } = await supabase.auth.getUser();
     
     if (userError || !user) {
       return NextResponse.json(
