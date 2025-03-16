@@ -5,31 +5,16 @@ import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {Button} from "@/components/ui/button";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import {Skeleton} from "@/components/ui/skeleton";
-import {AlertTriangleIcon, CheckCircle2Icon, MailIcon, TrashIcon, UserIcon} from "lucide-react";
+import {CheckCircle2Icon, MailIcon, UserIcon} from "lucide-react";
 import {obfuscateUsername} from "@/lib/utils/obfuscate";
 import {useEffect, useState} from "react";
 import {createClient} from "@/lib/supabase/client";
 import type {Tables} from "@/database.types";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {useRouter} from "next/navigation";
-import {toast} from "sonner";
 
 export function UserProfile() {
   const {user, isLoading, signOut} = useAuth();
   const [profile, setProfile] = useState<Tables<"profiles"> | null>(null);
   const [profileLoading, setProfileLoading] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const router = useRouter();
 
   useEffect(() => {
     async function fetchProfile() {
@@ -47,43 +32,6 @@ export function UserProfile() {
 
     fetchProfile();
   }, [user]);
-
-  const handleDeleteAccount = async () => {
-    if (!user) return;
-
-    try {
-      setIsDeleting(true);
-
-      // Call the server API endpoint to delete the user account
-      const response = await fetch("/api/user/delete", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to delete account");
-      }
-
-      // Sign out after successful deletion
-      await signOut();
-
-      // Redirect to home page
-      router.push("/");
-
-      // Show success toast
-      toast.success("Вашата сметка беше успешно избришана.");
-    } catch (error) {
-      console.error("Error deleting account:", error);
-
-      // Show error toast
-      toast.error(error instanceof Error ? error.message : "Настана грешка при бришење на сметката.");
-    } finally {
-      setIsDeleting(false);
-    }
-  };
 
   if (isLoading || profileLoading) {
     return (
@@ -271,36 +219,6 @@ export function UserProfile() {
             </div>
 
             <div className="pt-4 space-y-3">
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="destructive" className="w-full" size="lg" disabled={isDeleting}>
-                    <TrashIcon className="h-4 w-4 mr-2" />
-                    {isDeleting ? "Бришење..." : "Избриши сметка"}
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle className="flex items-center gap-2">
-                      <AlertTriangleIcon className="h-5 w-5 text-destructive" />
-                      Избриши сметка
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Дали сте сигурни дека сакате да ја избришете вашата сметка? Оваа акција е неповратна и сите ваши податоци ќе бидат трајно
-                      избришани.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Откажи</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={handleDeleteAccount}
-                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                      disabled={isDeleting}>
-                      {isDeleting ? "Бришење..." : "Избриши сметка"}
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-
               <Button variant="outline" className="w-full" onClick={signOut} size="lg">
                 <svg className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path
