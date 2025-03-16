@@ -1,29 +1,23 @@
 "use client";
 
 import {useRouter} from "next/navigation";
-import {useEffect, useState} from "react";
-import {createClient} from "@/lib/supabase/client";
-import {Database} from "@/database.types";
 import {SearchBar} from "@/components/search-bar";
 import Image from "next/image";
 
-type Category = Database["public"]["Tables"]["categories"]["Row"];
+// Static categories data
+const categories = [
+  {id: 1, name: "Кучиња", slug: "dog"},
+  {id: 2, name: "Мачки", slug: "cat"},
+  {id: 3, name: "Коњи", slug: "horse"},
+  {id: 4, name: "Птици", slug: "bird"},
+  {id: 5, name: "Риби", slug: "fish"},
+  {id: 6, name: "Рептили", slug: "reptile"},
+  {id: 7, name: "Мали миленичиња", slug: "smallpet"},
+  {id: 8, name: "Фармски животни", slug: "farm"},
+];
 
 export function Hero() {
   const router = useRouter();
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchCategories() {
-      const supabase = createClient();
-      const {data} = await supabase.from("categories").select("*").order("id");
-      setCategories(data || []);
-      setIsLoading(false);
-    }
-
-    fetchCategories();
-  }, []);
 
   const handleCategoryClick = (slug: string) => {
     router.push(`/listings?category=${slug}`);
@@ -53,17 +47,14 @@ export function Hero() {
 
           {/* Category Links */}
           <div className="flex flex-wrap justify-center gap-4 mt-8">
-            {!isLoading &&
-              categories
-                .slice(0, 2)
-                .map((category) => (
-                  <CategoryLink
-                    key={category.id}
-                    icon={getCategoryIcon(category.slug)}
-                    label={category.name}
-                    onClick={() => handleCategoryClick(category.slug)}
-                  />
-                ))}
+            {categories.slice(0, 2).map((category) => (
+              <CategoryLink
+                key={category.id}
+                icon={getCategoryIcon(category.slug)}
+                label={category.name}
+                onClick={() => handleCategoryClick(category.slug)}
+              />
+            ))}
             <CategoryLink icon="🐾" label="Сите животни" onClick={() => router.push("/listings")} />
             <CategoryLink icon="💖" label="Пронајди партнер" onClick={() => router.push("/find-partner")} />
           </div>
