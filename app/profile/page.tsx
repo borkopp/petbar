@@ -63,7 +63,6 @@ export default async function ProfilePage({searchParams}: PageProps) {
 
   return (
     <div className="container mx-auto py-10 px-4 md:px-0">
-      <h1 className="text-3xl font-bold mb-8">Мојот профил</h1>
       <div className="mb-10 w-full">
         <UserProfile />
       </div>

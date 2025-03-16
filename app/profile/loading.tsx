@@ -3,9 +3,6 @@ import {Skeleton} from "@/components/ui/skeleton";
 export default function ProfileLoading() {
   return (
     <div className="container mx-auto py-10 px-4 md:px-0">
-      {/* Page Title */}
-      <Skeleton className="h-10 w-48 mb-8" />
-
       {/* User Profile Card */}
       <div className="mb-10 w-full">
         <div className="w-full overflow-hidden border rounded-lg shadow-lg">

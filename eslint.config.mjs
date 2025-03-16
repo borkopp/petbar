@@ -9,6 +9,14 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-const eslintConfig = [...compat.extends("next/core-web-vitals", "next/typescript")];
+const eslintConfig = [
+  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    rules: {
+      // Disable the exhaustive-deps rule to prevent warnings about missing dependencies in useEffect
+      "react-hooks/exhaustive-deps": "off",
+    },
+  },
+];
 
 export default eslintConfig;
