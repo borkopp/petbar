@@ -13,7 +13,7 @@ import Link from "next/link";
 import {useRouter} from "next/navigation";
 import {Loader2} from "lucide-react";
 import {PasswordInput} from "@/components/ui/password-input";
-import {BlurImage} from "@/components/ui/blur-image";
+import Image from "next/image";
 
 // Helper function to translate Supabase error messages to Macedonian
 function translateErrorMessage(error: string): string {
@@ -58,14 +58,9 @@ function SubmitButton() {
 
 interface LoginFormProps {
   redirectTo?: string;
-  loginBgPlaceholder?: {
-    blurDataURL: string;
-    width?: number;
-    height?: number;
-  };
 }
 
-export function LoginForm({redirectTo, loginBgPlaceholder}: LoginFormProps) {
+export function LoginForm({redirectTo}: LoginFormProps) {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -240,14 +235,12 @@ export function LoginForm({redirectTo, loginBgPlaceholder}: LoginFormProps) {
             </div>
           </form>
           <div className="relative hidden bg-muted md:block">
-            <BlurImage
+            <Image
               src="/login-bg.png"
               alt="Image"
-              width={loginBgPlaceholder?.width || 1380}
-              height={loginBgPlaceholder?.height || 1500}
-              blurDataURL={loginBgPlaceholder?.blurDataURL}
+              width={1380}
+              height={1500}
               className="h-full w-full object-cover object-left dark:brightness-[0.2] dark:grayscale"
-              loadingClassName="animate-pulse"
               priority
             />
           </div>
