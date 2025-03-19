@@ -2,8 +2,7 @@ import {notFound} from "next/navigation";
 import {createClient} from "@/lib/supabase/server";
 import ListingGallery from "@/components/listings/listing-gallery";
 import ListingInfo from "@/components/listings/listing-info";
-import SellerCard from "@/components/listings/seller-card";
-import ContactInfo from "@/components/listings/contact-info";
+import SellerSection from "@/components/listings/seller-section";
 import PetDetails from "@/components/listings/pet-details";
 import ShareSection from "@/components/listings/share-section";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
@@ -86,8 +85,12 @@ export default async function ListingPage(props: PageProps) {
           </TabsContent>
 
           <TabsContent value="seller" className="mt-4 space-y-6">
-            <SellerCard seller={listing.profiles} responseTime="1 час" responseRate={100} />
-            <ContactInfo location={listing.location} phone={listing.phone || "Нема број"} />
+            <SellerSection 
+              seller={listing.profiles}
+              location={listing.location}
+              phone={listing.phone}
+              listingType="pet"
+            />
           </TabsContent>
         </Tabs>
         <div className="flex flex-col gap-4">
@@ -112,7 +115,7 @@ export default async function ListingPage(props: PageProps) {
           <ListingGallery images={listing.pet_images} />
 
           <div>
-            <h1 className="text-3xl font-semibold mb-6">{listing.title}</h1>
+            <h1 className="text-3xl font-semibold font-rubik mb-6">{listing.title}</h1>
 
             <PetDetails
               age={listing.age}
@@ -130,8 +133,12 @@ export default async function ListingPage(props: PageProps) {
         {/* Right section - Info */}
         <div className="lg:col-span-2 space-y-6">
           <ListingInfo id={listing.id} breed={listing.breed} price={listing.price} location={listing.location} sellerId={listing.profiles.id} />
-          <SellerCard seller={listing.profiles} responseTime="1 час" responseRate={100} />
-          <ContactInfo location={listing.location} phone={listing.phone || "Нема број"} />
+          <SellerSection 
+            seller={listing.profiles}
+            location={listing.location}
+            phone={listing.phone}
+            listingType="pet"
+          />
           <ShareSection title={listing.title} />
         </div>
       </div>

@@ -9,6 +9,7 @@ import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {Button} from "@/components/ui/button";
 import {Heart, MessageCircle} from "lucide-react";
 import Link from "next/link";
+import SellerSection from "@/components/listings/seller-section";
 
 interface PageProps {
   params: Promise<{id: string}>;
@@ -186,7 +187,7 @@ export default async function PartnerListingPage(props: PageProps) {
 
         {/* Right section - Info */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white p-6 rounded-lg border shadow-sm">
+          <div className="  ]">
             <div className="space-y-4">
               <div className="flex justify-between items-start">
                 <div>
@@ -200,7 +201,7 @@ export default async function PartnerListingPage(props: PageProps) {
               </div>
               <div className="flex flex-col gap-3">
                 {listing.profiles && (
-                  <Button asChild className="w-full">
+                  <Button asChild className="w-full bg-secondary hover:bg-secondary/80">
                     <Link href={`/chat/${listing.profiles.id}?listing=${listing.id}`}>
                       <MessageCircle className="mr-2 h-5 w-5" />
                       Испрати порака
@@ -214,8 +215,12 @@ export default async function PartnerListingPage(props: PageProps) {
               </div>
             </div>
           </div>
-          {listing.profiles && <OwnerCard owner={listing.profiles} responseTime="1 час" responseRate={100} />}
-          <ContactInfo location={listing.location} phone={listing.phone || undefined} />
+          <SellerSection 
+            seller={listing.profiles}
+            location={listing.location}
+            phone={listing.phone}
+            listingType="partner"
+          />
           <ShareSection title={listing.title} />
         </div>
       </div>

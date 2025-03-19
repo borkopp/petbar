@@ -79,7 +79,7 @@ export default function ListingCard({
           {/* Price */}
           <div>
             {price ? (
-              <p className="text-lg md:text-xl text-muted-foreground font-semibold">{price.toLocaleString()} ден</p>
+              <p className="text-lg md:text-xl text-muted-foreground font-rubik font-medium">{price.toLocaleString()} ден</p>
             ) : (
               <Badge variant="outline" className="text-base px-3 py-1">
                 За вдомување

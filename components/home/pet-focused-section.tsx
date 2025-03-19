@@ -45,9 +45,9 @@ export function PetFocusedSection() {
             <p className="text-gray-600 mb-4 text-sm">
               Добросостојбата на миленичињата е наш приоритет. Работиме за да обезбедиме безбедна платформа за секое животинче.
             </p>
-            <Link href="/about" className="text-primary font-medium hover:underline text-sm mb-6">
+            {/* <Link href="/about" className="text-primary font-medium hover:underline text-sm mb-6">
               Дознајте повеќе &rarr;
-            </Link>
+            </Link> */}
             <div className="mt-auto">
               <Image src="/icons/love.svg" alt="Pet care illustration" width={200} height={200} className="opacity-80" />
             </div>
