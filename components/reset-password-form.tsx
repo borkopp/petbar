@@ -70,9 +70,9 @@ export function ResetPasswordForm() {
               </h3>
               <p className="text-sm text-muted-foreground max-w-sm">
                 Испративме линк за ресетирање на лозинката на{" "}
-                <br />
+
                 <span className="font-medium ">{emailSent}</span>.
-                <br />
+
                 Проверете ја вашата е-пошта и следете ги инструкциите.
               </p>
             </div>
@@ -115,7 +115,7 @@ export function ResetPasswordForm() {
               <FormLabel>Е-пошта</FormLabel>
               <FormControl>
                 <Input 
-                  placeholder="вашата@пошта.мк" 
+                  placeholder="example@email.com" 
                   type="email" 
                   autoComplete="email" 
                   disabled={isLoading} 
@@ -140,8 +140,9 @@ export function ResetPasswordForm() {
           )}
         </Button>
       </form>
-      <div className="mt-4 text-center text-sm">
-        <Link href="/login" className="text-primary underline underline-offset-4 hover:text-primary/90">
+      <div className="mt-4 text-center text-sm flex justify-center">
+        <Link href="/login" className="text-muted-foreground hover:underline underline-offset-4 font-rubik flex items-center gap-1 ">
+          <ArrowLeft className="h-4 w-4" />
           Назад кон најава
         </Link>
       </div>

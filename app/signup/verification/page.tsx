@@ -14,7 +14,7 @@ export default async function VerificationPage(props: PageProps) {
   const email = searchParams.email || "";
   
   return (
-    <div className="container min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center py-10">
+    <div className=" h-[92vh] flex flex-col items-center justify-center py-10">
       <Card className="mx-auto max-w-md w-full">
         <CardContent className="p-0">
           <div className="p-6 md:p-8 space-y-6">
