@@ -12,6 +12,7 @@ import {FooterWrapper} from "@/components/footer-wrapper";
 import {createClient} from "@/lib/supabase/server";
 import {UnreadMessagesProvider} from "@/lib/context/unread-messages-context";
 import {AuthProvider} from "@/lib/context/auth-provider";
+import {SpeedInsights} from "@vercel/speed-insights/next";
 
 const rubik = Rubik({
   subsets: ["latin", "cyrillic"],
@@ -63,6 +64,7 @@ export default async function RootLayout({
           </Suspense>
           <Analytics />
         </AuthProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
