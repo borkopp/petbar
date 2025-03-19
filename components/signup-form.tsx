@@ -154,6 +154,9 @@ export function SignupForm({className, ...props}: React.ComponentProps<"div">) {
                       </FormItem>
                     )}
                   />
+                  <div className="text-sm text-muted-foreground">
+                    По регистрацијата ќе добиете е-порака за потврда на вашата сметка.
+                  </div>
                   <SubmitButton />
                 </form>
               </Form>

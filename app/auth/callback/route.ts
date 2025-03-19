@@ -4,10 +4,13 @@ import { NextRequest, NextResponse } from 'next/server'
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
+  const type = requestUrl.searchParams.get('type')
+  const isSignUpConfirmation = type === 'signup'
   
   console.log("Auth callback route hit", { 
     url: request.url,
-    hasCode: !!code 
+    hasCode: !!code,
+    type
   })
   
   if (code) {
@@ -25,8 +28,14 @@ export async function GET(request: NextRequest) {
       
       console.log("Successfully exchanged code for session", { 
         user: data.user?.id,
-        session: !!data.session
+        session: !!data.session,
+        emailConfirmed: data.user?.email_confirmed_at
       })
+      
+      // For email confirmations, redirect to the verified page
+      if (isSignUpConfirmation || (data.user && data.user.email_confirmed_at)) {
+        return NextResponse.redirect(`${requestUrl.origin}/auth/verified`)
+      }
     } catch (e) {
       console.error("Exception in auth callback:", e)
       return NextResponse.redirect(`${requestUrl.origin}?auth_error=unexpected_error`)

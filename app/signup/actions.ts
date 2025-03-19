@@ -32,7 +32,7 @@ export async function signup(prevState: State, formData: FormData): Promise<Stat
   }
 
   revalidatePath('/')
-  redirect('/')
+  redirect(`/signup/verification?email=${encodeURIComponent(email)}`)
 }
 
 export async function signUpWithGoogle() {

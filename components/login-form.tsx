@@ -103,7 +103,7 @@ export function LoginForm({redirectTo}: LoginFormProps) {
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Лозинка</Label>
-                  <Link href="/forgot-password" className="ml-auto text-xs underline-offset-2 hover:underline">
+                  <Link href="/reset-password" className="ml-auto text-xs underline-offset-2 hover:underline">
                     Ја заборавивте лозинката?
                   </Link>
                 </div>
