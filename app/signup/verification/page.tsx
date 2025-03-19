@@ -4,15 +4,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Mail, CheckCircle2, ArrowLeft } from "lucide-react";
 import { ResendVerificationButton } from "@/components/resend-verification-button";
 
-interface VerificationPageProps {
-  searchParams: { email?: string };
+interface PageProps {
+  params: Promise<object>;
+  searchParams: Promise<{ email?: string }>;
 }
 
-export default function VerificationPage({ searchParams }: VerificationPageProps) {
+export default async function VerificationPage(props: PageProps) {
+  const searchParams = await props.searchParams;
   const email = searchParams.email || "";
   
   return (
-    <div className="container flex h-screen flex-col items-center justify-center">
+    <div className="container min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center py-10">
       <Card className="mx-auto max-w-md w-full">
         <CardContent className="p-0">
           <div className="p-6 md:p-8 space-y-6">

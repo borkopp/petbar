@@ -3,9 +3,17 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle } from "lucide-react";
 
-export default function VerifiedPage() {
+interface PageProps {
+  params: Promise<object>;
+  searchParams: Promise<object>;
+}
+
+export default async function VerifiedPage(props: PageProps) {
+  // We don't need to use searchParams in this case, but still need to follow Next.js 15 pattern
+  await props.searchParams;
+  
   return (
-    <div className="container flex h-screen flex-col items-center justify-center">
+    <div className="container min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center py-10">
       <Card className="mx-auto max-w-md w-full">
         <CardContent className="p-0">
           <div className="p-6 md:p-8 space-y-6">

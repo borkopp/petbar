@@ -3,9 +3,17 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, LockKeyhole } from "lucide-react";
 
-export default function PasswordResetSuccessPage() {
+interface PageProps {
+  params: Promise<object>;
+  searchParams: Promise<object>;
+}
+
+export default async function PasswordResetSuccessPage(props: PageProps) {
+  // We don't need to use searchParams in this case, but still need to follow Next.js 15 pattern
+  await props.searchParams;
+  
   return (
-    <div className="container flex h-screen flex-col items-center justify-center">
+    <div className="container min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center py-10">
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <Card>
           <CardContent className="pt-6 pb-6">
