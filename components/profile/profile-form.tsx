@@ -15,10 +15,7 @@ import {LocationCombobox} from "@/components/location-combobox";
 import type {Tables} from "@/database.types";
 
 const formSchema = z.object({
-  username: z.string().min(3, {
-    message: "Корисничкото име мора да содржи најмалку 3 карактери",
-  }),
-  full_name: z.string().min(2, {
+    full_name: z.string().min(2, {
     message: "Името мора да содржи најмалку 2 карактера",
   }),
   location: z.string({
@@ -39,7 +36,6 @@ export default function ProfileForm({profile}: ProfileFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: profile.username,
       full_name: profile.full_name || "",
       location: profile.location || "",
     },
@@ -52,7 +48,6 @@ export default function ProfileForm({profile}: ProfileFormProps) {
       const {error} = await supabase
         .from("profiles")
         .update({
-          username: values.username,
           full_name: values.full_name,
           location: values.location,
           updated_at: new Date().toISOString(),
@@ -75,20 +70,6 @@ export default function ProfileForm({profile}: ProfileFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({field}) => (
-            <FormItem>
-              <FormLabel>Е-пошта</FormLabel>
-              <FormControl>
-                <Input disabled {...field} />
-              </FormControl>
-              <p className="text-sm text-muted-foreground">Е-поштата не може да се промени</p>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
         <FormField
           control={form.control}
