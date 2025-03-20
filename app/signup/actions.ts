@@ -10,6 +10,7 @@ type State = {
 
 export async function signup(prevState: State, formData: FormData): Promise<State> {
   const email = formData.get('email') as string
+  const fullName = formData.get('fullName') as string
   const password = formData.get('password') as string
   const confirmPassword = formData.get('confirmPassword') as string
   
@@ -19,16 +20,35 @@ export async function signup(prevState: State, formData: FormData): Promise<Stat
 
   const supabase = await createClient()
 
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
       emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+      data: {
+        full_name: fullName,
+      }
     },
   })
 
   if (error) {
     return { error: error.message }
+  }
+
+  // Create profile entry if signup was successful
+  if (data?.user) {
+    const { error: profileError } = await supabase
+      .from('profiles')
+      .upsert({
+        id: data.user.id,
+        full_name: fullName,
+        username: email.split('@')[0],
+      });
+
+    if (profileError) {
+      console.error('Error creating profile:', profileError);
+      // We'll continue anyway since the auth was successful
+    }
   }
 
   revalidatePath('/')

@@ -20,7 +20,7 @@ import {PasswordInput} from "@/components/ui/password-input";
 function translateErrorMessage(error: string): string {
   // Map common Supabase error messages to Macedonian translations
   const errorTranslations: Record<string, string> = {
-    "User already registered": "Корисникот е веќе регистриран",
+    "User already registered": "Корисникот е веќe регистриран",
     "Email already in use": "Е-поштата е веќe во употреба",
     "Signup not allowed for this instance": "Регистрацијата не е дозволена",
     "Email rate limit exceeded": "Надминат е лимитот за обиди. Обидете се повторно подоцна",
@@ -44,6 +44,7 @@ function translateErrorMessage(error: string): string {
 const signupSchema = z
   .object({
     email: z.string().email("Внесете валидна е-пошта"),
+    fullName: z.string().min(2, "Внесете валидно име и презиме"),
     password: z
       .string()
       .min(8, "Лозинката мора да содржи најмалку 8 карактери")
@@ -74,6 +75,7 @@ export function SignupForm({className, ...props}: React.ComponentProps<"div">) {
     resolver: zodResolver(signupSchema),
     defaultValues: {
       email: "",
+      fullName: "",
       password: "",
       confirmPassword: "",
     },
@@ -83,6 +85,7 @@ export function SignupForm({className, ...props}: React.ComponentProps<"div">) {
     setError(null);
     const formData = new FormData();
     formData.append("email", data.email);
+    formData.append("fullName", data.fullName);
     formData.append("password", data.password);
     formData.append("confirmPassword", data.confirmPassword);
 
@@ -130,6 +133,19 @@ export function SignupForm({className, ...props}: React.ComponentProps<"div">) {
                   />
                   <FormField
                     control={form.control}
+                    name="fullName"
+                    render={({field}) => (
+                      <FormItem>
+                        <FormLabel>Име и презиме</FormLabel>
+                        <FormControl>
+                          <Input {...field} placeholder="Име Презиме" autoComplete="name" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
                     name="password"
                     render={({field}) => (
                       <FormItem>
@@ -154,9 +170,7 @@ export function SignupForm({className, ...props}: React.ComponentProps<"div">) {
                       </FormItem>
                     )}
                   />
-                  <div className="text-sm text-muted-foreground">
-                    По регистрацијата ќе добиете е-порака за потврда на вашата сметка.
-                  </div>
+                  <div className="text-sm text-muted-foreground">По регистрацијата ќе добиете е-порака за потврда на вашата сметка.</div>
                   <SubmitButton />
                 </form>
               </Form>
