@@ -65,18 +65,15 @@ export default function LazyListings({initialListings, pageSize = 10}: LazyListi
   const loadMoreListings = () => {
     setIsLoading(true);
 
-    // Simulate network delay (remove in production)
-    setTimeout(() => {
-      const nextPage = currentPage + 1;
-      const startIndex = (nextPage - 1) * pageSize;
-      const endIndex = startIndex + pageSize;
+    const nextPage = currentPage + 1;
+    const startIndex = (nextPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
 
-      const newListings = initialListings.slice(0, endIndex);
+    const newListings = initialListings.slice(0, endIndex);
 
-      setVisibleListings(newListings);
-      setCurrentPage(nextPage);
-      setIsLoading(false);
-    }, 500);
+    setVisibleListings(newListings);
+    setCurrentPage(nextPage);
+    setIsLoading(false);
   };
 
   return (
