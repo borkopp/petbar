@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle } from "lucide-react";
+import {Card, CardContent} from "@/components/ui/card";
+import {CheckCircle} from "lucide-react";
 
 interface PageProps {
   params: Promise<object>;
@@ -11,9 +11,9 @@ interface PageProps {
 export default async function VerifiedPage(props: PageProps) {
   // We don't need to use searchParams in this case, but still need to follow Next.js 15 pattern
   await props.searchParams;
-  
+
   return (
-    <div className="container min-h-[calc(100vh-4rem)] flex flex-col items-center justify-center py-10">
+    <div className=" h-[92vh] flex flex-col items-center justify-center py-10">
       <Card className="mx-auto max-w-md w-full">
         <CardContent className="p-0">
           <div className="p-6 md:p-8 space-y-6">
@@ -29,14 +29,10 @@ export default async function VerifiedPage(props: PageProps) {
 
             <div className="flex flex-col space-y-3">
               <Button asChild>
-                <Link href="/login">
-                  Најавете се
-                </Link>
+                <Link href="/login">Најавете се</Link>
               </Button>
               <Button asChild variant="outline">
-                <Link href="/">
-                  Кон почетна
-                </Link>
+                <Link href="/">Кон почетна</Link>
               </Button>
             </div>
           </div>
@@ -44,4 +40,4 @@ export default async function VerifiedPage(props: PageProps) {
       </Card>
     </div>
   );
-} 
+}
