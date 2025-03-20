@@ -1,11 +1,11 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 
 type State = {
   error: string | null;
+  success?: boolean;
   redirectTo?: string;
 }
 
@@ -26,7 +26,7 @@ export async function login(prevState: State, formData: FormData): Promise<State
   }
 
   revalidatePath('/')
-  redirect(redirectTo || '/')
+  return { error: null, success: true, redirectTo: redirectTo || '/' }
 }
 
 export async function signInWithGoogle() {

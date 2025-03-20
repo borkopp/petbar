@@ -7,8 +7,9 @@ import PetDetails from "@/components/listings/pet-details";
 import ShareSection from "@/components/listings/share-section";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {Button} from "@/components/ui/button";
-import {Heart, MessageCircle} from "lucide-react";
+import {MessageCircle} from "lucide-react";
 import Link from "next/link";
+import BookmarkButton from "@/components/listings/bookmark-button";
 
 interface PageProps {
   params: Promise<{id: string}>;
@@ -85,12 +86,7 @@ export default async function ListingPage(props: PageProps) {
           </TabsContent>
 
           <TabsContent value="seller" className="mt-4 space-y-6">
-            <SellerSection 
-              seller={listing.profiles}
-              location={listing.location}
-              phone={listing.phone}
-              listingType="pet"
-            />
+            <SellerSection seller={listing.profiles} location={listing.location} phone={listing.phone} listingType="pet" />
           </TabsContent>
         </Tabs>
         <div className="flex flex-col gap-4">
@@ -100,10 +96,7 @@ export default async function ListingPage(props: PageProps) {
               Испрати порака
             </Link>
           </Button>
-          <Button variant="outline" className="w-full">
-            <Heart className="mr-2 h-5 w-5" />
-            Зачувај во омилени
-          </Button>
+          <BookmarkButton listingId={listing.id} variant="full" />
         </div>
         <ShareSection title={listing.title} />
       </div>
@@ -133,12 +126,7 @@ export default async function ListingPage(props: PageProps) {
         {/* Right section - Info */}
         <div className="lg:col-span-2 space-y-6 self-start sticky top-24 h-fit max-h-[calc(100vh-6rem)] overflow-y-auto">
           <ListingInfo id={listing.id} breed={listing.breed} price={listing.price} location={listing.location} sellerId={listing.profiles.id} />
-          <SellerSection 
-            seller={listing.profiles}
-            location={listing.location}
-            phone={listing.phone}
-            listingType="pet"
-          />
+          <SellerSection seller={listing.profiles} location={listing.location} phone={listing.phone} listingType="pet" />
           <ShareSection title={listing.title} />
         </div>
       </div>

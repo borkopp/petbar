@@ -74,19 +74,26 @@ export function LoginForm({redirectTo}: LoginFormProps) {
               if (redirectTo) {
                 formData.append("redirectTo", redirectTo);
               }
+
               const result = await login(initialState, formData);
+
               if (result?.error) {
                 const macedonianError = translateErrorMessage(result.error);
                 setError(macedonianError);
                 toast.error("Грешка при најавување", {
                   description: macedonianError,
                 });
-              } else {
+              } else if (result?.success) {
+                // Show success toast before redirecting
                 toast.success("Добредојдовте назад!", {
                   description: "Успешно се најавивте на вашата сметка",
                 });
-                router.refresh();
-                router.push(redirectTo || "/");
+
+                // Wait a short time to ensure toast is displayed before redirect
+                setTimeout(() => {
+                  router.refresh();
+                  router.push(result.redirectTo || "/");
+                }, 500);
               }
             }}
             className="p-6 md:p-8">

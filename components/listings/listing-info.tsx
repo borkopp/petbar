@@ -1,10 +1,9 @@
 "use client";
 
-import {Heart} from "lucide-react";
 import {useRouter} from "next/navigation";
 import Link from "next/link";
-
 import {Button} from "@/components/ui/button";
+import BookmarkButton from "@/components/listings/bookmark-button";
 
 interface ListingInfoProps {
   id: string;
@@ -37,9 +36,7 @@ export default function ListingInfo({id, breed, price, location, sellerId}: List
         <Button className="flex-1 text-md py-6" onClick={handleContact}>
           Испрати порака
         </Button>
-        <Button variant="outline" size="icon" className="h-[52px] w-[52px]">
-          <Heart className="h-5 w-5" />
-        </Button>
+        <BookmarkButton listingId={id} />
       </div>
     </div>
   );
