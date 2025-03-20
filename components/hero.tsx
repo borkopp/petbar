@@ -7,7 +7,7 @@ import Image from "next/image";
 // Static categories data
 const categories = [
   {id: 1, name: "Кучиња", slug: "dog"},
-  {id: 2, name: "Мачки", slug: "cat"},
+  {id: 2, name: "Мачиња", slug: "cat"},
   {id: 3, name: "Коњи", slug: "horse"},
   {id: 4, name: "Птици", slug: "bird"},
   {id: 5, name: "Риби", slug: "fish"},
@@ -50,13 +50,13 @@ export function Hero() {
             {categories.slice(0, 2).map((category) => (
               <CategoryLink
                 key={category.id}
-                icon={getCategoryIcon(category.slug)}
+                iconSrc={getCategoryIconSrc(category.slug)}
                 label={category.name}
                 onClick={() => handleCategoryClick(category.slug)}
               />
             ))}
-            <CategoryLink icon="🐾" label="Сите животни" onClick={() => router.push("/listings")} />
-            <CategoryLink icon="💖" label="Пронајди партнер" onClick={() => router.push("/find-partner")} />
+            <CategoryLink iconSrc="/icons/pets-hero.svg" label="Сите животни" onClick={() => router.push("/listings")} />
+            <CategoryLink iconSrc="/icons/love-hero.svg" label="Пронајди партнер" onClick={() => router.push("/find-partner")} />
           </div>
         </div>
       </div>
@@ -64,27 +64,29 @@ export function Hero() {
   );
 }
 
-function CategoryLink({icon, label, onClick}: {icon: string; label: string; onClick: () => void}) {
+function CategoryLink({iconSrc, label, onClick}: {iconSrc: string; label: string; onClick: () => void}) {
   return (
     <button
       onClick={onClick}
       className="flex items-center space-x-2 bg-white shadow-lg hover:shadow-xl hover:bg-white text-black px-6 py-3 rounded-full transition-colors">
-      <span className="text-2xl">{icon}</span>
+      <div className="relative w-8 h-8">
+        <Image src={iconSrc} alt={label} width={32} height={32} className="object-contain" />
+      </div>
       <span className="font-medium">{label}</span>
     </button>
   );
 }
 
-function getCategoryIcon(slug: string): string {
+function getCategoryIconSrc(slug: string): string {
   const iconMap: Record<string, string> = {
-    dog: "🐕",
-    cat: "🐈",
-    horse: "🐎",
-    bird: "🦜",
-    fish: "🐠",
-    reptile: "🦎",
-    smallpet: "🐰",
-    farm: "🐄",
+    dog: "/icons/dog-hero.svg",
+    cat: "/icons/cat-hero.svg",
+    horse: "/icons/horse-hero.svg",
+    bird: "/icons/bird-hero.svg",
+    fish: "/icons/fish-hero.svg",
+    reptile: "/icons/reptile-hero.svg",
+    smallpet: "/icons/rabbit-hero.svg",
+    farm: "/icons/farm-hero.svg",
   };
-  return iconMap[slug] || "🐾";
+  return iconMap[slug] || "/pets-hero.svg";
 }
