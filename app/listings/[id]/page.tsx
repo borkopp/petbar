@@ -131,7 +131,7 @@ export default async function ListingPage(props: PageProps) {
         </div>
 
         {/* Right section - Info */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-6 self-start sticky top-24 h-fit max-h-[calc(100vh-6rem)] overflow-y-auto">
           <ListingInfo id={listing.id} breed={listing.breed} price={listing.price} location={listing.location} sellerId={listing.profiles.id} />
           <SellerSection 
             seller={listing.profiles}

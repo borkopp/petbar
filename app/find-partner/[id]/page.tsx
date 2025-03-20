@@ -186,33 +186,31 @@ export default async function PartnerListingPage(props: PageProps) {
         </div>
 
         {/* Right section - Info */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="  ]">
-            <div className="space-y-4">
-              <div className="flex justify-between items-start">
-                <div>
-                  <p className="text-sm text-muted-foreground">{listing.location}</p>
-                  {(listing.price !== undefined || listing.is_price_negotiable) && (
-                    <p className="text-2xl font-semibold mt-1">
-                      {listing.is_price_negotiable ? "По договор" : `${listing.price?.toLocaleString()} ден`}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <div className="flex flex-col gap-3">
-                {listing.profiles && (
-                  <Button asChild className="w-full bg-secondary hover:bg-secondary/80">
-                    <Link href={`/chat/${listing.profiles.id}?listing=${listing.id}`}>
-                      <MessageCircle className="mr-2 h-5 w-5" />
-                      Испрати порака
-                    </Link>
-                  </Button>
+        <div className="lg:col-span-2 space-y-6 self-start sticky top-24 h-fit max-h-[calc(100vh-6rem)] overflow-y-auto">
+          <div className="space-y-4">
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-sm text-muted-foreground">{listing.location}</p>
+                {(listing.price !== undefined || listing.is_price_negotiable) && (
+                  <p className="text-2xl font-semibold mt-1">
+                    {listing.is_price_negotiable ? "По договор" : `${listing.price?.toLocaleString()} ден`}
+                  </p>
                 )}
-                <Button variant="outline" className="w-full">
-                  <Heart className="mr-2 h-5 w-5" />
-                  Зачувај во омилени
-                </Button>
               </div>
+            </div>
+            <div className="flex flex-col gap-3">
+              {listing.profiles && (
+                <Button asChild className="w-full bg-secondary hover:bg-secondary/80">
+                  <Link href={`/chat/${listing.profiles.id}?listing=${listing.id}`}>
+                    <MessageCircle className="mr-2 h-5 w-5" />
+                    Испрати порака
+                  </Link>
+                </Button>
+              )}
+              <Button variant="outline" className="w-full">
+                <Heart className="mr-2 h-5 w-5" />
+                Зачувај во омилени
+              </Button>
             </div>
           </div>
           <SellerSection 
