@@ -215,7 +215,6 @@ export function PartnerListingForm({userId}: PartnerListingFormProps) {
       // Upload images
       if (images.length > 0) {
         toast.loading("Се прикачуваат сликите...", {id: "uploading-images"});
-        console.log(`Starting upload of ${images.length} images`);
         try {
           for (const [index, image] of images.entries()) {
             console.log(`Processing image ${index + 1}:`, {
@@ -226,7 +225,6 @@ export function PartnerListingForm({userId}: PartnerListingFormProps) {
 
             const fileExt = image.name.split(".").pop();
             const filePath = `${listing.id}/${index}.${fileExt}`;
-            console.log("Generated file path:", filePath);
 
             // Ensure user is authenticated before upload
             const {
@@ -254,17 +252,14 @@ export function PartnerListingForm({userId}: PartnerListingFormProps) {
               data: {publicUrl},
             } = supabase.storage.from("partner-images").getPublicUrl(filePath);
 
-            console.log(`Image ${index + 1} uploaded, public URL:`, publicUrl);
-
             // Insert image record in the partner_images table
             const imageData = {
               listing_id: listing.id,
               url: publicUrl,
               is_primary: index === 0,
             };
-            console.log(`Saving image record ${index + 1}:`, imageData);
 
-            const {data: imageRecord, error: imageError} = await supabase.from("partner_images").insert(imageData).select();
+            const {error: imageError} = await supabase.from("partner_images").insert(imageData).select();
 
             if (imageError) {
               console.error(`Error saving image record ${index + 1}:`, {
@@ -275,10 +270,7 @@ export function PartnerListingForm({userId}: PartnerListingFormProps) {
               });
               throw new Error(`Failed to save image record ${index + 1}: ${imageError.message || "Check Supabase logs for details"}`);
             }
-
-            console.log(`Image record ${index + 1} saved successfully:`, imageRecord);
           }
-          console.log("All images processed successfully");
           toast.dismiss("uploading-images");
         } catch (error) {
           toast.dismiss("uploading-images");

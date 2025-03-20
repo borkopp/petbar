@@ -6,12 +6,7 @@ export async function GET(request: NextRequest) {
   const code = requestUrl.searchParams.get('code')
   const type = requestUrl.searchParams.get('type')
   const isSignUpConfirmation = type === 'signup'
-  
-  console.log("Auth callback route hit", { 
-    url: request.url,
-    hasCode: !!code,
-    type
-  })
+
   
   if (code) {
     try {
@@ -26,11 +21,6 @@ export async function GET(request: NextRequest) {
         return NextResponse.redirect(`${requestUrl.origin}?auth_error=${encodeURIComponent(error.message)}`)
       }
       
-      console.log("Successfully exchanged code for session", { 
-        user: data.user?.id,
-        session: !!data.session,
-        emailConfirmed: data.user?.email_confirmed_at
-      })
       
       // For email confirmations, redirect to the verified page
       if (isSignUpConfirmation || (data.user && data.user.email_confirmed_at)) {

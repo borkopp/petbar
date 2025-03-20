@@ -107,7 +107,6 @@ export default function CreateListing({user}: CreateListingProps) {
   const onSubmit = async (values: FormInput) => {
     try {
       setIsSubmitting(true);
-      console.log("Form values being submitted:", values);
 
       // Check for required images
       if (images.length === 0) {
@@ -152,11 +151,8 @@ export default function CreateListing({user}: CreateListingProps) {
         throw new Error(`Failed to create listing: ${listingError.message}`);
       }
 
-      console.log("Listing created successfully:", listing);
-
       // Upload images
       if (images.length > 0) {
-        console.log(`Starting upload of ${images.length} images`);
         for (const [index, image] of images.entries()) {
           console.log(`Processing image ${index + 1}:`, {
             name: image.name,
@@ -166,7 +162,6 @@ export default function CreateListing({user}: CreateListingProps) {
 
           const fileExt = image.name.split(".").pop();
           const filePath = `${listing.id}/${index}.${fileExt}`;
-          console.log("Generated file path:", filePath);
 
           const {error: uploadError} = await supabase.storage.from("pet-images").upload(filePath, image);
 
@@ -182,16 +177,12 @@ export default function CreateListing({user}: CreateListingProps) {
             data: {publicUrl},
           } = supabase.storage.from("pet-images").getPublicUrl(filePath);
 
-          console.log(`Image ${index + 1} uploaded, public URL:`, publicUrl);
-
           // Insert image record
           const imageData = {
             listing_id: listing.id,
             url: publicUrl,
             is_primary: index === 0,
           };
-          console.log(`Saving image record ${index + 1}:`, imageData);
-
           const {error: imageError} = await supabase.from("pet_images").insert(imageData);
 
           if (imageError) {
@@ -204,10 +195,8 @@ export default function CreateListing({user}: CreateListingProps) {
             throw new Error(`Failed to save image record ${index + 1}: ${imageError.message}`);
           }
         }
-        console.log("All images processed successfully");
       }
 
-      console.log("Listing creation completed, redirecting to success page");
       router.push(`/create-listing/success?id=${listing.id}`);
     } catch (error) {
       console.error("=== Error Details ===");
@@ -225,7 +214,6 @@ export default function CreateListing({user}: CreateListingProps) {
         description: errorMessage,
       });
     } finally {
-      console.log("Form submission process completed");
       setIsSubmitting(false);
     }
   };

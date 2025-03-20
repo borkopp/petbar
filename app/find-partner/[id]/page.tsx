@@ -27,8 +27,6 @@ export default async function PartnerListingPage(props: PageProps) {
     notFound();
   }
 
-  console.log("Fetching partner listing with ID:", params.id);
-
   // Fetch the partner listing
   const {data: listing, error} = await supabase
     .from("partner_listings")
@@ -213,12 +211,7 @@ export default async function PartnerListingPage(props: PageProps) {
               </Button>
             </div>
           </div>
-          <SellerSection 
-            seller={listing.profiles}
-            location={listing.location}
-            phone={listing.phone}
-            listingType="partner"
-          />
+          <SellerSection seller={listing.profiles} location={listing.location} phone={listing.phone} listingType="partner" />
           <ShareSection title={listing.title} />
         </div>
       </div>

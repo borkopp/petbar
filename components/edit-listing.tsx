@@ -72,11 +72,6 @@ export default function EditListing({user, listing}: EditListingProps) {
   // Use the user ID in the component
   const userId = user.id;
 
-  // Log listing data for debugging
-  React.useEffect(() => {
-    console.log("Listing data:", listing);
-  }, [listing]);
-
   const form = useForm<FormInput>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -113,9 +108,6 @@ export default function EditListing({user, listing}: EditListingProps) {
 
       setIsSubmitting(true);
 
-      // Log form values for debugging
-      console.log("Form values:", values);
-
       // Create the update object with the correct field names
       const updateData = {
         title: values.title,
@@ -133,9 +125,6 @@ export default function EditListing({user, listing}: EditListingProps) {
         updated_at: new Date().toISOString(),
         user_id: userId,
       };
-
-      // Log update data for debugging
-      console.log("Update data:", updateData);
 
       // Update the listing in the database
       const {error: updateError} = await supabase.from("pet_listings").update(updateData).eq("id", listing.id);

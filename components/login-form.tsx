@@ -120,10 +120,8 @@ export function LoginForm({redirectTo}: LoginFormProps) {
                   className="w-full"
                   onClick={async () => {
                     try {
-                      console.log("Apple sign-in button clicked");
-                      toast.info("Attempting to sign in with Apple...");
+                      toast.info("Се најавувате со Apple...");
                       const result = await signInWithApple();
-                      console.log("Apple sign-in result:", result);
 
                       if (result?.error) {
                         const macedonianError = translateErrorMessage(result.error);
@@ -132,15 +130,15 @@ export function LoginForm({redirectTo}: LoginFormProps) {
                         });
                       } else if (result?.data?.url) {
                         // If we have a URL, redirect the user to it
-                        toast.success("Redirecting to Apple...");
+                        toast.success("Пренасочување на Apple...");
                         window.location.href = result.data.url;
                       } else {
-                        toast.error("Missing redirect URL from Apple OAuth");
+                        toast.error("Недостапен URL за најавување со Apple");
                         console.error("Missing URL in OAuth response:", result);
                       }
                     } catch (error) {
-                      console.error("Error during Apple sign-in:", error);
-                      toast.error("Unexpected error during Apple sign-in");
+                      console.error("Грешка при најавување со Apple:", error);
+                      toast.error("Неочекувана грешка при најавување со Apple");
                     }
                   }}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -157,10 +155,8 @@ export function LoginForm({redirectTo}: LoginFormProps) {
                   className="w-full"
                   onClick={async () => {
                     try {
-                      console.log("Google sign-in button clicked");
-                      toast.info("Attempting to sign in with Google...");
+                      toast.info("Се најавувате со Google...");
                       const result = await signInWithGoogle();
-                      console.log("Google sign-in result:", result);
 
                       if (result?.error) {
                         const macedonianError = translateErrorMessage(result.error);
@@ -169,15 +165,15 @@ export function LoginForm({redirectTo}: LoginFormProps) {
                         });
                       } else if (result?.data?.url) {
                         // If we have a URL, redirect the user to it
-                        toast.success("Redirecting to Google...");
+                        toast.success("Пренасочување на Google...");
                         window.location.href = result.data.url;
                       } else {
-                        toast.error("Missing redirect URL from Google OAuth");
+                        toast.error("Недостапен URL за најавување со Google");
                         console.error("Missing URL in OAuth response:", result);
                       }
                     } catch (error) {
-                      console.error("Error during Google sign-in:", error);
-                      toast.error("Unexpected error during Google sign-in");
+                      console.error("Грешка при најавување со Google:", error);
+                      toast.error("Неочекувана грешка при најавување со Google");
                     }
                   }}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -194,10 +190,8 @@ export function LoginForm({redirectTo}: LoginFormProps) {
                   className="w-full"
                   onClick={async () => {
                     try {
-                      console.log("Facebook sign-in button clicked");
-                      toast.info("Attempting to sign in with Facebook...");
+                      toast.info("Се најавувате со Facebook...");
                       const result = await signInWithFacebook();
-                      console.log("Facebook sign-in result:", result);
 
                       if (result?.error) {
                         const macedonianError = translateErrorMessage(result.error);
@@ -206,15 +200,15 @@ export function LoginForm({redirectTo}: LoginFormProps) {
                         });
                       } else if (result?.data?.url) {
                         // If we have a URL, redirect the user to it
-                        toast.success("Redirecting to Facebook...");
+                        toast.success("Пренасочување на Facebook...");
                         window.location.href = result.data.url;
                       } else {
-                        toast.error("Missing redirect URL from Facebook OAuth");
+                        toast.error("Недостапен URL за најавување со Facebook");
                         console.error("Missing URL in OAuth response:", result);
                       }
                     } catch (error) {
-                      console.error("Error during Facebook sign-in:", error);
-                      toast.error("Unexpected error during Facebook sign-in");
+                      console.error("Грешка при најавување со Facebook:", error);
+                      toast.error("Неочекувана грешка при најавување со Facebook");
                     }
                   }}>
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="text-[#000]">

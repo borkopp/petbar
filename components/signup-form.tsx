@@ -235,7 +235,7 @@ export function SignupForm({className, ...props}: React.ComponentProps<"div">) {
                       fill="currentColor"
                     />
                   </svg>
-                  <span className="sr-only">Sign up with Meta</span>
+                  <span className="sr-only">Sign up with Facebook</span>
                 </Button>
               </div>
               <div className="text-center text-sm">

@@ -34,7 +34,6 @@ export async function signInWithGoogle() {
   
   // Use your domain for the callback URL
   const redirectUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`
-  console.log("Redirect URL:", redirectUrl)
   
   try {
     const { data, error } = await supabase.auth.signInWithOAuth({
@@ -54,8 +53,6 @@ export async function signInWithGoogle() {
       return { error: error.message }
     }
 
-    // Log the URL that the user should be redirected to
-    console.log("Auth URL to redirect to:", data?.url)
     
     return { data }
   } catch (e) {
@@ -107,7 +104,6 @@ export async function signInWithFacebook() {
       return { error: error.message }
     }
     
-    console.log("Facebook auth URL to redirect to:", data?.url)
     return { data }
   } catch (e) {
     console.error("Exception during Facebook OAuth setup:", e)

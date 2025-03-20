@@ -83,11 +83,6 @@ export default function EditPartnerListingForm({user, listing}: EditPartnerListi
   // Use the user ID in the component
   const userId = user.id;
 
-  // Log listing data for debugging
-  React.useEffect(() => {
-    console.log("Listing data:", listing);
-  }, [listing]);
-
   // Parse desired_age_range from JSON if it exists
   const desiredAgeRange = React.useMemo(() => {
     if (listing.desired_age_range) {
@@ -196,9 +191,6 @@ export default function EditPartnerListingForm({user, listing}: EditPartnerListi
 
       setIsSubmitting(true);
 
-      // Log form values for debugging
-      console.log("Form values:", values);
-
       // Create the update object with the correct field names
       const updateData = {
         title: values.title,
@@ -226,9 +218,6 @@ export default function EditPartnerListingForm({user, listing}: EditPartnerListi
         updated_at: new Date().toISOString(),
         user_id: userId,
       };
-
-      // Log update data for debugging
-      console.log("Update data:", updateData);
 
       // Update the listing in the database
       const {error: updateError} = await supabase.from("partner_listings").update(updateData).eq("id", listing.id);

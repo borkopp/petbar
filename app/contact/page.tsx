@@ -41,13 +41,12 @@ export default function ContactPage() {
     },
   });
 
-  async function onSubmit(values: FormValues) {
+  async function onSubmit() {
     setIsSubmitting(true);
 
     try {
       // Here you would typically send the data to your backend
       // For now, we'll just simulate a successful submission
-      console.log("Form submitted with values:", values);
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
       toast.success("Пораката е успешно испратена! Ви благодариме.", {

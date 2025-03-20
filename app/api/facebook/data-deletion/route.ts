@@ -94,7 +94,6 @@ export async function POST(request: NextRequest) {
       });
     }
     
-    console.log(`Received data deletion request for user ID: ${userId}`);
     
     // Generate a unique confirmation code
     const confirmationCode = `fb_${userId}_${Date.now()}`;
