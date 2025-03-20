@@ -203,8 +203,10 @@ function FiltersContent() {
             <div className="space-y-4">
               <Slider
                 defaultValue={priceRange}
+                className="my-2"
                 max={100000}
                 step={1000}
+                color="primary"
                 onValueChange={setPriceRange}
                 onValueCommit={() => handleFilterChange("price", `${priceRange[0]}-${priceRange[1]}`)}
               />
@@ -237,6 +239,8 @@ function FiltersContent() {
                 defaultValue={ageRange}
                 max={180}
                 step={1}
+                color="primary"
+                className="my-2"
                 onValueChange={setAgeRange}
                 onValueCommit={() => handleFilterChange("age", `${ageRange[0]}-${ageRange[1]}`)}
               />

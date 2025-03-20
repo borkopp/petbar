@@ -237,9 +237,10 @@ function FiltersContent() {
                 defaultValue={priceRange}
                 max={100000}
                 step={1000}
+                color="secondary"
+                className="my-2"
                 onValueChange={setPriceRange}
                 onValueCommit={() => handleFilterChange("price", `${priceRange[0]}-${priceRange[1]}`)}
-                className="[&>[role=slider]]:bg-secondary [&>.range]:bg-secondary"
               />
               <div className="flex items-center space-x-4">
                 <Input
@@ -270,9 +271,10 @@ function FiltersContent() {
                 defaultValue={ageRange}
                 max={180}
                 step={1}
+                color="secondary"
                 onValueChange={setAgeRange}
                 onValueCommit={() => handleFilterChange("age", `${ageRange[0]}-${ageRange[1]}`)}
-                className="[&>[role=slider]]:bg-secondary [&>.range]:bg-secondary"
+                className="my-2"
               />
               <div className="flex items-center space-x-4">
                 <Input
