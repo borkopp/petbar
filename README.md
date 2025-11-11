@@ -39,4 +39,4 @@ To enable Google authentication with Supabase:
    - Enter your Client ID and Client Secret
    - Save changes
 
-Remember to update your `.env.local` file with the correct `NEXT_PUBLIC_SITE_URL` for your environment.
+Remember to update your `.env.local` file with the correct `NEXT_PUBLIC_SITE_URL` for your environment
